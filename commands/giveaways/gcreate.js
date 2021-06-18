@@ -39,8 +39,9 @@ module.exports = class GiveawayCreate extends Command {
       max: 1
     })
 
-    m = await m.mentions.channels.first();
-    channelArg = m.id;
+    m = await m.first();
+    let channel = m.mentions.channels.first();
+    channelArg = channel.id;
     if(!channel) return message.channel.send(this.client.embedBuilder(this.client, message, "Error", "You haven't mentioned Channel."));
 
     embed.setDescription(`Enter Number of Winners you want.`);

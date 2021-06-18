@@ -1,3 +1,5 @@
+const db = require("quick.db");
+
 function giveawayObject(guild, messageID, time, channel, winners, messages, invites, ending, hoster, prize) {
   let gwObject = {
     messageID: messageID,
@@ -19,6 +21,10 @@ function giveawayObject(guild, messageID, time, channel, winners, messages, invi
   return gwObject;
 }
 
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 function commandsList(client, message, category) {
   let prefix = db.fetch(`settings_${message.guild.id}_prefix`);
   if (prefix === null) prefix = client.config.prefix; 
@@ -38,4 +44,6 @@ function commandsList(client, message, category) {
 module.exports = {
   giveawayObject, 
   commandsList, 
+  capitalizeFirstLetter, 
+  
 }

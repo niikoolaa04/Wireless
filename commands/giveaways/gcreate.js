@@ -22,7 +22,7 @@ module.exports = class GiveawayCreate extends Command {
       .setAuthor("Giveaway Setup", this.client.user.displayAvatarURL());
       
     embed.setDescription(`Enter Duration for Giveaway.
-Ex. \`2m\``)
+Example: \`2m\``)
     message.channel.send(embed); 
     
     var m = await message.channel.awaitMessages((m) => { return m.author.id == message.author.id }, {
@@ -33,7 +33,7 @@ Ex. \`2m\``)
     let durationArg = m.content;
     
     embed.setDescription(`Mention Channel in which to start Giveaway.
-Ex. \`#general\``);
+Example: \`#general\``);
     message.channel.send(embed);
     var m = await message.channel.awaitMessages((m) => { return m.author.id == message.author.id }, {
       max: 1
@@ -45,7 +45,7 @@ Ex. \`#general\``);
     if(!channel) return message.channel.send(this.client.embedBuilder(this.client, message, "Error", "You haven't mentioned Channel."));
 
     embed.setDescription(`Enter Number of Winners you want.
-Ex. \`2\``);
+Example: \`2\``);
     message.channel.send(embed);
     var m = await message.channel.awaitMessages((m) => { return m.author.id == message.author.id }, {
       max: 1
@@ -56,7 +56,7 @@ Ex. \`2\``);
     if(isNaN(m.content)) return message.channel.send(this.client.embedBuilder(this.client, message, "Error", "You have entered invalid Number of Winners.", "RED"));
     
     embed.setDescription(`Enter Number of Messages Required in order to Enter Giveaway - 0 for none.
-Ex. \`500\``);
+Example: \`500\``);
     message.channel.send(embed);
     var m = await message.channel.awaitMessages((m) => { return m.author.id == message.author.id }, {
       max: 1
@@ -67,7 +67,7 @@ Ex. \`500\``);
     if(isNaN(m.content)) return message.channel.send(this.client.embedBuilder(this.client, message, "Error", "You have entered invalid Number of Messages Required for Entering Giveaway.", "RED"));
     
     embed.setDescription(`Enter Number of Invites Required in order to Enter Giveaway - 0 for none.
-Ex. \`10\``);
+Example: \`10\``);
     message.channel.send(embed);
     var m = await message.channel.awaitMessages((m) => { return m.author.id == message.author.id }, {
       max: 1
@@ -78,7 +78,7 @@ Ex. \`10\``);
     if(isNaN(invitesArg)) return message.channel.send(this.client.embedBuilder(this.client, message, "Error", "You have entered invalid Number of Invites Required for Entering Giveaway.", "RED"));
     
     embed.setDescription(`Enter Prize for this Giveaway.
-Ex. \`Nitro Classic\``);
+Example: \`Nitro Classic\``);
     message.channel.send(embed);
     var m = await message.channel.awaitMessages((m) => { return m.author.id == message.author.id }, {
       max: 1

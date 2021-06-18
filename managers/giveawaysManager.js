@@ -192,6 +192,8 @@ const rerollGiveaway = async (client, message, messageID) => {
 
 const checkGiveaway = async (client, guild) => {
   let giveaways = db.fetch(`giveaways_${guild.id}`);
+  if(giveaways == null) return;
+  if(giveaways.length == 0) return;
   
   for(let i = 0; i < giveaways.length; i++) {
     if(giveaways[i].ended == true) continue;
@@ -291,7 +293,7 @@ ${reqContent}
         .setColor("BLURPLE")
         .setThumbnail(guild.iconURL())
         .setFooter("Ends at", client.user.displayAvatarURL())
-        .setTimestamp(gwObject.endsAt);
+        .setTimestamp(giveaways[i].endsAt);
 
       msg.edit({ embed: embedChange });
     }

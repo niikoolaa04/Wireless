@@ -8,6 +8,7 @@ module.exports = class Ping extends Command {
       description: "bot's ping",
       usage: "ping",
       permissions: [],
+      aliases: ["uptime"], 
       category: "utility",
       listed: true,
     });

@@ -4,7 +4,7 @@
   "description": "Wireless is Giveaway Bot rich with features.",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node wire.js"
   },
   "dependencies": {
     "random": "^2.1.0",

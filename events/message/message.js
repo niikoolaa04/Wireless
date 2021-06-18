@@ -32,6 +32,7 @@ To view all commands do \`${mPrefix}help\``)
     }
 
     // <== Commands ==> //
+    if (message.content.indexOf(prefix) !== 0) return;
   
     const args = message.content
       .slice(prefix.length)

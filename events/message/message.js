@@ -15,16 +15,17 @@ module.exports = class Message extends Event {
 
     if (message.author.bot) return;
   
-    db.add(`poslatePoruke_${message.guild.id}_${message.author.id}`, 1);
+    db.add(`messages_${message.guild.id}_${message.author.id}`, 1);
     
 
     // <== Mention Bota ==> //
     const prefixMention = new RegExp(`^<@!?${this.client.user.id}>( |)$`);
     if (message.content.match(prefixMention)) {
       let mPrefix = db.fetch(`settings_${message.guild.id}_prefix`);
-      if(mPrefix === null) mPrefix = ".";
+      if(mPrefix === null) mPrefix = "+";
       let mentionEmbed = new Discord.MessageEmbed()
-        .setDescription(`Hej ${message.author}, moj prefix na ovom serveru je \`${mPrefix}\`, ukoliko želiš videti sve komande koristi \`${mPrefix}help\``)
+        .setDescription(`Hey ${message.author}, my current prefix is \`${mPrefix}\`.
+To view all commands do \`${mPrefix}help\``)
         .setColor("YELLOW")
         .setAuthor(message.author.username, message.author.displayAvatarURL({ dynamic: true }));
       message.channel.send(mentionEmbed);

@@ -208,8 +208,8 @@ const checkGiveaway = async (client, guild) => {
     let winners = [];
     
     if(Date.now() > giveaways[i].endsAt) {
-      for(let j = 0; j < gwData.winnerCount; j++) {
-        if(gwData.winnerCount > 1 && rArray.length < 2) {
+      for(let j = 0; j < giveaways[i].winnerCount; j++) {
+        if(giveaways[i].winnerCount > 1 && rArray.length < 2) {
           randomWinner = rArray[0];
           winners.push(randomWinner);
           rArray.splice(rArray.indexOf(randomWinner), 1);

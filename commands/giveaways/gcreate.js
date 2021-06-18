@@ -88,7 +88,7 @@ module.exports = class GiveawayCreate extends Command {
       message.guild.id, 
       0, 
       ms(durationArg), 
-      channelArg.id, 
+      channelArg, 
       parseInt(winnersArg), 
       parseInt(messagesArg), 
       parseInt(invitesArg), 
@@ -98,6 +98,6 @@ module.exports = class GiveawayCreate extends Command {
     );
     this.client.gw.startGiveaway(this.client, message, giveawayObject);
     
-    message.channel.send(this.client.embedBuilder(this.client, message, "Giveaway", `Giveaway has started in ${channelArg}.`, "YELLOW"));
+    message.channel.send(this.client.embedBuilder(this.client, message, "Giveaway", `Giveaway has started in <#${channelArg}>.`, "YELLOW"));
   }
 };

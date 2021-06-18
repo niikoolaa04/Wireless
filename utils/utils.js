@@ -1,6 +1,8 @@
 const db = require("quick.db");
 
 function giveawayObject(guild, messageID, time, channel, winners, messages, invites, ending, hoster, prize) {
+  let role = db.fetch(`server_${guild.id}_bypassRole`);
+  if(role == null) role = "none";
   let gwObject = {
     messageID: messageID,
     guildID: guild, 
@@ -13,6 +15,7 @@ function giveawayObject(guild, messageID, time, channel, winners, messages, invi
       messagesReq: messages, 
       invitesReq: invites, 
     },
+    roleBypass: role, 
     ended: false, 
     endsAt: ending,
     winners: []

@@ -19,9 +19,10 @@ module.exports = class GiveawayCreate extends Command {
   async run(message, args) {
     let embed = new Discord.MessageEmbed()
       .setColor("BLURPLE")
-      .setTitle("Giveaway Setup");
+      .setAuthor("Giveaway Setup", this.client.user.displayAvatarURL());
       
-    embed.setDescription(`Enter Duration for Giveaway.`)
+    embed.setDescription(`Enter Duration for Giveaway.
+Ex. \`2m\``)
     message.channel.send(embed); 
     
     var m = await message.channel.awaitMessages((m) => { return m.author.id == message.author.id }, {
@@ -31,7 +32,8 @@ module.exports = class GiveawayCreate extends Command {
     m = await m.first();
     let durationArg = m.content;
     
-    embed.setDescription(`Mention Channel in which to start Giveaway.`);
+    embed.setDescription(`Mention Channel in which to start Giveaway.
+Ex. \`#general\``);
     message.channel.send(embed);
     var m = await message.channel.awaitMessages((m) => { return m.author.id == message.author.id }, {
       max: 1
@@ -42,7 +44,8 @@ module.exports = class GiveawayCreate extends Command {
     let channelArg = channel;
     if(!channel) return message.channel.send(this.client.embedBuilder(this.client, message, "Error", "You haven't mentioned Channel."));
 
-    embed.setDescription(`Enter Number of Winners you want.`);
+    embed.setDescription(`Enter Number of Winners you want.
+Ex. \`2\``);
     message.channel.send(embed);
     var m = await message.channel.awaitMessages((m) => { return m.author.id == message.author.id }, {
       max: 1
@@ -52,7 +55,8 @@ module.exports = class GiveawayCreate extends Command {
     let winnersArg = m.content;
     if(isNaN(m.content)) return message.channel.send(this.client.embedBuilder(this.client, message, "Error", "You have entered invalid Number of Winners.", "RED"));
     
-    embed.setDescription(`Enter Number of Messages Required in order to Enter Giveaway - 0 for none.`);
+    embed.setDescription(`Enter Number of Messages Required in order to Enter Giveaway - 0 for none.
+Ex. \`500\``);
     message.channel.send(embed);
     var m = await message.channel.awaitMessages((m) => { return m.author.id == message.author.id }, {
       max: 1
@@ -62,7 +66,8 @@ module.exports = class GiveawayCreate extends Command {
     let messagesArg = m.content;
     if(isNaN(m.content)) return message.channel.send(this.client.embedBuilder(this.client, message, "Error", "You have entered invalid Number of Messages Required for Entering Giveaway.", "RED"));
     
-    embed.setDescription(`Enter Number of Invites Required in order to Enter Giveaway - 0 for none.`);
+    embed.setDescription(`Enter Number of Invites Required in order to Enter Giveaway - 0 for none.
+Ex. \`10\``);
     message.channel.send(embed);
     var m = await message.channel.awaitMessages((m) => { return m.author.id == message.author.id }, {
       max: 1
@@ -72,7 +77,8 @@ module.exports = class GiveawayCreate extends Command {
     let invitesArg = m.content;
     if(isNaN(invitesArg)) return message.channel.send(this.client.embedBuilder(this.client, message, "Error", "You have entered invalid Number of Invites Required for Entering Giveaway.", "RED"));
     
-    embed.setDescription(`Enter Prize for this Giveaway.`);
+    embed.setDescription(`Enter Prize for this Giveaway.
+Ex. \`Nitro Classic\``);
     message.channel.send(embed);
     var m = await message.channel.awaitMessages((m) => { return m.author.id == message.author.id }, {
       max: 1

@@ -15,7 +15,7 @@ const startGiveaway = async (client, message, gwObject) => {
     .setDescription(`
 **${client.emojisConfig.prize} About Giveaway**
 > **${client.emojisConfig.reward} Reward:** ${gwObject.prize}
-> **${client.emojisConfig.hoster} Hosted by:** ${gwData.hostedBy}
+> **${client.emojisConfig.hoster} Hosted by:** ${gwObject.hostedBy}
 > **${client.emojisConfig.timer} Time Remaining:** ${client.utils.formatVreme(gwObject.duration)}
 > **${client.emojisConfig.members} Number of Winners:** ${gwObject.winnerCount}
 ${reqContent}

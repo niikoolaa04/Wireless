@@ -15,10 +15,11 @@ module.exports = class Ready extends Event {
     console.log(`[BOT] Total Member Count on all servers is ${this.client.users.cache.size}`);
   
     const activities_list = [
-        `${this.client.config.prefix}help | ${this.client.channels.cache.size} channels`,
-        `${this.client.config.prefix}help | ${this.client.users.cache.size} members`,
+        `${this.client.config.prefix}help | ${this.client.channels.cache.size} Channels`,
+        `${this.client.config.prefix}help | ${this.client.users.cache.size} Members`,
+        `${this.client.config.prefix}help | ${this.client.guilds.cache.size} Guilds`,
         `${this.client.config.prefix}help | v${this.client.config.version}`,
-      ];
+    ];
     const rand = Math.floor(Math.random() * (activities_list.length - 1) + 1);
       
     this.client.user.setActivity(activities_list[rand], { type: 'WATCHING' });
@@ -26,7 +27,7 @@ module.exports = class Ready extends Event {
     setInterval(() => {
         const index = Math.floor(Math.random() * (activities_list.length - 1) + 1);
           this.client.user.setActivity(activities_list[index], { type: 'WATCHING' });
-    }, 180000);
+    }, 210000);
 
     this.client.guilds.cache.forEach(g => {
       setInterval(() => {

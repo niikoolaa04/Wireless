@@ -24,8 +24,10 @@ module.exports = class Message extends Event {
       let mPrefix = db.fetch(`settings_${message.guild.id}_prefix`);
       if(mPrefix === null) mPrefix = "+";
       let mentionEmbed = new Discord.MessageEmbed()
-        .setDescription(`Hey ${message.author}, my current prefix is \`${mPrefix}\`.
-To view all commands do \`${mPrefix}help\``)
+        .setDescription(`Hey ${message.author}, my current prefix for this Guild is \`${mPrefix}\`.
+To view all commands do \`${mPrefix}help\`
+
+[Invite Me](${this.client.config.links.inviteURL}) | [Support Server](${this.client.config.links.supportServer})`)
         .setColor("YELLOW")
         .setAuthor(message.author.username, message.author.displayAvatarURL({ dynamic: true }));
       message.channel.send(mentionEmbed);

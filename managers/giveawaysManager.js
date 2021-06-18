@@ -19,7 +19,7 @@ const startGiveaway = async (client, message, gwObject) => {
 > **Number of Winners:** ${gwObject.winnerCount}
 ${reqContent}
 
-[Invite Bot](${client.config.links.inviteURL}) | [Support Server](${client.config.links.supportServer})`)
+[Invite Me](${client.config.links.inviteURL}) | [Support Server](${client.config.links.supportServer})`)
     .setColor("BLURPLE")
     .setThumbnail(message.guild.iconURL())
     .setFooter("Ends at", client.user.displayAvatarURL())
@@ -135,7 +135,7 @@ const endGiveaway = async (client, message, messageID, guild) => {
 > **Winner(s):** ${randomWinner ? winners : "No Winner(s)"}
 ${reqContent}
 
-[Invite Bot](${client.config.links.inviteURL}) | [Support Server](${client.config.links.supportServer})`)
+[Invite Me](${client.config.links.inviteURL}) | [Support Server](${client.config.links.supportServer})`)
     .setColor("RED")
     .setThumbnail(message.guild.iconURL())
     .setFooter("Ended", client.user.displayAvatarURL())
@@ -257,7 +257,7 @@ const checkGiveaway = async (client, guild) => {
 > **Winner(s):** ${randomWinner ? winners : "No Winner(s)"}
 ${reqContent}
 
-[Invite Bot](${client.config.links.inviteURL}) | [Support Server](${client.config.links.supportServer})`)
+[Invite Me](${client.config.links.inviteURL}) | [Support Server](${client.config.links.supportServer})`)
         .setColor("RED")
         .setThumbnail(guild.iconURL())
         .setFooter("Ended", client.user.displayAvatarURL())
@@ -289,7 +289,7 @@ ${reqContent}
 > **Number of Winners:** ${giveaways[i].winnerCount}
 ${reqContent}
 
-[Invite Bot](${client.config.links.inviteURL}) | [Support Server](${client.config.links.supportServer})`)
+[Invite Me](${client.config.links.inviteURL}) | [Support Server](${client.config.links.supportServer})`)
         .setColor("BLURPLE")
         .setThumbnail(guild.iconURL())
         .setFooter("Ends at", client.user.displayAvatarURL())

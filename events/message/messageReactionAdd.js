@@ -39,30 +39,33 @@ module.exports = class MessageReactionAdd extends Event {
       let haveInvites = true;
       let haveMessages = true;
       if(gwInvites > 0 && totalReq < gwInvites) {
-        denyEmbed.setDescription(`Your Giveaway Entry in **${message.guild.name}** has been \`declined\`.
-**${this.client.emojisConfig.prize} Giveaway:** ${gwRunning.prize}
+        denyEmbed.setDescription(`**${this.client.emojisConfig.prize} Giveaway:** ${gwRunning.prize}
+
+Your Giveaway Entry in **${message.guild.name}** has been \`declined\`.
 
 **${this.client.emojisConfig.tasks} You don't meet Requirement:**
 > **›** You need **${gwRunning.requirements.invitesReq}** Invite(s) to Enter Giveaway.`);
         reaction.users.remove(user);
         haveInvites = false;
-        message.channel.send(denyEmbed);
+        user.send(denyEmbed);
       }
       if(haveInvites == true && gwMsg > 0 && msgReq < gwMsg) {
-        denyEmbed.setDescription(`Your Giveaway Entry in **${message.guild.name}** has been \`declined\`.
-**${this.client.emojisConfig.prize} Giveaway:** ${gwRunning.prize}
+        denyEmbed.setDescription(`**${this.client.emojisConfig.prize} Giveaway:** ${gwRunning.prize}
+
+Your Giveaway Entry in **${message.guild.name}** has been \`declined\`.
 
 **${this.client.emojisConfig.tasks} You don't meet Requirement:**
 > **›** You need **${gwRunning.requirements.messagesReq}** Message(s) to Enter Giveaway.`);
         reaction.users.remove(user);
         haveMessages = false;
-        message.channel.send(denyEmbed); 
+        user.send(denyEmbed); 
       }
       if(haveInvites == true && haveMessages == true) {
-        denyEmbed.setDescription(`Your Giveaway Entry in **${message.guild.name}** has been \`approved\`.
-**${this.client.emojisConfig.prize} Giveaway:** ${gwRunning.prize}`);
+        denyEmbed.setDescription(`**${this.client.emojisConfig.prize} Giveaway:** ${gwRunning.prize}
+
+Your Giveaway Entry in **${message.guild.name}** has been \`approved\`.`);
         denyEmbed.setColor("YELLOW")
-        message.channel.send(denyEmbed);
+        user.send(denyEmbed);
       }
     }
 	}

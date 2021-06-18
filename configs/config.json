@@ -13,6 +13,6 @@
   }, 
   "links": {
     "inviteURL": "https://discord.com/api/oauth2/authorize?client_id=855321650706513940&permissions=8&scope=bot",
-    "supportServer": "null"
+    "supportServer": "https://discord.gg/APnKTdbM4w"
   }
 }

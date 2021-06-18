@@ -14,10 +14,10 @@ const startGiveaway = async (client, message, gwObject) => {
     .setAuthor("New Giveaway", client.user.displayAvatarURL())
     .setDescription(`
 **${client.emojisConfig.prize} About Giveaway**
-> **${this.client.emojisConfig.reward} Reward:** ${gwObject.prize}
-> **${this.client.emojisConfig.hoster} Hosted by:** ${gwData.hostedBy}
-> **${this.client.emojisConfig.timer} Time Remaining:** ${client.utils.formatVreme(gwObject.duration)}
-> **${this.client.emojisConfig.members} Number of Winners:** ${gwObject.winnerCount}
+> **${client.emojisConfig.reward} Reward:** ${gwObject.prize}
+> **${client.emojisConfig.hoster} Hosted by:** ${gwData.hostedBy}
+> **${client.emojisConfig.timer} Time Remaining:** ${client.utils.formatVreme(gwObject.duration)}
+> **${client.emojisConfig.members} Number of Winners:** ${gwObject.winnerCount}
 ${reqContent}
 
 [Invite Me](${client.config.links.inviteURL}) | [Support Server](${client.config.links.supportServer})`)
@@ -130,11 +130,11 @@ const endGiveaway = async (client, message, messageID, guild) => {
     .setAuthor("Giveaway Ended", client.user.displayAvatarURL())
     .setDescription(`
 **${client.emojisConfig.prize} About Giveaway**
-> **${this.client.emojisConfig.reward} Reward:** ${gwData.prize}
-> **${this.client.emojisConfig.hoster} Hosted by:** ${gwData.hostedBy}
-> **${this.client.emojisConfig.timer} Time Remaining:** Ended
-> **${this.client.emojisConfig.members} Number of Winners:** ${gwData.winnerCount}
-> **${this.client.emojisConfig.winners} Winner(s):** ${randomWinner ? winners : "No Winner(s)"}
+> **${client.emojisConfig.reward} Reward:** ${gwData.prize}
+> **${client.emojisConfig.hoster} Hosted by:** ${gwData.hostedBy}
+> **${client.emojisConfig.timer} Time Remaining:** Ended
+> **${client.emojisConfig.members} Number of Winners:** ${gwData.winnerCount}
+> **${client.emojisConfig.winners} Winner(s):** ${randomWinner ? winners : "No Winner(s)"}
 ${reqContent}
 
 [Invite Me](${client.config.links.inviteURL}) | [Support Server](${client.config.links.supportServer})`)
@@ -253,11 +253,11 @@ const checkGiveaway = async (client, guild) => {
         .setAuthor("Giveaway Ended", client.user.displayAvatarURL())
         .setDescription(`
 **${client.emojisConfig.prize} About Giveaway**
-> **${this.client.emojisConfig.reward} Reward:** ${giveaways[i].prize}
-> **${this.client.emojisConfig.hoster} Hosted by:** ${giveaways[i].hostedBy}
-> **${this.client.emojisConfig.timer} Time Remaining:** Ended
-> **${this.client.emojisConfig.members} Number of Winners:** ${giveaways[i].winnerCount}
-> **${this.client.emojisConfig.winners} Winner(s):** ${randomWinner ? winners : "No Winner(s)"}
+> **${client.emojisConfig.reward} Reward:** ${giveaways[i].prize}
+> **${client.emojisConfig.hoster} Hosted by:** ${giveaways[i].hostedBy}
+> **${client.emojisConfig.timer} Time Remaining:** Ended
+> **${client.emojisConfig.members} Number of Winners:** ${giveaways[i].winnerCount}
+> **${client.emojisConfig.winners} Winner(s):** ${randomWinner ? winners : "No Winner(s)"}
 ${reqContent}
 
 [Invite Me](${client.config.links.inviteURL}) | [Support Server](${client.config.links.supportServer})`)
@@ -287,10 +287,10 @@ ${reqContent}
         .setAuthor("New Giveaway", client.user.displayAvatarURL())
         .setDescription(`
 **${client.emojisConfig.prize} About Giveaway**
-> **${this.client.emojisConfig.reward} Reward:** ${giveaways[i].prize}
-> **${this.client.emojisConfig.hoster} Hosted by:** ${giveaways[i].hostedBy}
-> **${this.client.emojisConfig.timer} Time Remaining:** ${client.utils.formatVreme(giveaways[i].endsAt - Date.now())}
-> **${this.client.emojisConfig.members} Number of Winners:** ${giveaways[i].winnerCount}
+> **${client.emojisConfig.reward} Reward:** ${giveaways[i].prize}
+> **${client.emojisConfig.hoster} Hosted by:** ${giveaways[i].hostedBy}
+> **${client.emojisConfig.timer} Time Remaining:** ${client.utils.formatVreme(giveaways[i].endsAt - Date.now())}
+> **${client.emojisConfig.members} Number of Winners:** ${giveaways[i].winnerCount}
 ${reqContent}
 
 [Invite Me](${client.config.links.inviteURL}) | [Support Server](${client.config.links.supportServer})`)

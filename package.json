@@ -20,7 +20,8 @@
     "util": "^0.12.3",
     "@discordjs/opus": "^0.3.2",
     "superagent": "5.1.0",
-    "moment-timezone": "latest"
+    "moment-timezone": "latest", 
+    "hastebin-gen": "^2.0.5"
   },
   "engines": {
     "node": "12.x"

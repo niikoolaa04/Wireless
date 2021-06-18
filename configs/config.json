@@ -12,7 +12,7 @@
     "id": "823228305167351808"
   }, 
   "links": {
-    "inviteURL": "null",
+    "inviteURL": "https://discord.com/api/oauth2/authorize?client_id=855321650706513940&permissions=8&scope=bot",
     "supportServer": "null"
   }
 }

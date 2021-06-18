@@ -15,7 +15,7 @@ const startGiveaway = async (client, message, gwObject) => {
     .setDescription(`
 **${client.emojisConfig.prize} About Giveaway**
 > **Reward:** ${gwObject.prize}
-> **Time Remaining:** ${this.client.utils.formatVreme(gwObject.duration)}
+> **Time Remaining:** ${client.utils.formatVreme(gwObject.duration)}
 > **Number of Winners:** ${gwObject.winnerCount}
 ${reqContent}
 
@@ -285,7 +285,7 @@ ${reqContent}
         .setDescription(`
 **${client.emojisConfig.prize} About Giveaway**
 > **Reward:** ${giveaways[i].prize}
-> **Time Remaining:** ${this.client.utils.formatVreme(giveaways[i].endsAt - Date.now())}
+> **Time Remaining:** ${client.utils.formatVreme(giveaways[i].endsAt - Date.now())}
 > **Number of Winners:** ${giveaways[i].winnerCount}
 ${reqContent}
 

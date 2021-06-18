@@ -259,7 +259,7 @@ ${reqContent}
 
 [Invite Bot](${client.config.links.inviteURL}) | [Support Server](${client.config.links.supportServer})`)
         .setColor("RED")
-        .setThumbnail(message.guild.iconURL())
+        .setThumbnail(guild.iconURL())
         .setFooter("Ended", client.user.displayAvatarURL())
         .setTimestamp();
       
@@ -280,7 +280,7 @@ ${reqContent}
       if(giveaways[i].requirements.messagesReq > 0) reqContent += `\n> **›** You need **${giveaways[i].requirements.messagesReq}** Message(s) to Enter Giveaway.`;
       if(giveaways[i].requirements.invitesReq > 0) reqContent += `\n> **›** You need **${giveaways[i].requirements.invitesReq}** Invite(s) to Enter Giveaway.`;
 
-      let startEmbed = new Discord.MessageEmbed()
+      let embedChange = new Discord.MessageEmbed()
         .setTitle(`🎁︲New Giveaway`)
         .setDescription(`
 **${client.emojisConfig.prize} About Giveaway**

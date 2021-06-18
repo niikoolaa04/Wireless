@@ -1,6 +1,6 @@
 const Discord = require("discord.js");
 const db = require("quick.db");
-const ms = require("ms");
+const ms = require("pretty-ms");
 const random = require("random");
 const delay = require("delay");
 

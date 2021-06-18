@@ -15,7 +15,7 @@ const startGiveaway = async (client, message, gwObject) => {
     .setDescription(`
 **${client.emojisConfig.prize} About Giveaway**
 > **${client.emojisConfig.reward} Reward:** ${gwObject.prize}
-> **${client.emojisConfig.hoster} Hosted by:** ${gwObject.hostedBy}
+> **${client.emojisConfig.hoster} Hosted by:** <@${gwObject.hostedBy}>
 > **${client.emojisConfig.timer} Time Remaining:** ${client.utils.formatVreme(gwObject.duration)}
 > **${client.emojisConfig.members} Number of Winners:** ${gwObject.winnerCount}
 ${reqContent}
@@ -131,7 +131,7 @@ const endGiveaway = async (client, message, messageID, guild) => {
     .setDescription(`
 **${client.emojisConfig.prize} About Giveaway**
 > **${client.emojisConfig.reward} Reward:** ${gwData.prize}
-> **${client.emojisConfig.hoster} Hosted by:** ${gwData.hostedBy}
+> **${client.emojisConfig.hoster} Hosted by:** <@${gwData.hostedBy}>
 > **${client.emojisConfig.timer} Time Remaining:** Ended
 > **${client.emojisConfig.members} Number of Winners:** ${gwData.winnerCount}
 > **${client.emojisConfig.winners} Winner(s):** ${randomWinner ? winners : "No Winner(s)"}
@@ -254,7 +254,7 @@ const checkGiveaway = async (client, guild) => {
         .setDescription(`
 **${client.emojisConfig.prize} About Giveaway**
 > **${client.emojisConfig.reward} Reward:** ${giveaways[i].prize}
-> **${client.emojisConfig.hoster} Hosted by:** ${giveaways[i].hostedBy}
+> **${client.emojisConfig.hoster} Hosted by:** <@${giveaways[i].hostedBy}>
 > **${client.emojisConfig.timer} Time Remaining:** Ended
 > **${client.emojisConfig.members} Number of Winners:** ${giveaways[i].winnerCount}
 > **${client.emojisConfig.winners} Winner(s):** ${randomWinner ? winners : "No Winner(s)"}
@@ -288,7 +288,7 @@ ${reqContent}
         .setDescription(`
 **${client.emojisConfig.prize} About Giveaway**
 > **${client.emojisConfig.reward} Reward:** ${giveaways[i].prize}
-> **${client.emojisConfig.hoster} Hosted by:** ${giveaways[i].hostedBy}
+> **${client.emojisConfig.hoster} Hosted by:** <@${giveaways[i].hostedBy}>
 > **${client.emojisConfig.timer} Time Remaining:** ${client.utils.formatVreme(giveaways[i].endsAt - Date.now())}
 > **${client.emojisConfig.members} Number of Winners:** ${giveaways[i].winnerCount}
 ${reqContent}

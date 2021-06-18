@@ -40,7 +40,7 @@ module.exports = class GiveawayStart extends Command {
       parseInt(messagesArg), 
       parseInt(invitesArg), 
       (Date.now() + ms(durationArg)), 
-      message.author,
+      message.author.id,
       prizeArg,
     );
     this.client.gw.startGiveaway(this.client, message, giveawayObject);

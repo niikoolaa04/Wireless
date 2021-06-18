@@ -40,11 +40,11 @@ module.exports = class GiveawayStart extends Command {
       parseInt(messagesArg), 
       parseInt(invitesArg), 
       (Date.now() + ms(durationArg)), 
-      message.author.tag,
+      message.author,
       prizeArg,
     );
     this.client.gw.startGiveaway(this.client, message, giveawayObject);
     
-    message.channel.send(this.client.embedBuilder(this.client, message, "Giveaway", `Giveaway have been started in Channel ${channelArg}.`, "YELLOW"));
+    message.channel.send(this.client.embedBuilder(this.client, message, "Giveaway", `Giveaway has started in Channel ${channelArg}.`, "YELLOW"));
   }
 };

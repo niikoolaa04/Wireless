@@ -37,5 +37,5 @@ module.exports = class Ready extends Event {
         this.client.invites[g.id] = guildInvites;
       });
     }); 
-	} 
+	}
 };

@@ -97,7 +97,7 @@ Example: \`Nitro Classic\``);
       parseInt(messagesArg), 
       parseInt(invitesArg), 
       (Date.now() + ms(durationArg)), 
-      message.author.tag,
+      message.author,
       prizeArg,
     );
     this.client.gw.startGiveaway(this.client, message, giveawayObject);

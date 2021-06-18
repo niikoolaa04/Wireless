@@ -15,6 +15,7 @@ const startGiveaway = async (client, message, gwObject) => {
     .setDescription(`
 **${client.emojisConfig.prize} About Giveaway**
 > **Reward:** ${gwObject.prize}
+> **Hosted by:** ${gwData.hostedBy}
 > **Time Remaining:** ${client.utils.formatVreme(gwObject.duration)}
 > **Number of Winners:** ${gwObject.winnerCount}
 ${reqContent}
@@ -130,6 +131,7 @@ const endGiveaway = async (client, message, messageID, guild) => {
     .setDescription(`
 **${client.emojisConfig.prize} About Giveaway**
 > **Reward:** ${gwData.prize}
+> **Hosted by:** ${gwData.hostedBy}
 > **Time Remaining:** Ended
 > **Number of Winners:** ${gwData.winnerCount}
 > **Winner(s):** ${randomWinner ? winners : "No Winner(s)"}
@@ -252,6 +254,7 @@ const checkGiveaway = async (client, guild) => {
         .setDescription(`
 **${client.emojisConfig.prize} About Giveaway**
 > **Reward:** ${giveaways[i].prize}
+> **Hosted by:** ${giveaways[i].hostedBy}
 > **Time Remaining:** Ended
 > **Number of Winners:** ${giveaways[i].winnerCount}
 > **Winner(s):** ${randomWinner ? winners : "No Winner(s)"}
@@ -285,6 +288,7 @@ ${reqContent}
         .setDescription(`
 **${client.emojisConfig.prize} About Giveaway**
 > **Reward:** ${giveaways[i].prize}
+> **Hosted by:** ${giveaways[i].hostedBy}
 > **Time Remaining:** ${client.utils.formatVreme(giveaways[i].endsAt - Date.now())}
 > **Number of Winners:** ${giveaways[i].winnerCount}
 ${reqContent}

@@ -11,7 +11,7 @@ module.exports = class Message extends Event {
 	async run(message) {
     if (message.channel.type === "dm") return;
     let prefix = await db.fetch(`settings_${message.guild.id}_prefix`);
-    if (prefix === null) prefix = this.client.config.prefix;
+    if (prefix == null) prefix = this.client.config.prefix;
 
     if (message.author.bot) return;
   

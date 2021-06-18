@@ -289,7 +289,7 @@ ${reqContent}
 
 [Invite Bot](${client.config.links.inviteURL}) | [Support Server](${client.config.links.supportServer})`)
         .setColor("BLURPLE")
-        .setThumbnail(message.guild.iconURL())
+        .setThumbnail(guild.iconURL())
         .setFooter("Ends at", client.user.displayAvatarURL())
         .setTimestamp(gwObject.endsAt);
 

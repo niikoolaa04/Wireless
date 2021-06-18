@@ -11,7 +11,7 @@ const startGiveaway = async (client, message, gwObject) => {
   if(gwObject.requirements.invitesReq > 0) reqContent += `\n> **›** You need **${gwObject.requirements.invitesReq}** Invite(s) to Enter Giveaway.`;
   
   let startEmbed = new Discord.MessageEmbed()
-    .setTitle(`🎁︲New Giveaway`)
+    .setAuthor("New Giveaway", client.user.displayAvatarURL())
     .setDescription(`
 **${client.emojisConfig.prize} About Giveaway**
 > **Reward:** ${gwObject.prize}
@@ -126,7 +126,7 @@ const endGiveaway = async (client, message, messageID, guild) => {
   if (gwData.requirements.invitesReq > 0) reqContent += `\n> **›** You need **${gwData.requirements.invitesReq}** Invite(s) to Enter Giveaway.`;
 
   let editEmbed = new Discord.MessageEmbed()
-    .setTitle(`🎁︲Giveaway Ended`)
+    .setAuthor("Giveaway Ended", client.user.displayAvatarURL())
     .setDescription(`
 **${client.emojisConfig.prize} About Giveaway**
 > **Reward:** ${gwData.prize}
@@ -248,7 +248,7 @@ const checkGiveaway = async (client, guild) => {
       if(giveaways[i].requirements.invitesReq > 0) reqContent += `\n> **›** You need **${giveaways[i].requirements.invitesReq}** Invite(s) to Enter Giveaway.`;
 
       let editEmbed = new Discord.MessageEmbed()
-        .setTitle(`🎁︲Giveaway Ended`)
+        .setAuthor("Giveaway Ended", client.user.displayAvatarURL())
         .setDescription(`
 **${client.emojisConfig.prize} About Giveaway**
 > **Reward:** ${giveaways[i].prize}
@@ -281,7 +281,7 @@ ${reqContent}
       if(giveaways[i].requirements.invitesReq > 0) reqContent += `\n> **›** You need **${giveaways[i].requirements.invitesReq}** Invite(s) to Enter Giveaway.`;
 
       let embedChange = new Discord.MessageEmbed()
-        .setTitle(`🎁︲New Giveaway`)
+        .setAuthor("New Giveaway", client.user.displayAvatarURL())
         .setDescription(`
 **${client.emojisConfig.prize} About Giveaway**
 > **Reward:** ${giveaways[i].prize}

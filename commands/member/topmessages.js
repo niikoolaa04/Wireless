@@ -8,7 +8,7 @@ module.exports = class TopMessages extends Command {
       description: "top 10 users by messages",
       usage: "topmessages",
       permissions: [],
-      category: "utility",
+      category: "member",
       listed: true,
     });
   }

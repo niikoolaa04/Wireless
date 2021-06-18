@@ -8,7 +8,7 @@ module.exports = class TopInvites extends Command {
       description: "top 10 users by invites",
       usage: "topinvites",
       permissions: [],
-      category: "utility",
+      category: "member",
       listed: true,
     });
   }

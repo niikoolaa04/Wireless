@@ -17,7 +17,7 @@ module.exports = class Invites extends Command {
   async run(message, args) {
     var user = message.mentions.users.first() || this.client.users.cache.get(args[0]) || message.author;
   
-    let total = db.fetch(`invitesTotal_${message.guild.id}_${user.id}`) || 0;
+    let joins = db.fetch(`invitesJoins_${message.guild.id}_${user.id}`) || 0;
     let left = db.fetch(`invitesLeaves_${message.guild.id}_${user.id}`) || 0;
     let regular = db.fetch(`invitesRegular_${message.guild.id}_${user.id}`) || 0;
     let bonus = db.fetch(`invitesBonus_${message.guild.id}_${user.id}`) || 0;
@@ -33,10 +33,11 @@ module.exports = class Invites extends Command {
       .setColor("BLURPLE")
       .setDescription(`> **User** · ${user.username}
 
-> Total Invites · \`${total}\`
+> Total Invites · \`${regular + bonus}\`
+> Join Invites · \`${joins}\`
+> Leaves Invites · \`${left}\`
 > Regular Invites · \`${regular}\`
 > Bonus Invites · \`${bonus}\`
-> Leaves Invites · \`${left}\`
 
 **Leaderboard Rank:** #${rank}
 **Invited by:** ${inviter}`);

@@ -38,7 +38,7 @@ function commandsList(client, message, category) {
   let content = "";
   
   loaded.forEach(
-    c => (content += `\`${c.name}\`, `)
+    c => (content += `\`${c.name}\` `)
   );
   
   return content;
@@ -48,5 +48,4 @@ module.exports = {
   giveawayObject, 
   commandsList, 
   capitalizeFirstLetter, 
-  
 }

@@ -1,7 +1,7 @@
 {
-  "name": "bolt",
+  "name": "wireless",
   "version": "1.0.0",
-  "description": "Bolt Giveaways is Giveaway Bot rich with features.",
+  "description": "Wireless is Giveaway Bot rich with features.",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"

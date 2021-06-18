@@ -1,8 +1,8 @@
 const fs = require("fs");
-const BoltClient = require("./structures/BoltClient");
+const WirelessClient = require("./structures/WirelessClient");
 const dotenv = require("dotenv").config();
 
-const client = new BoltClient(process.env.BOT_TOKEN)
+const client = new WirelessClient(process.env.BOT_TOKEN)
 client.login(process.env.BOT_TOKEN);
 
 ["commands", "events"].forEach(handler => {

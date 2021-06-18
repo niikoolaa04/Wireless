@@ -1,6 +1,6 @@
 const Discord = require("discord.js");
 
-module.exports = class BoltClient extends Discord.Client {
+module.exports = class WirelessClient extends Discord.Client {
   constructor() {
     super({ disableMentions: "everyone", ws: { intents: Discord.Intents.ALL }, partials: ['MESSAGE', 'CHANNEL', 'REACTION', 'USER', 'GUILD_MEMBER']});
     

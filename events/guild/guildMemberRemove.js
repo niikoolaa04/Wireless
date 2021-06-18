@@ -30,10 +30,12 @@ module.exports = class GuildMemberRemove extends Event {
         
       let inviterName = invv;
       
-      let total = db.fetch(`invitesTotal_${member.guild.id}_${inviter}`) || 0;
+      let joins = db.fetch(`invitesJoins_${member.guild.id}_${inviter}`) || 0;
       let leaves = db.fetch(`invitesLeaves_${member.guild.id}_${inviter}`) || 0;
       let regular = db.fetch(`invitesRegular_${member.guild.id}_${member.id}`) || 0;
-      let msgLeave = db.fetch(`server_${member.guild.id}_leaveMessage`); 
+      let bonus = db.fetch(`invitesBonus_${member.guild.id}_${member.id}`) || 0;
+      let msgLeave = db.fetch(`server_${member.guild.id}_leaveMessage`);
+      
       if(invitesChannel !== null && invitesChannel !== undefined && msgLeave !== null) {
         invitesChannel.send(`${msgLeave
           .replace("{userTag}", member.user.tag)
@@ -41,9 +43,11 @@ module.exports = class GuildMemberRemove extends Event {
           .replace("{username}", member.user.username)
           .replace("{userID}", member.user.id)
           .replace("{invitedBy}", inviterName)
+          .replace("{totalInvites}", parseInt(regular + bonus))
           .replace("{leavesInvites}", leaves)
+          .replace("{bonusInvites}", bonus)
           .replace("{regularInvites}", regular)
-          .replace("{totalInvites}", total)
+          .replace("{joinsInvites}", joins)
           .replace("{created}", moment.utc(member.user.createdAt).tz("Europe/Belgrade").format("dddd, MMMM Do YYYY, HH:mm:ss"))}`);
       }
     }  

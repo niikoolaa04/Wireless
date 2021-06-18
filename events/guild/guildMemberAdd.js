@@ -50,8 +50,9 @@ module.exports = class GuildMemberAdd extends Event {
         
         let inviterName = invv;
         
-        let total = db.fetch(`invitesTotal_${member.guild.id}_${inviter}`);
-        let leaves = db.fetch(`invitesLeaves_${member.guild.id}_${inviter}`);
+        let total = db.fetch(`invitesTotal_${member.guild.id}_${inviter}`) || 0;
+        let regular = db.fetch(`invitesRegular_${member.guild.id}_${inviter}`) || 0;
+        let leaves = db.fetch(`invitesLeaves_${member.guild.id}_${inviter}`) || 0;
         let ukupno = (total - leaves);
 
         invitesChannel.send(`${msgJoin

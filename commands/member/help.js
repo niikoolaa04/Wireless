@@ -32,7 +32,7 @@ module.exports = class Help extends Command {
       let cmdEmbed = new Discord.MessageEmbed()
         .setTitle(`🚀 · Help Menu`)
         .setDescription(`Use \`${prefix}help [command]\` to view more informations about command.`)
-        .addField(`${this.client.emojisConfig.membersE} Member`, 
+        .addField(`${this.client.emojisConfig.members} Member`, 
 `${contentMember}`)
         .addField(`${this.client.emojisConfig.prize} Giveaway`, 
 `${contentGiveaway}`)

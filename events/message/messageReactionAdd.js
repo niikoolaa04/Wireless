@@ -27,8 +27,6 @@ module.exports = class MessageReactionAdd extends Event {
       let gwMsg = gwRunning.requirements.messagesReq; 
       let totalReq = parseInt(invitesReq + bonusReq);
     
-      let role = db.fetch(`server_${message.guild.id}_bypassRole`);
-    
       let denyEmbed = new Discord.MessageEmbed()
         .setTitle("🎁︲Giveaway Entry")
         .setColor("RED")

@@ -29,6 +29,9 @@ module.exports = class Ready extends Event {
     }, 180000);
 
     this.client.guilds.cache.forEach(g => {
+      setInterval(() => {
+        this.client.gw.checkGiveaway(this.client, g);
+      }, 30000);
       g.fetchInvites().then(guildInvites => {
         this.client.invites[g.id] = guildInvites;
       });

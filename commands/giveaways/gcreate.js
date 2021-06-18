@@ -17,8 +17,6 @@ module.exports = class GiveawayCreate extends Command {
 	}
     
   async run(message, args) {
-    let durationArg, channelArg, winnersArg, messagesArg, invitesArg, prizeArg;
-    
     let embed = new Discord.MessageEmbed()
       .setColor("BLURPLE")
       .setTitle("Giveaway Setup");
@@ -31,7 +29,7 @@ module.exports = class GiveawayCreate extends Command {
     })
 
     m = await m.first();
-    durationArg = ms(m.content);
+    let durationArg = m.content;
     
     embed.setDescription(`Mention Channel in which to start Giveaway.`);
     message.channel.send(embed);
@@ -41,7 +39,7 @@ module.exports = class GiveawayCreate extends Command {
 
     m = await m.first();
     let channel = m.mentions.channels.first();
-    channelArg = channel.id;
+    let channelArg = channel;
     if(!channel) return message.channel.send(this.client.embedBuilder(this.client, message, "Error", "You haven't mentioned Channel."));
 
     embed.setDescription(`Enter Number of Winners you want.`);
@@ -51,7 +49,7 @@ module.exports = class GiveawayCreate extends Command {
     })
 
     m = await m.first();
-    winnersArg = m.content;
+    let winnersArg = m.content;
     if(isNaN(m.content)) return message.channel.send(this.client.embedBuilder(this.client, message, "Error", "You have entered invalid Number of Winners.", "RED"));
     
     embed.setDescription(`Enter Number of Messages Required in order to Enter Giveaway - 0 for none.`);
@@ -61,7 +59,7 @@ module.exports = class GiveawayCreate extends Command {
     })
 
     m = await m.first();
-    messagesArg = m.content;
+    let messagesArg = m.content;
     if(isNaN(m.content)) return message.channel.send(this.client.embedBuilder(this.client, message, "Error", "You have entered invalid Number of Messages Required for Entering Giveaway.", "RED"));
     
     embed.setDescription(`Enter Number of Invites Required in order to Enter Giveaway - 0 for none.`);
@@ -71,7 +69,7 @@ module.exports = class GiveawayCreate extends Command {
     })
     
     m = await m.first();
-    invitesArg = m.content;
+    let invitesArg = m.content;
     if(isNaN(invitesArg)) return message.channel.send(this.client.embedBuilder(this.client, message, "Error", "You have entered invalid Number of Invites Required for Entering Giveaway.", "RED"));
     
     embed.setDescription(`Enter Prize for this Giveaway.`);
@@ -81,7 +79,7 @@ module.exports = class GiveawayCreate extends Command {
     })
     
     m = await m.first();
-    prizeArg = m.content;
+    let prizeArg = m.content;
     if(!prizeArg || prizeArg.length < 3 || prizeArg.length > 256) return message.channel.send(this.client.embedBuilder(this.client, message, "Error", "You have entered invalid Prize.", "RED"))
 
     let giveawayObject = this.client.utils.giveawayObject(

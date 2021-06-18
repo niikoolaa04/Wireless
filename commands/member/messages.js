@@ -25,7 +25,7 @@ module.exports = class Messages extends Command {
     let embed = new Discord.MessageEmbed()
       .setAuthor("Messages Count", this.client.user.displayAvatarURL())
       .setColor("BLURPLE")
-      .setDescription(`> ${user.id == message.author.id ? "You" : user} have sent **${messages} Messages in Total.
+      .setDescription(`> ${user.id == message.author.id ? "You" : user} sent **${messages}** Messages in Total.
 > 
 > **Leaderboard Rank:** ${rank}`);
   

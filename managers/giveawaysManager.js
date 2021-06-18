@@ -7,12 +7,13 @@ const delay = require("delay");
 const startGiveaway = async (client, message, gwObject) => {
   let reqContent = "";
   if(gwObject.requirements.messagesReq > 0 || gwObject.requirements.invitesReq > 0) reqContent += `\n**${client.emojisConfig.tasks} Requirements**`;
-  if(gwObject.requirements.messagesReq > 0) reqContent += `\n> **›** You need **${gwObject.requirements.messagesReq}** Messages to Enter Giveaway.`;
-  if(gwObject.requirements.invitesReq > 0) reqContent += `\n> **›** You need **${gwObject.requirements.invitesReq}** Invites to Enter Giveaway.`;
+  if(gwObject.requirements.messagesReq > 0) reqContent += `\n> **›** You need **${gwObject.requirements.messagesReq}** Message(s) to Enter Giveaway.`;
+  if(gwObject.requirements.invitesReq > 0) reqContent += `\n> **›** You need **${gwObject.requirements.invitesReq}** Invite(s) to Enter Giveaway.`;
   
   let startEmbed = new Discord.MessageEmbed()
     .setTitle(`🎁︲New Giveaway`)
-    .setDescription(`**${client.emojisConfig.prize} About Giveaway**
+    .setDescription(`
+**${client.emojisConfig.prize} About Giveaway**
 > **Reward:** ${gwObject.prize}
 > **Time Remaining:** ${ms(gwObject.duration)}
 > **Number of Winners:** ${gwObject.winnerCount}
@@ -121,12 +122,13 @@ const endGiveaway = async (client, message, messageID, guild) => {
 
   let reqContent = "";
   if (gwData.requirements.messagesReq > 0 || gwData.requirements.invitesReq > 0) reqContent += `\n**${client.emojisConfig.tasks} Requirements**`;
-  if (gwData.requirements.messagesReq > 0) reqContent += `\n> **›** You need **${gwData.requirements.messagesReq}** Messages to Enter Giveaway.`;
-  if (gwData.requirements.invitesReq > 0) reqContent += `\n> **›** You need **${gwData.requirements.invitesReq}** Invites to Enter Giveaway.`;
+  if (gwData.requirements.messagesReq > 0) reqContent += `\n> **›** You need **${gwData.requirements.messagesReq}** Message(s) to Enter Giveaway.`;
+  if (gwData.requirements.invitesReq > 0) reqContent += `\n> **›** You need **${gwData.requirements.invitesReq}** Invite(s) to Enter Giveaway.`;
 
   let editEmbed = new Discord.MessageEmbed()
     .setTitle(`🎁︲Giveaway Ended`)
-    .setDescription(`**${client.emojisConfig.prize} About Giveaway**
+    .setDescription(`
+**${client.emojisConfig.prize} About Giveaway**
 > **Reward:** ${gwData.prize}
 > **Time Remaining:** Ended
 > **Number of Winners:** ${gwData.winnerCount}
@@ -141,7 +143,7 @@ ${reqContent}
 
   msg.edit({ embed: editEmbed });
   
-  let hasWinners = `\`🎊\` Congratulations to ${gwData.winnerCount > 1 ? "winners" : "winner"} ${winners} on winning this Giveaway!\nBetter luck next time others.`;
+  let hasWinners = `\`🎊\` Congratulations to ${gwData.winnerCount > 1 ? "winners" : "winner"} ${winners} on winning this Giveaway!\nOthers, better luck next time.`;
   let noWinners = `\`🎊\` Giveaway ended but there is no winner(s).`;
 
   let endEmbed = new Discord.MessageEmbed()
@@ -189,7 +191,6 @@ const rerollGiveaway = async (client, message, messageID) => {
 }
 
 const checkGiveaway = async (client, guild) => {
-  if(guild != client.channelsConfig.guild) return;
   let giveaways = db.fetch(`giveaways_${guild.id}`);
   
   for(let i = 0; i < giveaways.length; i++) {
@@ -241,12 +242,13 @@ const checkGiveaway = async (client, guild) => {
       
       let reqContent = "";
       if(giveaways[i].requirements.messagesReq > 0 || giveaways[i].requirements.invitesReq > 0) reqContent += `\n**${client.emojisConfig.tasks} Requirements**`;
-      if(giveaways[i].requirements.messagesReq > 0) reqContent += `\n> **›** You need **${giveaways[i].requirements.messagesReq}** Messages to Enter Giveaway.`;
-      if(giveaways[i].requirements.invitesReq > 0) reqContent += `\n> **›** You need **${giveaways[i].requirements.invitesReq}** Invites to Enter Giveaway.`;
+      if(giveaways[i].requirements.messagesReq > 0) reqContent += `\n> **›** You need **${giveaways[i].requirements.messagesReq}** Message(s) to Enter Giveaway.`;
+      if(giveaways[i].requirements.invitesReq > 0) reqContent += `\n> **›** You need **${giveaways[i].requirements.invitesReq}** Invite(s) to Enter Giveaway.`;
 
       let editEmbed = new Discord.MessageEmbed()
         .setTitle(`🎁︲Giveaway Ended`)
-        .setDescription(`**${client.emojisConfig.prize} About Giveaway**
+        .setDescription(`
+**${client.emojisConfig.prize} About Giveaway**
 > **Reward:** ${giveaways[i].prize}
 > **Time Remaining:** Ended
 > **Number of Winners:** ${giveaways[i].winnerCount}
@@ -273,12 +275,13 @@ ${reqContent}
     } else {
       let reqContent = "";
       if(giveaways[i].requirements.messagesReq > 0 || giveaways[i].requirements.invitesReq > 0) reqContent += `\n**${client.emojisConfig.tasks} Requirements**`;
-      if(giveaways[i].requirements.messagesReq > 0) reqContent += `\n> **›** You need **${giveaways[i].requirements.messagesReq}** Messages to Enter Giveaway.`;
-      if(giveaways[i].requirements.invitesReq > 0) reqContent += `\n> **›** You need **${giveaways[i].requirements.invitesReq}** Invites to Enter Giveaway.`;
+      if(giveaways[i].requirements.messagesReq > 0) reqContent += `\n> **›** You need **${giveaways[i].requirements.messagesReq}** Message(s) to Enter Giveaway.`;
+      if(giveaways[i].requirements.invitesReq > 0) reqContent += `\n> **›** You need **${giveaways[i].requirements.invitesReq}** Invite(s) to Enter Giveaway.`;
 
       let startEmbed = new Discord.MessageEmbed()
         .setTitle(`🎁︲New Giveaway`)
-        .setDescription(`**${client.emojisConfig.prize} About Giveaway**
+        .setDescription(`
+**${client.emojisConfig.prize} About Giveaway**
 > **Reward:** ${giveaways[i].prize}
 > **Time Remaining:** ${ms(giveaways[i].endsAt - Date.now())}
 > **Number of Winners:** ${giveaways[i].winnerCount}

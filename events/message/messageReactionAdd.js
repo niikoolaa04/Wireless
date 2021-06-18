@@ -29,10 +29,41 @@ module.exports = class MessageReactionAdd extends Event {
     
       let role = db.fetch(`server_${message.guild.id}_bypassRole`);
     
+      let denyEmbed = new Discord.MessageEmbed()
+        .setTitle("🎁︲Giveaway Entry")
+        .setColor("RED")
+        .setThumbnail(this.client.user.displayAvatarURL());
+    
       if(message.id != gwRunning.messageID) return;
       if(role != null && message.member.roles.cache.has(role)) return;
-      if(gwInvites > 0 && totalReq < gwInvites) return reaction.users.remove(user);
-      if(gwMsg > 0 && msgReq < gwMsg) return reaction.users.remove(user);
+      let haveInvites = true;
+      let haveMessages = true;
+      if(gwInvites > 0 && totalReq < gwInvites) {
+        denyEmbed.setDescription(`Your Giveaway Entry in **${message.guild.name}** has been \`declined\`.
+**${this.client.emojisConfig.prize} Giveaway:** ${gwRunning.prize}
+
+**${this.client.emojisConfig.tasks} You don't meet Requirement:**
+> **›** You need **${gwRunning.requirements.invitesReq}** Invite(s) to Enter Giveaway.`);
+        reaction.users.remove(user);
+        haveInvites = false;
+        message.channel.send(denyEmbed);
+      }
+      if(haveInvites == true && gwMsg > 0 && msgReq < gwMsg) {
+        denyEmbed.setDescription(`Your Giveaway Entry in **${message.guild.name}** has been \`declined\`.
+**${this.client.emojisConfig.prize} Giveaway:** ${gwRunning.prize}
+
+**${this.client.emojisConfig.tasks} You don't meet Requirement:**
+> **›** You need **${gwRunning.requirements.messagesReq}** Message(s) to Enter Giveaway.`);
+        reaction.users.remove(user);
+        haveMessages = false;
+        message.channel.send(denyEmbed); 
+      }
+      if(haveInvites == true && haveMessages == true) {
+        denyEmbed.setDescription(`Your Giveaway Entry in **${message.guild.name}** has been \`approved\`.
+**${this.client.emojisConfig.prize} Giveaway:** ${gwRunning.prize}`);
+        denyEmbed.setColor("YELLOW")
+        message.channel.send(denyEmbed);
+      }
     }
 	}
 };

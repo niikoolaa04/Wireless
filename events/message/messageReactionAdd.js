@@ -21,12 +21,17 @@ module.exports = class MessageReactionAdd extends Event {
       if(!gwRunning) return;
       
       let invitesReq = db.fetch(`invitesRegular_${message.guild.id}_${user.id}`);
+      let bonusReq = db.fetch(`invitesBonus_${message.guild.id}_${user.id}`); 
       let msgReq = db.fetch(`poslatePoruke_${message.guild.id}_${user.id}`);
       let gwInvites = gwRunning.requirements.invitesReq;
       let gwMsg = gwRunning.requirements.messagesReq; 
+      let totalReq = parseInt(invitesReq + bonusReq);
+    
+      let role = db.fetch(`server_${message.guild.id}_bypassRole`);
     
       if(message.id != gwRunning.messageID) return;
-      if(gwInvites > 0 && invitesReq < gwInvites) return reaction.users.remove(user);
+      if(role != null && message.member.roles.cache.has(role)) return;
+      if(gwInvites > 0 && totalReq < gwInvites) return reaction.users.remove(user);
       if(gwMsg > 0 && msgReq < gwMsg) return reaction.users.remove(user);
     }
 	}

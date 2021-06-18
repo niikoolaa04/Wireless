@@ -20,6 +20,7 @@ module.exports = class Invites extends Command {
     let total = db.fetch(`invitesTotal_${message.guild.id}_${user.id}`) || 0;
     let left = db.fetch(`invitesLeaves_${message.guild.id}_${user.id}`) || 0;
     let regular = db.fetch(`invitesRegular_${message.guild.id}_${user.id}`) || 0;
+    let bonus = db.fetch(`invitesBonus_${message.guild.id}_${user.id}`) || 0;
     let invitedBy = db.fetch(`inviter_${message.guild.id}_${user.id}`);
     let inviter = this.client.users.cache.get(invitedBy);
     inviter = inviter ? inviter.username : 'Unknown User';
@@ -28,12 +29,13 @@ module.exports = class Invites extends Command {
     let rank = every.map(x => x.ID).indexOf(`invitesTotal_${message.guild.id}_${user.id}`) + 1 || 'N/A';
   
     let embed = new Discord.MessageEmbed()
-      .setAuthor("Invites", this.client.user.displayAvatarURL())
+      .setAuthor("Invites Count", this.client.user.displayAvatarURL())
       .setColor("BLURPLE")
       .setDescription(`> **User** · ${user.username}
 
 > Total Invites · \`${total}\`
 > Regular Invites · \`${regular}\`
+> Bonus Invites · \`${bonus}\`
 > Leaves Invites · \`${left}\`
 
 **Leaderboard Rank:** #${rank}

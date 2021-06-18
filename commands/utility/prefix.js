@@ -9,7 +9,7 @@ module.exports = class Prefix extends Command {
 			description: "change bot prefix for this guild",
 			usage: "prefix [Prefix]",
 			permissions: ["ADMINISTRATOR"],
-			category: "settings",
+			category: "utility",
 			listed: true,
 		});
 	}

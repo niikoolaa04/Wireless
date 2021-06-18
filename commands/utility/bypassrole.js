@@ -9,7 +9,7 @@ module.exports = class BypassRole extends Command {
       description: "role which will have ability to bypass giveaway requirements",
       usage: "bypassrole [@Role]",
       permissions: ["ADMINISTRATOR"],
-      category: "settings",
+      category: "utility",
       listed: true,
     });
   }

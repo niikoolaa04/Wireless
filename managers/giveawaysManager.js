@@ -143,7 +143,7 @@ ${reqContent}
 
   msg.edit({ embed: editEmbed });
   
-  let hasWinners = `\`🎊\` Congratulations to ${gwData.winnerCount > 1 ? "winners" : "winner"} ${winners} on winning this Giveaway!\nOthers, better luck next time.`;
+  let hasWinners = `\`🎊\` Congratulations to ${gwData.winnerCount > 1 ? "winners" : "winner"} ${winners} on winning this Giveaway!\nGood Luck to the others next time.`;
   let noWinners = `\`🎊\` Giveaway ended but there is no winner(s).`;
 
   let endEmbed = new Discord.MessageEmbed()
@@ -180,7 +180,7 @@ const rerollGiveaway = async (client, message, messageID) => {
     }
   }
   
-  let winnerString = `\`🎊\` ${gwData.winnerCount > 1 ? "New Winners have been choosen" : "New Winner have been choosen"} ${winners}, congratulations on winning this Giveaway!\nOthers, better luck next time.`;
+  let winnerString = `\`🎊\` ${gwData.winnerCount > 1 ? "New Winners have been choosen" : "New Winner have been choosen"} ${winners}, congratulations on winning this Giveaway!\nGood Luck to the others next time.`;
       
   let rerollEmbed = new Discord.MessageEmbed()
     .setTitle("🎁︲Giveaway")
@@ -265,7 +265,7 @@ ${reqContent}
       
       msg.edit({ embed: editEmbed });
       
-      let hasWinners = `\`🎊\` Congratulations to ${giveaways[i].winnerCount > 1 ? "winners" : "winner"} ${winners} on winning this Giveaway!\nBetter luck next time others.`;
+      let hasWinners = `\`🎊\` Congratulations to ${giveaways[i].winnerCount > 1 ? "winners" : "winner"} ${winners} on winning this Giveaway!\nGood Luck to the others next time.`;
       let noWinners = `\`🎊\` Giveaway ended but there is no winner(s).`;
       
       let endEmbed = new Discord.MessageEmbed()

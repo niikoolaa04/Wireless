@@ -82,7 +82,7 @@ module.exports = class GiveawayCreate extends Command {
     
     m = await m.first();
     prizeArg = m.content;
-    if(!prize || prize.length < 3 || prize.length > 256) return message.channel.send(this.client.embedBuilder(this.client, message, "Error", "You have entered invalid Prize.", "RED"))
+    if(!prizeArg || prizeArg.length < 3 || prize.length > 256) return message.channel.send(this.client.embedBuilder(this.client, message, "Error", "You have entered invalid Prize.", "RED"))
 
     let giveawayObject = this.client.utils.giveawayObject(
       message.guild.id, 

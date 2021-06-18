@@ -42,7 +42,7 @@ module.exports = class Help extends Command {
         .setColor("BLURPLE")
         .setThumbnail(user.displayAvatarURL({ size: 1024, dynamic: true }))
         .setFooter(`Total Commands ${loadedCommands.length}`, message.author.displayAvatarURL({ size: 1024, dynamic: true }));
-      message.channel.send(embed);
+      message.channel.send(cmdEmbed);
     } else {
       let cmd = this.client.commands.get(commandArg);
       if (!cmd) return message.channel.send(embedBuilderTitle(this.client, message, `Error`

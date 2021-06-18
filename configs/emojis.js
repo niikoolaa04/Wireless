@@ -5,7 +5,7 @@ const utility = "<:utility:855152636901457951>";
 const role = "<:role:855501210433093632>";
 const timer = "<:timer:855503029910503454>";
 const reward = "<:reward:855502986377035778>";
-const winner = "<:winner:855503074364883005>";
+const winners = "<:winner:855503074364883005>";
 const hoster = "<:hoster:855504312059035708>";
 
 module.exports = {
@@ -15,7 +15,7 @@ module.exports = {
   utility, 
   role, 
   timer, 
-  winner, 
+  winners, 
   reward,
   hoster, 
 }

@@ -28,11 +28,15 @@ ${reqContent}
   
   let channel = client.channels.cache.get(gwObject.channelID);
   
-  let m = await channel.send({embed: startEmbed});
-  await m.react("🎉");
-  
-  gwObject.messageID = m.id;
-  db.push(`giveaways_${message.guild.id}`, gwObject);
+  try {
+    let m = await channel.send({embed: startEmbed});
+    await m.react("🎉");
+    
+    gwObject.messageID = m.id;
+    db.push(`giveaways_${message.guild.id}`, gwObject);
+  } catch {
+    message.channel.send(this.client.embedBuilder(this.client, message, "Error", "It seems like I don't have permission to write in that channel.", "RED"));
+  }
 }
 
 const editGiveaway = async (client, message, messageID, guild, msgReq, invReq, winners, ending, prize) => {

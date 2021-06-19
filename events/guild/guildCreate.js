@@ -17,7 +17,9 @@ To start with bot do \`${this.client.config.prefix}help\` to view all available 
 > Change Welcome/Leave Invites Messages \`(${this.client.config.prefix}welcomemessage, ${this.client.config.prefix}leavemessage)\`
 > Checkout Variables for Welcome/Leave Messages \`(${this.client.config.prefix}variables)\`
 > Setup Channel for Invites Messages \`(${this.client.config.prefix}inviteschannel)\`
-> Change Prefix \`(${this.client.config.prefix}prefix)\``)
+> Change Prefix \`(${this.client.config.prefix}prefix)\`
+
+\`If you encounter any issues please contact the developer of the bot via DMs - ${this.client.config.dev.name}\``)
       .setColor("BLURPLE");
       
     let m = await guild.owner.send(ownerDM);

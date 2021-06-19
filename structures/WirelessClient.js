@@ -13,7 +13,6 @@ module.exports = class WirelessClient extends Discord.Client {
     this.gw = require("../managers/giveawaysManager.js");
    
     // End Of Files
-
     // Other //
     
     this.db = require("quick.db");
@@ -23,6 +22,9 @@ module.exports = class WirelessClient extends Discord.Client {
       "419609616943546378",
       "823228305167351808", 
       "186158262855401472"
+    ];
+    this.disabledGuilds = [
+      "110373943822540800"
     ];
     this.invites = {};
     this.aliases = new Discord.Collection();

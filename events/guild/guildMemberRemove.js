@@ -12,6 +12,8 @@ module.exports = class GuildMemberRemove extends Event {
 	}
 
 	async run(member) {
+	  if(this.client.disabledGuilds.includes(member.guild.id)) return;
+
     const inviter = db.fetch(`inviter_${member.guild.id}_${member.id}`);
     if(inviter != member.id && inviter != "Unknown" && inviter != "Vanity URL") {
       db.add(`invitesLeaves_${member.guild.id}_${inviter}`, 1);

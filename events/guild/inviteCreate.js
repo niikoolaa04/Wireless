@@ -8,6 +8,8 @@ module.exports = class InviteCreate extends Event {
 	}
 
 	async run(invite) {
+	  if(this.client.disabledGuilds.includes(invite.guild.id)) return;
+
 	  invite.guild.fetchInvites().then(guildInvites => {
 	    this.client.invites[invite.guild.id] = guildInvites;
 	  });

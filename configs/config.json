@@ -3,9 +3,6 @@
   "prefix": "+",
   "version": "1.0.0",
   "footer": "Wireless",
-  "disabledGuilds": {
-    "botsList": "110373943822540800"
-  }, 
   "owner": {
     "name": "nikolaa#0123",
     "id": "823228305167351808"

@@ -22,7 +22,7 @@ module.exports = class MessageReactionAdd extends Event {
       
       let invitesReq = db.fetch(`invitesRegular_${message.guild.id}_${user.id}`);
       let bonusReq = db.fetch(`invitesBonus_${message.guild.id}_${user.id}`); 
-      let msgReq = db.fetch(`poslatePoruke_${message.guild.id}_${user.id}`);
+      let msgReq = db.fetch(`messages_${message.guild.id}_${user.id}`);
       let gwInvites = gwRunning.requirements.invitesReq;
       let gwMsg = gwRunning.requirements.messagesReq; 
       let totalReq = parseInt(invitesReq + bonusReq);

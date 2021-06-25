@@ -18,13 +18,16 @@ module.exports = class Discriminator extends Command {
     const discrim = args[0];
     if (!discrim || isNaN(discrim)) return message.channel.send(this.client.embedBuilder(this.client, message, `Error`, "You have entered invalid discriminator.", "RED"));
 
-    let members = this.client.users.cache.filter(c => c.discriminator === discrim).map(c => c.tag).join("\n");
+    let members = this.client.users.cache.filter(c => c.discriminator === discrim).map(c => c.tag);
+    let content = "";
+    if(members.length >= 45) content = members.slice(0, 20);
+    else content = members.join("\n");
 
     let embed = new Discord.MessageEmbed()
       .setAuthor("Discriminator", this.client.user.displayAvatarURL())
       .setDescription(`Users with Discriminator \`#${discrim}\`
   
->>> ${members}`)
+>>> ${content}`)
       .setColor("BLURPLE");
 
     message.channel.send(embed);

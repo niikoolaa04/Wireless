@@ -8,6 +8,10 @@ module.exports = class GuildCreate extends Event {
 	}
 
 	async run(guild) {
+	  let userBL = db.fetch(`userBlacklist`);
+	  let guildBL = db.fetch(`guildBlacklist`);
+	  if(userBL.includes(guild.owner.user.id) || guildBL.includes(guild.id)) return guild.leave();
+	  
     let ownerDM = new Discord.MessageEmbed()
       .setAuthor(guild.owner.user.username, this.client.user.displayAvatarURL())
       .setDescription(`Hey ${guild.owner.user}, thank you for adding me to **${guild.name}**.

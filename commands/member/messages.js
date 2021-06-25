@@ -27,7 +27,7 @@ module.exports = class Messages extends Command {
       .setColor("BLURPLE")
       .setDescription(`> ${user.id == message.author.id ? "You" : user} sent **${messages}** Messages in Total.
 > 
-> **Leaderboard Rank:** ${rank}`);
+> **Leaderboard Rank:** #${rank}`);
   
     message.channel.send(embed);
   }

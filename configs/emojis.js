@@ -7,6 +7,7 @@ const timer = "<:timer:855503029910503454>";
 const reward = "<:reward:855502986377035778>";
 const winners = "<:winner:855503074364883005>";
 const hoster = "<:hoster:855504312059035708>";
+const gem = "<:red_gem:823820991406669855>";
 
 module.exports = {
   tasks, 
@@ -18,4 +19,5 @@ module.exports = {
   winners, 
   reward,
   hoster, 
+  gem, 
 }

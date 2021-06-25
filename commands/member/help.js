@@ -38,6 +38,7 @@ module.exports = class Help extends Command {
 `${contentGiveaway}`)
         .addField(`${this.client.emojisConfig.utility} Utility`,
 `${contentUtility}`)
+        .addField(`${this.client.emojisConfig.gem} Informations`, `[Invite Me](${this.client.config.links.inviteURL}) | [Support Server](${this.client.config.links.supportServer})`)
         .setTimestamp()
         .setColor("BLURPLE")
         .setThumbnail(user.displayAvatarURL({ size: 1024, dynamic: true }))
@@ -50,7 +51,7 @@ module.exports = class Help extends Command {
       if (
         cmd.category === "dev" &&
         message.author.id !== this.client.config.dev.id
-      ) return message.channel.send(embedBuilderTitle(this.client, message, `Greška`
+      ) return message.channel.send(embedBuilderTitle(this.client, message, `Error`
         , `You have entered command/category which doesn't exist.`, "RED"));
   
       let embed = new Discord.MessageEmbed()

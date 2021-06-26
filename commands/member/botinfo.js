@@ -20,6 +20,7 @@ module.exports = class Botinfo extends Command {
       .setAuthor("Bot Informations", this.client.user.displayAvatarURL())
       .setDescription(`\`👤\` Developer: \`${this.client.config.dev.name}\`
 \`🤖\` Bot Version: \`${this.client.config.version}\`
+\`⭐\` Guilds: \`${this.client.guilds.cache.size}\`
 \`📚\` Programming Language: \`JavaScript\`
 \`🎮\` Library: \`discord.js\`
 \`🖥️\` Memory: \`${memory.toFixed(2)}MB\`

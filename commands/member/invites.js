@@ -33,11 +33,7 @@ module.exports = class Invites extends Command {
       .setColor("BLURPLE")
       .setDescription(`> **User** · ${user.username}
 
-> Total Invites · \`${regular + bonus}\`
-> Join Invites · \`${joins}\`
-> Leaves Invites · \`${left}\`
-> Regular Invites · \`${regular}\`
-> Bonus Invites · \`${bonus}\`
+> **${regular}** Invites \`(${regular + bonus} total, ${joins} joins, ${left} leaves, ${bonus} bonus)\`
 
 **Leaderboard Rank:** #${rank}
 **Invited by:** ${inviter}`);

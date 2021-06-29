@@ -11,5 +11,6 @@ module.exports = class GuildDelete extends Event {
     console.log(
       `[BOT] (${moment.utc(new Date()).tz('Europe/Belgrade').format('HH:mm:ss, DD/MM/YYYY.')}) I'm removed from the Guild ${guild.name} (${guild.id}) which had ${guild.memberCount} total members!`
     );
+    db.delete(`giveaways_${guild.id}`);
   }
 };

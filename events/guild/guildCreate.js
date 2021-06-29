@@ -1,6 +1,7 @@
 const Discord = require("discord.js");
 const Event = require("../../structures/Events");
 const moment = require("moment");
+const db = require("quick.db");
 
 module.exports = class GuildCreate extends Event {
 	constructor(...args) {

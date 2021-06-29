@@ -9,7 +9,8 @@ module.exports = class InviteCreate extends Event {
 
 	async run(invite) {
 	  if(this.client.disabledGuilds.includes(invite.guild.id)) return;
-
+    if(!invite.guild.me.permissions.has("MANAGE_GUILD")) return;
+    
 	  invite.guild.fetchInvites().then(guildInvites => {
 	    this.client.invites[invite.guild.id] = guildInvites;
 	  });

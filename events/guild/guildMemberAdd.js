@@ -15,6 +15,7 @@ module.exports = class GuildMemberAdd extends Event {
 	async run(member) {
 	  if(this.client.disabledGuilds.includes(member.guild.id)) return;
 	  
+	  if(!member.guild.me.permissions.has("MANAGE_GUILD")) return;
     member.guild.fetchInvites().then(async guildInvites => {
       const ei = this.client.invites[member.guild.id];
   

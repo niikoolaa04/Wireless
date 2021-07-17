@@ -18,7 +18,7 @@ module.exports = class Botinfo extends Command {
     const cpu = process.cpuUsage().system / 1024 / 1024;
     let embed = new Discord.MessageEmbed()
       .setAuthor("Bot Informations", this.client.user.displayAvatarURL())
-      .setDescription(`\`👤\` Developer: \`${this.client.config.dev.name}\`
+      .setDescription(`\`👤\` Developer: <@${this.client.config.dev.id}>
 \`🤖\` Bot Version: \`${this.client.config.version}\`
 \`⭐\` Guilds: \`${this.client.guilds.cache.size}\`
 \`📚\` Programming Language: \`JavaScript\`

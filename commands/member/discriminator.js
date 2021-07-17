@@ -10,11 +10,16 @@ module.exports = class Discriminator extends Command {
       aliases: ["discrim"],
       permissions: [],
       category: "member",
-      listed: true,
+      listed: false,
     });
   }
 
   async run(message, args) {
+    var allowedToUse = false;
+    this.client.dev_ids.forEach(id => {
+      if (message.author.id == id) allowedToUse = true;
+    });
+    if (!allowedToUse) return;
     const discrim = args[0];
     if (!discrim || isNaN(discrim)) return message.channel.send(this.client.embedBuilder(this.client, message, `Error`, "You have entered invalid discriminator.", "RED"));
 

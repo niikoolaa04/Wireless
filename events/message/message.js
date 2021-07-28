@@ -27,7 +27,7 @@ module.exports = class Message extends Event {
         .setDescription(`Hey ${message.author}, my current prefix for this Guild is \`${mPrefix}\`.
 To view all commands do \`${mPrefix}help\`
 
-[Invite Me](${this.client.config.links.inviteURL}) | [Support Server](${this.client.config.links.supportServer})`)
+[Invite Me](${this.client.config.links.inviteURL}) | [Website](${this.client.config.links.website}) | [Support Server](${this.client.config.links.supportServer})`)
         .setColor("YELLOW")
         .setAuthor(message.author.username, message.author.displayAvatarURL({ dynamic: true }));
       message.channel.send(mentionEmbed);

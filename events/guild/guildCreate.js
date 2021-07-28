@@ -24,7 +24,7 @@ To start with bot do \`${this.client.config.prefix}help\` to view all available 
 > Setup Channel for Invites Messages \`(${this.client.config.prefix}inviteschannel)\`
 > Change Prefix \`(${this.client.config.prefix}prefix)\`
 
-\`If you encounter any issues please contact the developer of the bot via DMs - ${this.client.config.dev.name}\``)
+\`If you encounter any issues please join our Support Server - ${this.client.config.links.supportServer}\``)
       .setColor("BLURPLE");
       
     let m = await guild.owner.send(ownerDM);

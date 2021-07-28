@@ -15,7 +15,6 @@ module.exports = class Botinfo extends Command {
 
   async run(message, args) {
     const memory = process.memoryUsage().heapUsed / 1024 / 1024;
-    const cpu = process.cpuUsage().system / 1024 / 1024;
     let embed = new Discord.MessageEmbed()
       .setAuthor("Bot Informations", this.client.user.displayAvatarURL())
       .setDescription(`\`👤\` Developer: <@${this.client.config.dev.id}>
@@ -23,8 +22,7 @@ module.exports = class Botinfo extends Command {
 \`⭐\` Guilds: \`${this.client.guilds.cache.size}\`
 \`📚\` Programming Language: \`JavaScript\`
 \`🎮\` Library: \`discord.js\`
-\`🖥️\` Memory: \`${memory.toFixed(2)}MB\`
-\`📟\` CPU: \`${Math.round(cpu)}%\``)
+\`🖥️\` Memory: \`${memory.toFixed(2)}MB\``)
       .setColor("BLURPLE");
   
     message.channel.send(embed);

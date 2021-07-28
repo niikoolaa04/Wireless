@@ -15,6 +15,9 @@ module.exports = class InvitesLeaveMessage extends Command {
   }
 
   async run(message, args) {
+    if(!args[0]) return message.channel.send(
+      this.client.embedBuilder(this.client, message, "Error", "You need to enter join message or in order to clear it just type 'none'", "RED")
+    );
     if (args[0].toLowerCase() == "none") {
       db.delete(`server_${message.guild.id}_joinMessage`);
       let msgEmbedClear = new Discord.MessageEmbed()

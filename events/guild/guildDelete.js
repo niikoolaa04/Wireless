@@ -1,4 +1,5 @@
 const Discord = require("discord.js");
+const db = require("quick.db");
 const Event = require("../../structures/Events");
 const moment = require("moment");
 

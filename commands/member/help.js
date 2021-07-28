@@ -46,12 +46,12 @@ module.exports = class Help extends Command {
       message.channel.send(cmdEmbed);
     } else {
       let cmd = this.client.commands.get(commandArg);
-      if (!cmd) return message.channel.send(embedBuilderTitle(this.client, message, `Error`
+      if (!cmd) return message.channel.send(this.client.embedBuilder(this.client, message, `Error`
         , `You have entered invalid command/category.`, "RED"));
       if (
         cmd.category === "dev" &&
         message.author.id !== this.client.config.dev.id
-      ) return message.channel.send(embedBuilderTitle(this.client, message, `Error`
+      ) return message.channel.send(this.client.embedBuilder(this.client, message, `Error`
         , `You have entered command/category which doesn't exist.`, "RED"));
   
       let embed = new Discord.MessageEmbed()

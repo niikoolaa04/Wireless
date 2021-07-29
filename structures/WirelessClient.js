@@ -5,7 +5,7 @@ module.exports = class WirelessClient extends Discord.Client {
   constructor() {
     super({ disableMentions: "everyone", ws: { intents: Discord.Intents.ALL }, partials: ['MESSAGE', 'CHANNEL', 'REACTION', 'USER', 'GUILD_MEMBER']});
     
-    const poster = AutoPoster('topggtoken', this)
+    const poster = AutoPoster(process.env.TOP_GG_TOKEN, this)
 
     // Files
     

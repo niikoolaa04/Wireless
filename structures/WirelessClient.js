@@ -1,9 +1,12 @@
 const Discord = require("discord.js");
+const { AutoPoster } = require('topgg-autoposter')
 
 module.exports = class WirelessClient extends Discord.Client {
   constructor() {
     super({ disableMentions: "everyone", ws: { intents: Discord.Intents.ALL }, partials: ['MESSAGE', 'CHANNEL', 'REACTION', 'USER', 'GUILD_MEMBER']});
     
+    const poster = AutoPoster('topggtoken', this)
+
     // Files
     
     this.config = require("../configs/config.json");

@@ -9,13 +9,14 @@ module.exports = class GuildCreate extends Event {
 	}
 
 	async run(guild) {
+    let owner = await owner.fetch();
 	  let userBL = db.fetch(`userBlacklist`) || [];
 	  let guildBL = db.fetch(`guildBlacklist`) || [];
-	  if(userBL.includes(guild.owner.user.id) || guildBL.includes(guild.id)) return guild.leave();
+	  if(userBL.includes(owner.user.id) || guildBL.includes(guild.id)) return guild.leave();
 	  
     let ownerDM = new Discord.MessageEmbed()
-      .setAuthor(guild.owner.user.username, this.client.user.displayAvatarURL())
-      .setDescription(`Hey ${guild.owner.user}, thank you for adding me to **${guild.name}**.
+      .setAuthor(owner.user.username, this.client.user.displayAvatarURL())
+      .setDescription(`Hey ${owner.user}, thank you for adding me to **${guild.name}**.
 To start with bot do \`${this.client.config.prefix}help\` to view all available commands.
 
 **${this.client.emojisConfig.tasks} Starting Tips**
@@ -27,7 +28,7 @@ To start with bot do \`${this.client.config.prefix}help\` to view all available 
 \`If you encounter any issues please join our Support Server - ${this.client.config.links.supportServer}\``)
       .setColor("BLURPLE");
       
-    let m = await guild.owner.send(ownerDM);
+    let m = await owner.send({ embeds: [ownerDM] });
     await m.react("👋");
     
     console.log(

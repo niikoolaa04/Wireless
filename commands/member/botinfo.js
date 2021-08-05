@@ -25,6 +25,6 @@ module.exports = class Botinfo extends Command {
 \`🖥️\` Memory: \`${memory.toFixed(2)}MB\``)
       .setColor("BLURPLE");
   
-    message.channel.send(embed);
+    message.channel.send({ embeds: [embed] });
   }
 };

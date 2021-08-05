@@ -18,14 +18,14 @@ module.exports = class GiveawayEdit extends Command {
   async run(message, args) {
     let messageID = args[0];
 
-    if (!messageID || isNaN(messageID)) return message.channel.send(this.client.embedBuilder(this.client, message, "Greška", "You haven't entered Message ID.", "RED"));
+    if (!messageID || isNaN(messageID)) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message, "Error", "You haven't entered Message ID.", "RED")] });
 
     let giveaways = db.fetch(`giveaways_${message.guild.id}`);
     let gwData = giveaways.find(g => g.messageID == messageID && g.ended == false);
 
-    if (!gwData) return message.channel.send(this.client.embedBuilder(this.client, message, "Greška", "You have entered invalid Message ID.", "RED"));
+    if (!gwData) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message, "Error", "You have entered invalid Message ID.", "RED")] });
 
     this.client.gw.endGiveaway(this.client, message, messageID, message.guild);
-    message.channel.send(this.client.embedBuilder(this.client, message, "Giveaway", `Giveaway have been ended successfuly.`, "YELLOW"));
+    message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message, "Giveaway", `Giveaway have been ended successfuly.`, "YELLOW")] });
   }
 };

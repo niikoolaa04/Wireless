@@ -21,14 +21,14 @@ module.exports = class BypassRole extends Command {
     let next = false;
     if (gwRole != null) {
       db.delete(`server_${message.guild.id}_bypassRole`);
-      message.channel.send(this.client.embedBuilder(this.client, message,
-      `Bypass Role`, "You have successfully reseted Bypass Role.", "YELLOW"));
+      message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message,
+      `Bypass Role`, "You have successfully reseted Bypass Role.", "YELLOW") ]});
       next = true;
     }
     if(next == true) return;
     
-    if (!role) return message.channel.send(this.client.embedBuilder(this.client, message,
-      `Error`, "You haven't mentioned role.", "RED"));
+    if (!role) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message,
+      `Error`, "You haven't mentioned role.", "RED") ]});
     
     db.set(`settings_${message.guild.id}_bypassRole`, role.id);
 
@@ -37,6 +37,6 @@ module.exports = class BypassRole extends Command {
       .setDescription(`Giveaway Requirements Bypass Role have been successfully changed to \`${role}\``)
       .setColor("BLURPLE");
 
-    message.channel.send(embed);
+    message.channel.send({ embeds: [embed] });
   }
 };

@@ -34,7 +34,7 @@ module.exports = class Ready extends Event {
         this.client.gw.checkGiveaway(this.client, g);
       }, 30000);
       if(!g.me.permissions.has("MANAGE_GUILD")) return;
-      g.fetchInvites().then(guildInvites => {
+      g.invites.fetch().then(guildInvites => {
         this.client.invites[g.id] = guildInvites;
       });
     }); 

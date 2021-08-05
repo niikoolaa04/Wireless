@@ -16,7 +16,7 @@ module.exports = class GuildMemberAdd extends Event {
 	  if(this.client.disabledGuilds.includes(member.guild.id)) return;
 	  
 	  if(!member.guild.me.permissions.has("MANAGE_GUILD")) return;
-    member.guild.fetchInvites().then(async guildInvites => {
+    member.guild.invites.fetch().then(async guildInvites => {
       const ei = this.client.invites[member.guild.id];
   
       this.client.invites[member.guild.id] = guildInvites;
@@ -58,7 +58,7 @@ module.exports = class GuildMemberAdd extends Event {
         let leaves = db.fetch(`invitesLeaves_${member.guild.id}_${inviter}`) || 0;
         let bonus = db.fetch(`invitesBonus_${member.guild.id}_${inviter}`) || 0;
 
-        invitesChannel.send(`${msgJoin
+        invitesChannel.send({ content: `${msgJoin
           .replace("{userTag}", member.user.tag)
           .replace("{members}", member.guild.memberCount)
           .replace("{username}", member.user.username)
@@ -69,7 +69,7 @@ module.exports = class GuildMemberAdd extends Event {
           .replace("{bonusInvites}", bonus)
           .replace("{regularInvites}", regular)
           .replace("{joinsInvites}", joins)
-          .replace("{created}", moment.utc(member.user.createdAt).tz("Europe/Belgrade").format("dddd, MMMM Do YYYY, HH:mm:ss"))}`);
+          .replace("{created}", moment.utc(member.user.createdAt).tz("Europe/Belgrade").format("dddd, MMMM Do YYYY, HH:mm:ss"))}` });
       } 
     });
 	} 

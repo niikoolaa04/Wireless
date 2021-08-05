@@ -23,7 +23,7 @@ module.exports = class Help extends Command {
       let commandsArray = this.client.commands.filter(
           c => c.listed === true
         );
-      let loadedCommands = commandsArray.array();
+      let loadedCommands = [...commandsArray.values()];
       
       let contentMember = this.client.utils.commandsList(this.client, message, "member");
       let contentGiveaway = this.client.utils.commandsList(this.client, message, "giveaway");
@@ -43,16 +43,16 @@ module.exports = class Help extends Command {
         .setColor("BLURPLE")
         .setThumbnail(user.displayAvatarURL({ size: 1024, dynamic: true }))
         .setFooter(`Total Commands ${loadedCommands.length}`, message.author.displayAvatarURL({ size: 1024, dynamic: true }));
-      message.channel.send(cmdEmbed);
+      message.channel.send({ embeds: [cmdEmbed] });
     } else {
       let cmd = this.client.commands.get(commandArg);
-      if (!cmd) return message.channel.send(this.client.embedBuilder(this.client, message, `Error`
-        , `You have entered invalid command/category.`, "RED"));
+      if (!cmd) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message, `Error`
+        , `You have entered invalid command/category.`, "RED") ]});
       if (
         cmd.category === "dev" &&
         message.author.id !== this.client.config.dev.id
-      ) return message.channel.send(this.client.embedBuilder(this.client, message, `Error`
-        , `You have entered command/category which doesn't exist.`, "RED"));
+      ) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message, `Error`
+        , `You have entered command/category which doesn't exist.`, "RED") ]});
   
       let embed = new Discord.MessageEmbed()
         .setTitle("🚀 · Informations About Command")
@@ -65,7 +65,7 @@ module.exports = class Help extends Command {
         .setFooter(this.client.config.footer, this.client.user.displayAvatarURL({ size: 1024, dynamic: true }))
         .setTimestamp();
   
-      message.channel.send(embed);
+      message.channel.send({ embeds: [embed] });
     }
   }
 };

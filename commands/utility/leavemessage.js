@@ -23,7 +23,7 @@ module.exports = class InvitesLeaveMessage extends Command {
       let msgEmbedClear = new Discord.MessageEmbed()
         .setDescription(`Leave Message have been reseted.`)
         .setColor("BLURPLE");
-      message.channel.send(msgEmbedClear);
+      message.channel.send({ embeds: [msgEmbedClear] });
     }
     if (args[0]) {
       db.set(`server_${message.guild.id}_leaveMessage`, args.join(" "));

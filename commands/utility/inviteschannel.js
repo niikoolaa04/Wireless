@@ -21,7 +21,7 @@ module.exports = class InvitesChannel extends Command {
       let msgEmbedClear = new Discord.MessageEmbed()
         .setDescription(`Invites Channel have been reseted.`)
         .setColor("BLURPLE");
-      message.channel.send(msgEmbedClear);
+      message.channel.send({ embeds: [msgEmbedClear] });
     }
     if (channel) {
       db.set(`channel_${message.guild.id}_invites`, channel.id);
@@ -30,7 +30,7 @@ module.exports = class InvitesChannel extends Command {
         .setDescription(`Invites Channel has been set to ${channel}.
 To reset it just use command without arguments.`)
         .setColor("BLURPLE");
-      message.channel.send(msgEmbed);
+      message.channel.send({ embeds: [msgEmbed] });
     }
   }
 };

@@ -20,7 +20,7 @@ const startGiveaway = async (client, message, gwObject) => {
 > **${client.emojisConfig.members} Number of Winners:** ${gwObject.winnerCount}
 ${reqContent}
 
-[Invite Me](${client.config.links.inviteURL}) | [Website](${this.client.config.links.website}) | [Support Server](${client.config.links.supportServer})`)
+[Invite Me](${client.config.links.inviteURL}) | [Website](${client.config.links.website}) | [Support Server](${client.config.links.supportServer})`)
     .setColor("BLURPLE")
     .setThumbnail(message.guild.iconURL())
     .setFooter("Ends at", client.user.displayAvatarURL())
@@ -28,7 +28,7 @@ ${reqContent}
   
   let channel = client.channels.cache.get(gwObject.channelID);
   
-  let m = await channel.send({embed: startEmbed});
+  let m = await channel.send({embeds: [startEmbed]});
   await m.react("🎉");
     
   gwObject.messageID = m.id;
@@ -82,7 +82,7 @@ const endGiveaway = async (client, message, messageID, guild) => {
   let rUsers = await msg.reactions.cache.get("🎉").users.fetch();
   let rFilter = rUsers.filter(r => !r.bot);
 
-  let rArray = rFilter.array();
+  let rArray = [...rFilter.values()];
   let randomWinner;
   let winners = [];
   
@@ -137,13 +137,13 @@ const endGiveaway = async (client, message, messageID, guild) => {
 > **${client.emojisConfig.winners} Winner(s):** ${randomWinner ? winners : "No Winner(s)"}
 ${reqContent}
 
-[Invite Me](${client.config.links.inviteURL}) | [Website](${this.client.config.links.website}) | [Support Server](${client.config.links.supportServer})`)
+[Invite Me](${client.config.links.inviteURL}) | [Website](${client.config.links.website}) | [Support Server](${client.config.links.supportServer})`)
     .setColor("RED")
     .setThumbnail(message.guild.iconURL())
     .setFooter("Ended", client.user.displayAvatarURL())
     .setTimestamp();
 
-  msg.edit({ embed: editEmbed });
+  msg.edit({ embeds: [editEmbed] });
   
   let hasWinners = `\`🎊\` Congratulations to ${gwData.winnerCount > 1 ? "winners" : "winner"} ${winners} on winning this Giveaway!\nGood Luck to the others next time.`;
   let noWinners = `\`🎊\` Giveaway ended but there is no winner(s).`;
@@ -153,7 +153,7 @@ ${reqContent}
     .setDescription(`${randomWinner ? hasWinners : noWinners}`)
     .setColor("YELLOW");
   
-  channel.send(endEmbed);
+  channel.send({ embeds: [endEmbed] });
 }
 
 const rerollGiveaway = async (client, message, messageID) => {
@@ -166,7 +166,7 @@ const rerollGiveaway = async (client, message, messageID) => {
   let rUsers = await msg.reactions.cache.get("🎉").users.fetch();
   let rFilter = rUsers.filter(r => !r.bot);
 
-  let rArray = rFilter.array();
+  let rArray = [...rFilter.values()];
   let winners = [];
   
   for(let i = 0; i < gwData.winnerCount; i++) {
@@ -189,11 +189,11 @@ const rerollGiveaway = async (client, message, messageID) => {
     .setDescription(`${winnerString}`)
     .setColor("BLURPLE");
   
-  channel.send({ embed: rerollEmbed })
+  channel.send({ embeds: [rerollEmbed] })
 }
 
 const checkGiveaway = async (client, guild) => {
-  let giveaways = db.fetch(`giveaways_${guild.id}`);
+  let giveaways = db.fetch(`giveaways_${guild.id}`) || [];
   if(giveaways == null) return;
   if(giveaways.length == 0) return;
   
@@ -205,7 +205,7 @@ const checkGiveaway = async (client, guild) => {
     
     let rUsers = await msg.reactions.cache.get("🎉").users.fetch();
     let rFilter = rUsers.filter(r => !r.bot);
-    let rArray = rFilter.array();
+    let rArray = [...rFilter.values()];
     let randomWinner;
     let winners = [];
     
@@ -213,6 +213,7 @@ const checkGiveaway = async (client, guild) => {
       for(let j = 0; j < giveaways[i].winnerCount; j++) {
         if(giveaways[i].winnerCount > 1 && rArray.length < 2) {
           randomWinner = rArray[0];
+
           winners.push(randomWinner);
           rArray.splice(rArray.indexOf(randomWinner), 1);
           break;
@@ -260,13 +261,13 @@ const checkGiveaway = async (client, guild) => {
 > **${client.emojisConfig.winners} Winner(s):** ${randomWinner ? winners : "No Winner(s)"}
 ${reqContent}
 
-[Invite Me](${client.config.links.inviteURL}) | [Website](${this.client.config.links.website}) | [Support Server](${client.config.links.supportServer})`)
+[Invite Me](${client.config.links.inviteURL}) | [Website](${client.config.links.website}) | [Support Server](${client.config.links.supportServer})`)
         .setColor("RED")
         .setThumbnail(guild.iconURL())
         .setFooter("Ended", client.user.displayAvatarURL())
         .setTimestamp();
       
-      msg.edit({ embed: editEmbed });
+      msg.edit({ embeds: [editEmbed] });
       
       let hasWinners = `\`🎊\` Congratulations to ${giveaways[i].winnerCount > 1 ? "winners" : "winner"} ${winners} on winning this Giveaway!\nGood Luck to the others next time.`;
       let noWinners = `\`🎊\` Giveaway ended but there is no winner(s).`;
@@ -276,7 +277,7 @@ ${reqContent}
         .setDescription(`${randomWinner ? hasWinners : noWinners}`)
         .setColor("YELLOW");
       
-      channel.send(endEmbed);
+      channel.send({ embeds: [endEmbed] });
     } else {
       let reqContent = "";
       if(giveaways[i].requirements.messagesReq > 0 || giveaways[i].requirements.invitesReq > 0) reqContent += `\n**${client.emojisConfig.tasks} Requirements**`;
@@ -293,13 +294,13 @@ ${reqContent}
 > **${client.emojisConfig.members} Number of Winners:** ${giveaways[i].winnerCount}
 ${reqContent}
 
-[Invite Me](${client.config.links.inviteURL}) | [Website](${this.client.config.links.website}) | [Support Server](${client.config.links.supportServer})`)
+[Invite Me](${client.config.links.inviteURL}) | [Website](${client.config.links.website}) | [Support Server](${client.config.links.supportServer})`)
         .setColor("BLURPLE")
         .setThumbnail(guild.iconURL())
         .setFooter("Ends at", client.user.displayAvatarURL())
         .setTimestamp(giveaways[i].endsAt);
 
-      msg.edit({ embed: embedChange });
+      msg.edit({ embeds: [embedChange] });
     }
   } 
 }

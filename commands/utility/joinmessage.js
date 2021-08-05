@@ -23,7 +23,7 @@ module.exports = class InvitesJoinMessage extends Command {
       let msgEmbedClear = new Discord.MessageEmbed()
         .setDescription(`Join Message have been reseted.`)
         .setColor("BLURPLE");
-      message.channel.send(msgEmbedClear);
+      message.channel.send({ embeds: [msgEmbedClear] });
     }
     if (args[0]) {
       db.set(`server_${message.guild.id}_joinMessage`, args.join(" "));
@@ -33,7 +33,7 @@ module.exports = class InvitesJoinMessage extends Command {
 To clear Message just use "none".
 Use \`variables\` Command to view all available Variables.`)
         .setColor("BLURPLE");
-      message.channel.send(msgEmbed);
+      message.channel.send({ embeds: [msgEmbed] });
     }
   }
 };

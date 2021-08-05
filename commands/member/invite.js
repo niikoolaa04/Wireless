@@ -18,6 +18,6 @@ module.exports = class Invite extends Command {
     let embed = new Discord.MessageEmbed()
       .setDescription(`Invite Me to your Server by [Clicking Here](${this.client.config.links.inviteURL})`)
       .setColor("BLURPLE");
-    message.channel.send(embed);
+    message.channel.send({ embeds: [embed] });
   }
 };

@@ -15,7 +15,7 @@ module.exports = class Variables extends Command {
   }
 
   async run(message, args) {
-    message.channel.send(this.client.embedBuilder(this.client, message, "Variables", `You can use this Variables in Join \`(joinmessage)\` & Leave \`(leavemessage)\` Messages.
+    message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message, "Variables", `You can use this Variables in Join \`(joinmessage)\` & Leave \`(leavemessage)\` Messages.
     
 **VARIABLES**
 
@@ -29,6 +29,6 @@ module.exports = class Variables extends Command {
 \`{regularInvites}\` - Regular Invites
 \`{bonusInvites}\` - Bonus Invites
 \`{leavesInvites}\` - Leaves Invites
-\`{totalInvites}\` - Regular + Bonus Invites`, "BLURPLE"));
+\`{totalInvites}\` - Regular + Bonus Invites`, "BLURPLE") ]});
   }
 };

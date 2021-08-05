@@ -48,7 +48,7 @@ Your Giveaway Entry in **${message.guild.name}** has been \`declined\`.
 > **›** You have an Role which is blacklisted from Entering Giveaways.`);
         reaction.users.remove(user);
         isBlacklist = true;
-        user.send(denyEmbed);
+        user.send({ embeds: [denyEmbed] });
       }
       if(isBlacklist == false && gwInvites > 0 && totalReq < gwInvites) {
         denyEmbed.setDescription(`**${this.client.emojisConfig.prize} Giveaway:** ${gwRunning.prize}
@@ -59,7 +59,7 @@ Your Giveaway Entry in **${message.guild.name}** has been \`declined\`.
 > **›** You need **${gwRunning.requirements.invitesReq}** Invite(s) to Enter Giveaway.`);
         reaction.users.remove(user);
         haveInvites = false;
-        user.send(denyEmbed);
+        user.send({ embeds: [denyEmbed] });
       }
       if(isBlacklist == false &&   haveInvites == true && gwMsg > 0 && msgReq < gwMsg) {
         denyEmbed.setDescription(`**${this.client.emojisConfig.prize} Giveaway:** ${gwRunning.prize}
@@ -70,14 +70,14 @@ Your Giveaway Entry in **${message.guild.name}** has been \`declined\`.
 > **›** You need **${gwRunning.requirements.messagesReq}** Message(s) to Enter Giveaway.`);
         reaction.users.remove(user);
         haveMessages = false;
-        user.send(denyEmbed); 
+        user.send({ embeds: [denyEmbed] });
       }
       if(haveInvites == true && haveMessages == true && isBlacklist == false) {
         denyEmbed.setDescription(`**${this.client.emojisConfig.prize} Giveaway:** ${gwRunning.prize}
 
 Your Giveaway Entry in **${message.guild.name}** has been \`approved\`.`);
         denyEmbed.setColor("YELLOW")
-        user.send(denyEmbed);
+        user.send({ embeds: [denyEmbed] });
       }
     }
 	}

@@ -34,10 +34,9 @@ function commandsList(client, message, category) {
   let commands = client.commands.filter(
     c => c.category === category && c.listed === true
   );
-  let loaded = commands.array();
   let content = "";
   
-  loaded.forEach(
+  commands.forEach(
     c => (content += `\`${c.name}\`, `)
   );
   

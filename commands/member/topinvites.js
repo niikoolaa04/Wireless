@@ -24,6 +24,6 @@ module.exports = class TopInvites extends Command {
 ${content}`)
       .setColor("BLURPLE");
 
-    message.channel.send(embed);
+    message.channel.send({ embeds: [embed] });
   }
 };

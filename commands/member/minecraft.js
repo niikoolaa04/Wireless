@@ -20,7 +20,7 @@ module.exports = class Minecraft extends Command {
       text.toLowerCase().includes("č") ||
       text.toLowerCase().includes("ć") ||
       text.toLowerCase().includes("š") ||
-      text.toLowerCase().includes("đ")) return message.channel.send("> Instead of **'Š, Đ, Č, Ć, Ž'** use **'S, Dj, C, C, Z'**");
+      text.toLowerCase().includes("đ")) return message.channel.send({ content: "> Instead of **'Š, Đ, Č, Ć, Ž'** use **'S, Dj, C, C, Z'**" });
 
     let embedError = new Discord.MessageEmbed()
       .setAuthor("Error", this.client.user.displayAvatarURL())
@@ -32,7 +32,7 @@ module.exports = class Minecraft extends Command {
     var url = "https://minecraftskinstealer.com/achievement/" + (Math.floor(Math.random() * 30) + 1) + "/Achievement+Get%21/" + text;
     let file = new Discord.MessageAttachment(await url, "MinecraftAchievement.png");
 
-    if (!text) return message.channel.send(embedError);
-    message.channel.send(file);
+    if (!text) return message.channel.send({ embeds: [embedError] });
+    message.channel.send({ files: [file] });
   }
 };

@@ -18,23 +18,23 @@ module.exports = class BonusInvites extends Command {
     let type = args[0];
     let user = message.mentions.users.first() || this.client.users.cache.get(args[1]);
     let amount = args[2];
-    if(!amount || isNaN(amount) || amount < 0) return message.channel.send(this.client.embedBuilder(this.client, message,
-      `Error`, "You have entered invalid amount of invites.", "RED"));
-    if(type != "add" && type != "remove") return message.channel.send(this.client.embedBuilder(this.client, message,
-      `Error`, "You have entered invalid option (add/remove).", "RED"));
+    if(!amount || isNaN(amount) || amount < 0) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message,
+      `Error`, "You have entered invalid amount of invites.", "RED") ]});
+    if(type != "add" && type != "remove") return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message,
+      `Error`, "You have entered invalid option (add/remove).", "RED") ]});
     
     if(type == "add") {
       db.add(`invitesBonus_${message.guild.id}_${user.id}`, parseInt(amount));
-      message.channel.send(this.client.embedBuilder(this.client, message,
-        `Bonus Invites`, `You have successfully added ${amount} Bonus Invites to ${user}.`, "YELLOW"));
+      message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message,
+        `Bonus Invites`, `You have successfully added ${amount} Bonus Invites to ${user}.`, "YELLOW") ]});
     } else if(type == "remove") {
       let bonus = db.fetch(`invitesBonus_${message.guild.id}_${user.id}`);
-      if((bonus - amount) < 0) return message.channel.send(this.client.embedBuilder(this.client, message,
-      `Error`, "You cannot remove that much invites.", "RED"));
+      if((bonus - amount) < 0) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message,
+      `Error`, "You cannot remove that much invites.", "RED") ]});
       
       db.subtract(`invitesBonus_${message.guild.id}_${user.id}`, parseInt(amount));
-      message.channel.send(this.client.embedBuilder(this.client, message,
-        `Bonus Invites`, `You have successfully added ${amount} Bonus Invites to ${user}.`, "YELLOW"));
+      message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message,
+        `Bonus Invites`, `You have successfully added ${amount} Bonus Invites to ${user}.`, "YELLOW") ]});
     }
   }
 };

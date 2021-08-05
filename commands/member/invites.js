@@ -38,6 +38,6 @@ module.exports = class Invites extends Command {
 **Leaderboard Rank:** #${rank}
 **Invited by:** ${inviter}`);
   
-    message.channel.send(embed);
+    message.channel.send({ embeds: [embed] });
   }
 };

@@ -21,14 +21,14 @@ module.exports = class BlacklistRole extends Command {
     let next = false;
     if (gwRole != null) {
       db.delete(`server_${message.guild.id}_blacklistRole`);
-      message.channel.send(this.client.embedBuilder(this.client, message,
-        `Blacklist Role`, "You have successfully reseted Blacklist Role.", "YELLOW"));
+      message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message,
+        `Blacklist Role`, "You have successfully reseted Blacklist Role.", "YELLOW") ]});
       next = true;
     }
     if (next == true) return;
 
-    if (!role) return message.channel.send(this.client.embedBuilder(this.client, message,
-      `Error`, "You haven't mentioned role.", "RED"));
+    if (!role) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message,
+      `Error`, "You haven't mentioned role.", "RED") ]});
 
     db.set(`settings_${message.guild.id}_blacklistRole`, role.id);
 
@@ -37,6 +37,6 @@ module.exports = class BlacklistRole extends Command {
       .setDescription(`Giveaway Requirements Blacklist Role have been successfully changed to \`${role}\``)
       .setColor("BLURPLE");
 
-    message.channel.send(embed);
+    message.channel.send({ embeds: [embed] });
   }
 };

@@ -24,12 +24,12 @@ module.exports = class GiveawayStart extends Command {
     let invitesArg = args[4];
     let prizeArg = args.slice(5).join(" ");
     
-    if(!durationArg || isNaN(ms(durationArg))) return message.channel.send(this.client.embedBuilder(this.client, message, "Error", "You have entered invalid Giveaway Duration.", "RED"));
-    if(!channelArg) return message.channel.send(this.client.embedBuilder(this.client, message, "Error", "You have mentioned invalid Channel.", "RED"));
-    if(!winnersArg || isNaN(winnersArg) || winnersArg <= 0) return message.channel.send(this.client.embedBuilder(this.client, message, "Error", "You haven't entered number of winners.", "RED"));
-    if(!messagesArg || isNaN(messagesArg) || messagesArg < 0) return message.channel.send(this.client.embedBuilder(this.client, message, "Error", "You have entered invalid Number of Messages Required for Entering Giveaway.", "RED"));
-    if(!invitesArg || isNaN(invitesArg) || invitesArg < 0) return message.channel.send(this.client.embedBuilder(this.client, message, "Error", "You have entered invalid Number of Invites Required for Entering Giveaway.", "RED"));
-    if(!prizeArg || prizeArg.length >= 256) return message.channel.send(this.client.embedBuilder(this.client, message, "Error", "You have entered invalid Prize.", "RED"));
+    if(!durationArg || isNaN(ms(durationArg))) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message, "Error", "You have entered invalid Giveaway Duration.", "RED")] });
+    if(!channelArg) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message, "Error", "You have mentioned invalid Channel.", "RED")] });
+    if(!winnersArg || isNaN(winnersArg) || winnersArg <= 0) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message, "Error", "You haven't entered number of winners.", "RED")] });
+    if(!messagesArg || isNaN(messagesArg) || messagesArg < 0) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message, "Error", "You have entered invalid Number of Messages Required for Entering Giveaway.", "RED")] });
+    if(!invitesArg || isNaN(invitesArg) || invitesArg < 0) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message, "Error", "You have entered invalid Number of Invites Required for Entering Giveaway.", "RED")] });
+    if(!prizeArg || prizeArg.length >= 256) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message, "Error", "You have entered invalid Prize.", "RED")] });
 
     let giveawayObject = this.client.utils.giveawayObject(
       message.guild.id, 
@@ -45,6 +45,6 @@ module.exports = class GiveawayStart extends Command {
     );
     this.client.gw.startGiveaway(this.client, message, giveawayObject);
     
-    message.channel.send(this.client.embedBuilder(this.client, message, "Giveaway", `Giveaway has started in Channel ${channelArg}.`, "YELLOW"));
+    message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message, "Giveaway", `Giveaway has started in Channel ${channelArg}.`, "YELLOW")] });
   }
 };

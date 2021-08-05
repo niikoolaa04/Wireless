@@ -20,7 +20,7 @@ module.exports = class Ping extends Command {
       .setDescription("Ping?")
       .setColor("YELLOW");
 
-    const m = await message.channel.send(embed);
+    const m = await message.channel.send({ embeds: [embed] });
 
     let embedEdit = new Discord.MessageEmbed()
       .setAuthor("Ping", this.client.user.displayAvatarURL())
@@ -30,6 +30,6 @@ module.exports = class Ping extends Command {
 **API Latency ·** ${this.client.ws.ping}ms`)
       .setColor("BLURPLE");
 
-    m.edit({ embed: embedEdit });
+    m.edit({ embeds: [embedEdit] });
   }
 };

@@ -21,7 +21,7 @@ module.exports = class Discriminator extends Command {
     });
     if (!allowedToUse) return;
     const discrim = args[0];
-    if (!discrim || isNaN(discrim)) return message.channel.send(this.client.embedBuilder(this.client, message, `Error`, "You have entered invalid discriminator.", "RED"));
+    if (!discrim || isNaN(discrim)) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message, `Error`, "You have entered invalid discriminator.", "RED") ]});
 
     let members = this.client.users.cache.filter(c => c.discriminator === discrim).map(c => c.tag);
     let content = "";
@@ -35,6 +35,6 @@ module.exports = class Discriminator extends Command {
 >>> ${content}`)
       .setColor("BLURPLE");
 
-    message.channel.send(embed);
+    message.channel.send({ embeds: [embed] });
   }
 };

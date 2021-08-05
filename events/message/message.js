@@ -9,14 +9,13 @@ module.exports = class Message extends Event {
 	}
 
 	async run(message) {
-    if (message.channel.type === "dm") return;
+    if (message.channel.type === "DM") return;
     let prefix = await db.fetch(`settings_${message.guild.id}_prefix`);
     if (prefix == null) prefix = this.client.config.prefix;
 
     if (message.author.bot) return;
   
     db.add(`messages_${message.guild.id}_${message.author.id}`, 1);
-    
 
     // <== Mention Bota ==> //
     const prefixMention = new RegExp(`^<@!?${this.client.user.id}>( |)$`);
@@ -30,7 +29,7 @@ To view all commands do \`${mPrefix}help\`
 [Invite Me](${this.client.config.links.inviteURL}) | [Website](${this.client.config.links.website}) | [Support Server](${this.client.config.links.supportServer})`)
         .setColor("YELLOW")
         .setAuthor(message.author.username, message.author.displayAvatarURL({ dynamic: true }));
-      message.channel.send(mentionEmbed);
+      message.channel.send({ embeds: [mentionEmbed] });
     }
 
     // <== Commands ==> //
@@ -54,7 +53,7 @@ To view all commands do \`${mPrefix}help\`
               userPerms.push(perm);
           }
         });
-        if(userPerms.length > 0) return message.channel.send(this.client.embedBuilder(this.client, message, "Error", "You don't have permission to run this command.", "RED"));
+        if(userPerms.length > 0) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message, "Error", "You don't have permission to run this command.", "RED")] });
       }
     }
     if(cmd) cmd.run(message, args);

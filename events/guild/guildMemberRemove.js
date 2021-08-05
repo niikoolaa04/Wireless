@@ -39,7 +39,7 @@ module.exports = class GuildMemberRemove extends Event {
       let msgLeave = db.fetch(`server_${member.guild.id}_leaveMessage`);
       
       if(invitesChannel !== null && invitesChannel !== undefined && msgLeave !== null) {
-        invitesChannel.send(`${msgLeave
+        invitesChannel.send({ content: `${msgLeave
           .replace("{userTag}", member.user.tag)
           .replace("{members}", member.guild.memberCount)
           .replace("{username}", member.user.username)
@@ -50,7 +50,7 @@ module.exports = class GuildMemberRemove extends Event {
           .replace("{bonusInvites}", bonus)
           .replace("{regularInvites}", regular)
           .replace("{joinsInvites}", joins)
-          .replace("{created}", moment.utc(member.user.createdAt).tz("Europe/Belgrade").format("dddd, MMMM Do YYYY, HH:mm:ss"))}`);
+          .replace("{created}", moment.utc(member.user.createdAt).tz("Europe/Belgrade").format("dddd, MMMM Do YYYY, HH:mm:ss"))}` });
       }
     }  
 	}

@@ -43,8 +43,8 @@ module.exports = class Eval extends Command {
       return text;
   };
     try {
-      if(!args[0]) return message.channel.send(this.client.embedBuilder(this.client, message, 
-      `Greška`, "You haven't entered Code to run.", "RED"));
+      if(!args[0]) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message, 
+      `Error`, "You haven't entered Code to run.", "RED")] });
       const evaled = this.client.clean(eval(code));
       embed.addField('📥︲Input', `\`\`\`xl\n${code}\n\`\`\``);
       embed.setColor('YELLOW');
@@ -55,12 +55,12 @@ module.exports = class Eval extends Command {
             embed.addField('📤︲Output', `\`\`\`xl\n${r}\n\`\`\``)
           });
         }
-      message.channel.send(embed);
+      message.channel.send({ embeds: [embed] });
     } catch (err) {
         embed.addField('📥︲Input', `\`\`\`\n${code}\n\`\`\``);
         embed.setColor('RED');
         embed.addField('📤︲Error', `\`\`\`xl\n${err}\n\`\`\``);
-        message.channel.send(embed);
+        message.channel.send({ embeds: [embed] });
     }
   }
 }

@@ -29,6 +29,6 @@ module.exports = class Messages extends Command {
 > 
 > **Leaderboard Rank:** #${rank}`);
   
-    message.channel.send(embed);
+    message.channel.send({ embeds: [embed] });
   }
 };

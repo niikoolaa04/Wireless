@@ -17,10 +17,10 @@ module.exports = class Prefix extends Command {
   async run(message, args) {
     let prefix = args[0];
     let real = db.fetch(`settings_${message.guild.id}_prefix`);
-    if (!prefix) return message.channel.send(this.client.embedBuilder(this.client, message, 
-      `Error`, "You haven't entered prefix.", "RED"));
-    if (prefix === real) return message.channel.send(this.client.embedBuilder(this.client, message, 
-        `Error`, "New Prefix cannot be same as old one.", "RED"));
+    if (!prefix) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message, 
+      `Error`, "You haven't entered prefix.", "RED") ]});
+    if (prefix === real) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message, 
+        `Error`, "New Prefix cannot be same as old one.", "RED") ]});
     db.set(`settings_${message.guild.id}_prefix`, prefix);
   
     let embed = new Discord.MessageEmbed()
@@ -28,6 +28,6 @@ module.exports = class Prefix extends Command {
     .setDescription(`Guild prefix have been successfully changed to \`${prefix}\``)
     .setColor("BLURPLE");
   
-    message.channel.send(embed);
+    message.channel.send({ embeds: [embed] });
   }
 };

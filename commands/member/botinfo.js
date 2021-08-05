@@ -8,7 +8,7 @@ module.exports = class Botinfo extends Command {
       description: "informations about bot",
       usage: "botinfo",
       permissions: [],
-      category: "utility",
+      category: "member",
       listed: true,
     });
   }

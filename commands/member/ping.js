@@ -9,7 +9,7 @@ module.exports = class Ping extends Command {
       usage: "ping",
       permissions: [],
       aliases: ["uptime"], 
-      category: "utility",
+      category: "member",
       listed: true,
     });
   }

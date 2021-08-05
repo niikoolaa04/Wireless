@@ -1,14 +1,14 @@
 const Command = require("../../structures/Command");
 const Discord = require("discord.js");
 
-module.exports = class Invite extends Command {
+module.exports = class Vote extends Command {
   constructor(client) {
     super(client, {
-      name: "invite",
-      description: "invite bot to your server",
-      usage: "invite",
+      name: "vote",
+      description: "vote for bot",
+      usage: "vote",
       permissions: [],
-      aliases: ["link"],
+      aliases: ["upvote"],
       category: "member",
       listed: true,
     });
@@ -16,7 +16,7 @@ module.exports = class Invite extends Command {
 
   async run(message, args) {
     let embed = new Discord.MessageEmbed()
-      .setDescription(`Invite Me to your Server by [Clicking Here](${this.client.config.links.inviteURL})`)
+      .setDescription(`Vote for me by [Clicking Here](${this.client.config.links.voteURL})`)
       .setColor("BLURPLE");
     message.channel.send({ embeds: [embed] });
   }

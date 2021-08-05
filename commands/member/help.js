@@ -38,7 +38,7 @@ module.exports = class Help extends Command {
 `${contentGiveaway}`)
         .addField(`${this.client.emojisConfig.utility} Utility`,
 `${contentUtility}`)
-        .addField(`${this.client.emojisConfig.gem} Informations`, `[Invite Me](${this.client.config.links.inviteURL}) | [Website](${this.client.config.links.website}) | [Support Server](${this.client.config.links.supportServer})`)
+        .addField(`${this.client.emojisConfig.gem} Informations`, `[Invite Me](${this.client.config.links.inviteURL}) | [Vote for me](${this.client.config.links.voteURL}) | [Website](${this.client.config.links.website}) | [Support Server](${this.client.config.links.supportServer})`)
         .setTimestamp()
         .setColor("BLURPLE")
         .setThumbnail(user.displayAvatarURL({ size: 1024, dynamic: true }))

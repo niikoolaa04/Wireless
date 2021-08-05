@@ -3,7 +3,7 @@ const db = require("quick.db");
 const delay = require("delay");
 const Event = require("../../structures/Events");
 
-module.exports = class Message extends Event {
+module.exports = class MessageCreate extends Event {
 	constructor(...args) {
 		super(...args);
 	}

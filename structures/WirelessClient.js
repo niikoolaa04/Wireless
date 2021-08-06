@@ -1,5 +1,7 @@
 const { Collection, Intents, Client} = require("discord.js");
-const { AutoPoster } = require('topgg-autoposter')
+const { AutoPoster } = require('topgg-autoposter');
+const express = require('express');
+const Topgg = require('@top-gg/sdk');
 
 module.exports = class WirelessClient extends Client {
   constructor() {
@@ -20,6 +22,16 @@ module.exports = class WirelessClient extends Client {
     super({ intents: myIntents, partials: ['MESSAGE', 'CHANNEL', 'REACTION', 'USER', 'GUILD_MEMBER']});
     
     const poster = AutoPoster(process.env.TOP_GG_TOKEN, this)
+    
+    const app = express();
+    
+    const webhook = new Topgg.Webhook('wireless_wh11551');
+    
+    app.post('/dblwebhook', webhook.listener(vote => {
+      console.log(vote.user);
+    }));
+    
+    app.listen(7525);
 
     // Files
     

@@ -7,21 +7,21 @@
     "start": "node wire.js"
   },
   "dependencies": {
-    "random": "^2.1.0",
-    "better-sqlite3": "^7.4.3",
-    "dotenv": "latest",
     "delay": "^4.3.0",
+    "express": "latest",
     "discord.js": "^13.0.0",
+    "dotenv": "latest",
     "enmap": "^5.3.1",
+    "hastebin-gen": "^2.0.5",
+    "moment-timezone": "latest",
     "ms": "^2.1.2",
     "parse-ms": "^2.0.0",
-    "pretty-ms": "latest", 
+    "pretty-ms": "latest",
     "quick.db": "latest",
+    "random": "^2.1.0",
     "smart-timeout": "^2.5.0",
-    "util": "^0.12.3",
     "topgg-autoposter": "latest",
-    "moment-timezone": "latest", 
-    "hastebin-gen": "^2.0.5"
+    "util": "^0.12.3"
   },
   "engines": {
     "node": "16.x"

@@ -103,12 +103,12 @@ const endGiveaway = async (client, message, messageID, guild) => {
   let newObject = client.utils.giveawayObject(
     gwData.guildID,
     gwData.messageID,
-    "Završen",
+    "Ended",
     gwData.channelID,
     gwData.winnerCount,
     gwData.requirements.messagesReq,
     gwData.requirements.invitesReq,
-    "Završen",
+    "Ended",
     gwData.hostedBy,
     gwData.prize
   );
@@ -227,12 +227,12 @@ const checkGiveaway = async (client, guild) => {
       let newObject = client.utils.giveawayObject(
         giveaways[i].guildID,
         giveaways[i].messageID, 
-        "Završen", 
+        "Ended", 
         giveaways[i].channelID, 
         giveaways[i].winnerCount, 
         giveaways[i].requirements.messagesReq, 
         giveaways[i].requirements.invitesReq, 
-        "Završen", 
+        "Ended", 
         giveaways[i].hostedBy, 
         giveaways[i].prize
       );

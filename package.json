@@ -16,7 +16,7 @@
     "ms": "^2.1.2",
     "parse-ms": "^2.0.0",
     "pretty-ms": "latest", 
-    "quick.db": "^7.1.1",
+    "quick.db": "latest",
     "smart-timeout": "^2.5.0",
     "util": "^0.12.3",
     "topgg-autoposter": "latest",

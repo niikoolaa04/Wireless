@@ -8,10 +8,10 @@
   },
   "dependencies": {
     "random": "^2.1.0",
-    "better-sqlite3": "^7.1.0",
+    "better-sqlite3": "^7.4.3",
     "dotenv": "latest",
     "delay": "^4.3.0",
-    "discord.js": "latest",
+    "discord.js": "^13.0.0",
     "enmap": "^5.3.1",
     "ms": "^2.1.2",
     "parse-ms": "^2.0.0",
@@ -19,13 +19,12 @@
     "quick.db": "^7.1.1",
     "smart-timeout": "^2.5.0",
     "util": "^0.12.3",
-    "@discordjs/opus": "^0.3.2",
     "topgg-autoposter": "latest",
     "moment-timezone": "latest", 
     "hastebin-gen": "^2.0.5"
   },
   "engines": {
-    "node": "12.x"
+    "node": "16.x"
   },
   "license": "MIT",
   "keywords": [

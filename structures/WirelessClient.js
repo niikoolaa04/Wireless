@@ -31,9 +31,8 @@ module.exports = class WirelessClient extends Client {
       let channel = this.channels.cache.get("873256539199242280");
       let embed = new MessageEmbed()
         .setTitle("Top.gg Vote")
-        .setDescription(`<${vote.user}> just voted for bot on top.gg`)
-        .setColor("YELLOW")
-        .setTimestamp();
+        .setDescription(`<@${vote.user}> just voted for bot on top.gg`)
+        .setColor("YELLOW");
       channel.send({ embeds: [embed] })
     }));
     

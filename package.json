@@ -7,11 +7,12 @@
     "start": "node wire.js"
   },
   "dependencies": {
+    "@top-gg/sdk": "^3.1.2",
     "delay": "^4.3.0",
-    "express": "latest",
     "discord.js": "^13.0.0",
     "dotenv": "latest",
     "enmap": "^5.3.1",
+    "express": "latest",
     "hastebin-gen": "^2.0.5",
     "moment-timezone": "latest",
     "ms": "^2.1.2",

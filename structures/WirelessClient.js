@@ -1,4 +1,4 @@
-const { Collection, Intents, Client} = require("discord.js");
+const { MessageEmbed, Collection, Intents, Client } = require("discord.js");
 const { AutoPoster } = require('topgg-autoposter');
 const express = require('express');
 const Topgg = require('@top-gg/sdk');
@@ -28,10 +28,16 @@ module.exports = class WirelessClient extends Client {
     const webhook = new Topgg.Webhook('wireless_wh11551');
     
     app.post('/dblwebhook', webhook.listener(vote => {
-      console.log(vote.user);
+      let channel = this.channels.cache.get("873256539199242280");
+      let embed = new MessageEmbed()
+        .setTitle("Top.gg Vote")
+        .setDescription(`<${vote.user}> just voted for bot on top.gg`)
+        .setColor("YELLOW")
+        .setTimestamp();
+      channel.send({ embeds: [embed] })
     }));
     
-    app.listen(7525);
+    app.listen(7542);
 
     // Files
     

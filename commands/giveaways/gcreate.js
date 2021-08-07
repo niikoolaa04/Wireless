@@ -17,7 +17,6 @@ module.exports = class GiveawayCreate extends Command {
 	}
     
   async run(message, args) {
-    if(message.author.id != "823228305167351808") return message.reply("Command is in development mode, use +gstart")
     let embed = new Discord.MessageEmbed()
       .setColor("BLURPLE")
       .setAuthor("Giveaway Setup", this.client.user.displayAvatarURL());

@@ -20,8 +20,8 @@ async function submitGiveaway(client, message, data) {
   let gwConfirm = client.embedBuilder(client, message, "Giveaway Setup", 
 `Are this Giveaway Details Good? Confirm by clicking Button.
 
-**\`⏰\` Giveaway Duration:** ${client.utils.formatVreme(ms(data.duration) - Date.now())}
-**\`#️⃣\` Channel to Start in:** <#${data.channel}>
+**\`⏰\` Giveaway Duration:** ${client.utils.formatVreme(ms(data.duration))}
+**\`#️⃣\` Channel to Start in:** ${data.channel}
 **\`👑\` Number of Winners:** ${data.winners}
 **\`💬\` Messages Required:** ${data.messages}
 **\`🎫\` Invites Required:** ${data.invites}

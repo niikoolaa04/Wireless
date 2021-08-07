@@ -1,5 +1,5 @@
 const Command = require("../../structures/Command");
-const Discord = require("discord.js");
+const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
 
 module.exports = class Vote extends Command {
   constructor(client) {
@@ -24,7 +24,7 @@ module.exports = class Vote extends Command {
 					.setStyle('LINK'),
 			);
 
-    let embed = new Discord.MessageEmbed()
+    let embed = new MessageEmbed()
       .setDescription(`Vote for me by clicking on Button.`)
       .setColor("BLURPLE");
     message.channel.send({ embeds: [embed], components: [row] });

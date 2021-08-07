@@ -14,7 +14,7 @@ module.exports = class Poll extends Command {
   }
 
   async run(message, args) {
-    if(!arg[0]) return message.channel.send(
+    if(!args[0]) return message.channel.send(
       { embeds: [ this.client.embedBuilder(this.client, message, "Error", "You haven't entered what will poll be about.", "RED" ) ] }
     );
     let poll = args.join(" ");

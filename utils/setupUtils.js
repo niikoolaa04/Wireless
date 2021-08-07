@@ -1,22 +1,72 @@
-const Discord = require('discord.js');
+const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
 const ms = require('ms');
 
 async function submitGiveaway(client, message, data) {
-  let giveawayObject = client.utils.giveawayObject(
-    message.guild.id, 
-    0, 
-    ms(data.duration), 
-    data.channel.id, 
-    parseInt(data.winners), 
-    parseInt(data.messages), 
-    parseInt(data.invites), 
-    (Date.now() + ms(data.duration)), 
-    message.author.id,
-    data.prize,
-  );
-  client.gw.startGiveaway(client, message, giveawayObject);
-  
-  message.channel.send({ embeds: [ client.embedBuilder(client, message, "Giveaway", `Giveaway has started in ${channelArg}.`, "YELLOW")] });
+
+  const row = new MessageActionRow()
+    .addComponents(
+      new MessageButton()
+        .setCustomId('createGw')
+        .setEmoji("🎉")
+        .setLabel("Yes, Start Giveaway")
+        .setStyle('PRIMARY'))
+    .addComponents(
+      new MessageButton()
+        .setCustomId('cancelGw')
+        .setEmoji("❌")
+        .setLabel("No, don't Start Giveaway")
+        .setStyle('DANGER'));
+
+  let gwConfirm = client.embedBuilder(client, message, "Giveaway Setup", 
+`Are this Giveaway Details Good? Confirm by clicking Button.
+
+**\`⏰\` Giveaway Duration:** ${client.utils.formatVreme(ms(data.duration) - Date.now())}
+**\`#️⃣\` Channel to Start in:** <#${data.channel}>
+**\`👑\` Number of Winners:** ${data.winners}
+**\`💬\` Messages Required:** ${data.messages}
+**\`🎫\` Invites Required:** ${data.invites}
+**\`🎁\` Prize:** ${data.invites}
+`, "BLURPLE");
+
+  message.channel.send({ embeds: [gwConfirm], components: [row] });
+
+  const collector = message.channel.createMessageComponentCollector({ filter, time: 30000, errors: ["time"] });
+
+  collector.on("collect", async i => {
+    if(i.customId == "createGw") {
+      await i.deferUpdate();
+      let giveawayObject = client.utils.giveawayObject(
+        message.guild.id, 
+        0, 
+        ms(data.duration), 
+        data.channel.id, 
+        parseInt(data.winners), 
+        parseInt(data.messages), 
+        parseInt(data.invites), 
+        (Date.now() + ms(data.duration)), 
+        message.author.id,
+        data.prize,
+      );
+      client.gw.startGiveaway(client, message, giveawayObject);
+      
+      message.channel.send({ embeds: [ client.embedBuilder(client, message, "Giveaway", `Giveaway has started in ${data.channel}.`, "YELLOW")] });
+      collector.stop();
+    } else if(i.customId == "cancelGw") {
+      await i.deferUpdate();
+      message.channel.send({ embeds: [ client.embedBuilder(client, message, "Giveaway Setup", `Giveaway creation have been stopped.`, "RED")] });
+      collector.stop();
+    }
+  });
+
+  collector.on("end", (collected, reason) => {
+    console.log(reason);
+    if(reason != "time") return;
+    let endEmbed = new MessageEmbed()
+      .setColor("RED")
+      .setDescription('Time has passed without response, giveaway creation stopped')
+      .setAuthor("Giveaway Setup", client.user.displayAvatarURL());
+    message.channel.send({ embeds: [endEmbed] });
+  })
 }
 
 async function prizeSetup(client, message, embed, filter, data) {
@@ -27,7 +77,7 @@ Example: \`Nitro Classic\``);
   let prizeCollector = message.channel.createMessageCollector({ filter, time: 60000, errors: ["time"] });
 
   prizeCollector.on("collect", async (msg) => {
-    let cancelEmbed = new Discord.MessageEmbed()
+    let cancelEmbed = new MessageEmbed()
       .setColor("BLURPLE")
       .setDescription('You have canceled Giveaway Creation')
       .setAuthor("Giveaway Setup", client.user.displayAvatarURL());
@@ -45,8 +95,13 @@ Example: \`Nitro Classic\``);
     prizeCollector.stop();
   });
 
-  prizeCollector.on("end", collected => {
-    message.channel.send({ content: 'collector end' })
+  prizeCollector.on("end", (collected, reason) => {
+    if(reason != "time") return;
+    let endEmbed = new MessageEmbed()
+      .setColor("RED")
+      .setDescription('Time has passed without response, giveaway creation stopped')
+      .setAuthor("Giveaway Setup", client.user.displayAvatarURL());
+    message.channel.send({ embeds: [endEmbed] });
   });
 }
 
@@ -58,7 +113,7 @@ Example: \`500\``);
   let invCollector = message.channel.createMessageCollector({ filter, time: 60000, errors: ["time"] });
 
   invCollector.on("collect", async (msg) => {
-    let cancelEmbed = new Discord.MessageEmbed()
+    let cancelEmbed = new MessageEmbed()
       .setColor("BLURPLE")
       .setDescription('You have canceled Giveaway Creation')
       .setAuthor("Giveaway Setup", client.user.displayAvatarURL());
@@ -74,8 +129,13 @@ Example: \`500\``);
     invCollector.stop();
   });
 
-  invCollector.on("end", collected => {
-    message.channel.send({ content: 'collector end' })
+  invCollector.on("end", (collected, reason) => {
+    if(reason != "time") return;
+    let endEmbed = new MessageEmbed()
+      .setColor("RED")
+      .setDescription('Time has passed without response, giveaway creation stopped')
+      .setAuthor("Giveaway Setup", client.user.displayAvatarURL());
+    message.channel.send({ embeds: [endEmbed] });
   });
 }
 
@@ -87,7 +147,7 @@ Example: \`500\``);
   let msgCollector = message.channel.createMessageCollector({ filter, time: 60000, errors: ["time"] });
 
   msgCollector.on("collect", async (msg) => {
-    let cancelEmbed = new Discord.MessageEmbed()
+    let cancelEmbed = new MessageEmbed()
       .setColor("BLURPLE")
       .setDescription('You have canceled Giveaway Creation')
       .setAuthor("Giveaway Setup", client.user.displayAvatarURL());
@@ -103,8 +163,13 @@ Example: \`500\``);
     msgCollector.stop();
   });
 
-  msgCollector.on("end", collected => {
-    message.channel.send({ content: 'collector end' })
+  msgCollector.on("end", (collected, reason) => {
+    if(reason != "time") return;
+    let endEmbed = new MessageEmbed()
+      .setColor("RED")
+      .setDescription('Time has passed without response, giveaway creation stopped')
+      .setAuthor("Giveaway Setup", client.user.displayAvatarURL());
+    message.channel.send({ embeds: [endEmbed] });
   });
 }
 
@@ -116,7 +181,7 @@ Example: \`2\``);
   let winnerCollector = message.channel.createMessageCollector({ filter, time: 60000, errors: ["time"] });
 
   winnerCollector.on("collect", async (msg) => {
-    let cancelEmbed = new Discord.MessageEmbed()
+    let cancelEmbed = new MessageEmbed()
       .setColor("BLURPLE")
       .setDescription('You have canceled Giveaway Creation')
       .setAuthor("Giveaway Setup", client.user.displayAvatarURL());
@@ -132,8 +197,13 @@ Example: \`2\``);
     winnerCollector.stop();
   });
 
-  winnerCollector.on("end", collected => {
-    message.channel.send({ content: 'collector end' })
+  winnerCollector.on("end", (collected, reason) => {
+    if(reason != "time") return;
+    let endEmbed = new MessageEmbed()
+      .setColor("RED")
+      .setDescription('Time has passed without response, giveaway creation stopped')
+      .setAuthor("Giveaway Setup", client.user.displayAvatarURL());
+    message.channel.send({ embeds: [endEmbed] });
   });
 }
 
@@ -145,7 +215,7 @@ async function channelSetup(client, message, embed, filter, data) {
   let channelCollector = message.channel.createMessageCollector({ filter, time: 60000, errors: ["time"] });
 
   channelCollector.on("collect", async (msg) => {
-    let cancelEmbed = new Discord.MessageEmbed()
+    let cancelEmbed = new MessageEmbed()
       .setColor("BLURPLE")
       .setDescription('You have canceled Giveaway Creation')
       .setAuthor("Giveaway Setup", client.user.displayAvatarURL());
@@ -161,8 +231,13 @@ async function channelSetup(client, message, embed, filter, data) {
     channelCollector.stop();
   });
 
-  channelCollector.on("end", collected => {
-    message.channel.send({ content: 'collector end' })
+  channelCollector.on("end", (collected, reason) => {
+    if(reason != "time") return;
+    let endEmbed = new MessageEmbed()
+      .setColor("RED")
+      .setDescription('Time has passed without response, giveaway creation stopped')
+      .setAuthor("Giveaway Setup", client.user.displayAvatarURL());
+    message.channel.send({ embeds: [endEmbed] });
   });
 }
 
@@ -183,7 +258,7 @@ async function durationSetup(client, message, embed, filter) {
   let durationCollector = message.channel.createMessageCollector({ filter, time: 60000, errors: ["time"] });
 
   durationCollector.on("collect", async (msg) => {
-    let cancelEmbed = new Discord.MessageEmbed()
+    let cancelEmbed = new MessageEmbed()
       .setColor("BLURPLE")
       .setDescription('You have canceled Giveaway Creation')
       .setAuthor("Giveaway Setup", client.user.displayAvatarURL());
@@ -198,8 +273,13 @@ async function durationSetup(client, message, embed, filter) {
     durationCollector.stop();
   });
 
-  durationCollector.on("end", collected => {
-    message.channel.send('end collectyor')
+  durationCollector.on("end", (collected, reason) => {
+    if(reason != "time") return;
+    let endEmbed = new MessageEmbed()
+      .setColor("RED")
+      .setDescription('Time has passed without response, giveaway creation stopped')
+      .setAuthor("Giveaway Setup", client.user.displayAvatarURL());
+    message.channel.send({ embeds: [endEmbed] });
   });
 }
 

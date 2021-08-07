@@ -59,7 +59,6 @@ async function submitGiveaway(client, message, filter, data) {
   });
 
   collector.on("end", (collected, reason) => {
-    console.log(reason);
     if(reason != "time") return;
     let endEmbed = new MessageEmbed()
       .setColor("RED")
@@ -96,7 +95,6 @@ Example: \`Nitro Classic\``);
   });
 
   prizeCollector.on("end", (collected, reason) => {
-    console.log(reason);
     if(reason != "time") return;
     let endEmbed = new MessageEmbed()
       .setColor("RED")
@@ -131,7 +129,6 @@ Example: \`500\``);
   });
 
   invCollector.on("end", (collected, reason) => {
-    console.log(reason);
     if(reason != "time") return;
     let endEmbed = new MessageEmbed()
       .setColor("RED")

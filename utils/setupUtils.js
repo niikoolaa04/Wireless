@@ -1,7 +1,7 @@
 const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
 const ms = require('ms');
 
-async function submitGiveaway(client, message, filter, data) {
+async function submitGiveaway(client, message, data) {
 
   const row = new MessageActionRow()
     .addComponents(
@@ -30,6 +30,7 @@ async function submitGiveaway(client, message, filter, data) {
 
   message.channel.send({ embeds: [gwConfirm], components: [row] });
 
+  let filter = m => m.user.id === message.author.id;
   const collector = message.channel.createMessageComponentCollector({ filter, time: 30000, errors: ["time"] });
 
   collector.on("collect", async i => {
@@ -90,7 +91,7 @@ Example: \`Nitro Classic\``);
 
     if(!prizeArg || prizeArg.length < 3 || prizeArg.length > 256) return message.channel.send({ content: 'prize valid' })
     data.prize = msg.content;
-    await submitGiveaway(client, message, filter, data);
+    await submitGiveaway(client, message, data);
     prizeCollector.stop();
   });
 

@@ -22,7 +22,7 @@ module.exports = class GiveawayCreate extends Command {
       .setColor("BLURPLE")
       .setAuthor("Giveaway Setup", this.client.user.displayAvatarURL());
 
-    let filter = m => m.user.id === message.author.id;
+    let filter = m => m.author.id === message.author.id;
     this.client.setupUtils.durationSetup(this.client, message, embed, filter);
   }
 };

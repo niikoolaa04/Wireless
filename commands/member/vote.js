@@ -15,9 +15,18 @@ module.exports = class Vote extends Command {
   }
 
   async run(message, args) {
+    const row = new MessageActionRow()
+			.addComponents(
+				new MessageButton()
+					.setCustomId('voteBot')
+          .setURL("https://top.gg/bot/855321650706513940/vote/")
+					.setLabel('Vote for me')
+					.setStyle('LINK'),
+			);
+
     let embed = new Discord.MessageEmbed()
-      .setDescription(`Vote for me by [Clicking Here](${this.client.config.links.voteURL})`)
+      .setDescription(`Vote for me by clicking on Button.`)
       .setColor("BLURPLE");
-    message.channel.send({ embeds: [embed] });
+    message.channel.send({ embeds: [embed], components: [row] });
   }
 };

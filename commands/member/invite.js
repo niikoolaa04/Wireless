@@ -1,5 +1,5 @@
 const Command = require("../../structures/Command");
-const Discord = require("discord.js");
+const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
 
 module.exports = class Invite extends Command {
   constructor(client) {
@@ -15,9 +15,18 @@ module.exports = class Invite extends Command {
   }
 
   async run(message, args) {
-    let embed = new Discord.MessageEmbed()
-      .setDescription(`Invite Me to your Server by [Clicking Here](${this.client.config.links.inviteURL})`)
+    const row = new MessageActionRow()
+			.addComponents(
+				new MessageButton()
+					.setCustomId('inviteBot')
+          .setURL("https://invites.wireless-bot.tech")
+					.setLabel('Invite Me')
+					.setStyle('LINK'),
+			);
+
+    let embed = new MessageEmbed()
+      .setDescription(`Invite Me to your Server by clicking on Button.`)
       .setColor("BLURPLE");
-    message.channel.send({ embeds: [embed] });
+    message.channel.send({ embeds: [embed], components: [row] });
   }
 };

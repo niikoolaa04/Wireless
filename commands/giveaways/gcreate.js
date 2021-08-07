@@ -56,7 +56,7 @@ Example: \`2m\``)
       durationCollector.stop();
     });
 
-    channelCollector.on("collect", msg => {
+    await channelCollector.on("collect", msg => {
       if(msg.content.toLowerCase() == "cancel") {
         msg.stop();
       }

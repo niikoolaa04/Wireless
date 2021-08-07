@@ -18,7 +18,6 @@ module.exports = class Vote extends Command {
     const row = new MessageActionRow()
 			.addComponents(
 				new MessageButton()
-					.setCustomId('voteBot')
           .setURL("https://top.gg/bot/855321650706513940/vote/")
 					.setLabel('Vote for me')
 					.setStyle('LINK'),

@@ -18,7 +18,6 @@ module.exports = class Invite extends Command {
     const row = new MessageActionRow()
 			.addComponents(
 				new MessageButton()
-					.setCustomId('inviteBot')
           .setURL("https://invites.wireless-bot.tech")
 					.setLabel('Invite Me')
 					.setStyle('LINK'),

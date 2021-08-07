@@ -32,7 +32,7 @@ To start with bot do \`${this.client.config.prefix}help\` to view all available 
     await m.react("👋");
     
     let channel = this.client.channels.cache.get(this.client.config.logs);
-    let embed = new MessageEmbed()
+    let embed = new Discord.MessageEmbed()
       .setTitle("Added to Guild")
       .setDescription(`
 **\`⭐\` Guild Name** - ${guild.name}

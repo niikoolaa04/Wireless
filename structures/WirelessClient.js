@@ -28,7 +28,7 @@ module.exports = class WirelessClient extends Client {
     const webhook = new Topgg.Webhook('wireless_wh11551');
     
     app.post('/dblwebhook', webhook.listener(vote => {
-      let channel = this.channels.cache.get("873256539199242280");
+      let channel = this.channels.cache.get(this.config.logs);
       let embed = new MessageEmbed()
         .setTitle("Top.gg Vote")
         .setDescription(`<@${vote.user}> just voted for bot on top.gg`)

@@ -11,7 +11,7 @@ module.exports = class GuildDelete extends Event {
   async run(guild) {
     let owner = await guild.fetchOwner();
     let channel = this.client.channels.cache.get(this.client.config.logs);
-    let embed = new MessageEmbed()
+    let embed = new Discord.MessageEmbed()
       .setTitle("Removed from Guild")
       .setDescription(`
 **\`⭐\` Guild Name** - ${guild.name}

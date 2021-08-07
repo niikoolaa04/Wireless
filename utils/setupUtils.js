@@ -30,6 +30,7 @@ async function submitGiveaway(client, message, data) {
 
   message.channel.send({ embeds: [gwConfirm], components: [row] });
 
+  let filter = m => m.author.id === message.author.id;
   const collector = message.channel.createMessageComponentCollector({ filter, time: 30000, errors: ["time"] });
 
   collector.on("collect", async i => {
@@ -96,6 +97,7 @@ Example: \`Nitro Classic\``);
   });
 
   prizeCollector.on("end", (collected, reason) => {
+    console.log(reason);
     if(reason != "time") return;
     let endEmbed = new MessageEmbed()
       .setColor("RED")
@@ -130,6 +132,7 @@ Example: \`500\``);
   });
 
   invCollector.on("end", (collected, reason) => {
+    console.log(reason);
     if(reason != "time") return;
     let endEmbed = new MessageEmbed()
       .setColor("RED")
@@ -274,12 +277,14 @@ async function durationSetup(client, message, embed, filter) {
   });
 
   durationCollector.on("end", (collected, reason) => {
+    console.log(reason);
     if(reason != "time") return;
     let endEmbed = new MessageEmbed()
       .setColor("RED")
       .setDescription('Time has passed without response, giveaway creation stopped')
       .setAuthor("Giveaway Setup", client.user.displayAvatarURL());
     message.channel.send({ embeds: [endEmbed] });
+    console.log(reason);
   });
 }
 

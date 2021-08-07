@@ -2,7 +2,6 @@ const Discord = require('discord.js');
 const ms = require('ms');
 
 async function submitGiveaway(client, message, data) {
-  console.log(data.duration)
   let giveawayObject = client.utils.giveawayObject(
     message.guild.id, 
     0, 
@@ -42,7 +41,7 @@ Example: \`Nitro Classic\``);
 
     if(!prizeArg || prizeArg.length < 3 || prizeArg.length > 256) return message.channel.send({ content: 'prize valid' })
     data.prize = msg.content;
-    await submitGiveaway(client, message, embed, filter, data);
+    await submitGiveaway(client, message, data);
     prizeCollector.stop();
   });
 
@@ -169,7 +168,7 @@ async function channelSetup(client, message, embed, filter, data) {
 
 async function durationSetup(client, message, embed, filter) {
   let currentData = {
-    duration: "1m",
+    duration: null,
     winners: 0,
     messages: 0,
     invites: 0,

@@ -35,6 +35,8 @@ Example: \`Nitro Classic\``);
       return;
     }
 
+    let prizeArg = msg.content;
+
     if(!prizeArg || prizeArg.length < 3 || prizeArg.length > 256) return message.channel.send({ content: 'prize valid' })
     data.prize = msg.content;
     await submitGiveaway(client, message, embed, filter, data);

@@ -1,7 +1,7 @@
 const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
 const ms = require('ms');
 
-async function submitGiveaway(client, message, data) {
+async function submitGiveaway(client, message, filter, data) {
 
   const row = new MessageActionRow()
     .addComponents(
@@ -30,7 +30,6 @@ async function submitGiveaway(client, message, data) {
 
   message.channel.send({ embeds: [gwConfirm], components: [row] });
 
-  let filter = m => m.author.id === message.author.id;
   const collector = message.channel.createMessageComponentCollector({ filter, time: 30000, errors: ["time"] });
 
   collector.on("collect", async i => {
@@ -92,7 +91,7 @@ Example: \`Nitro Classic\``);
 
     if(!prizeArg || prizeArg.length < 3 || prizeArg.length > 256) return message.channel.send({ content: 'prize valid' })
     data.prize = msg.content;
-    await submitGiveaway(client, message, data);
+    await submitGiveaway(client, message, filter, data);
     prizeCollector.stop();
   });
 
@@ -277,14 +276,12 @@ async function durationSetup(client, message, embed, filter) {
   });
 
   durationCollector.on("end", (collected, reason) => {
-    console.log(reason);
     if(reason != "time") return;
     let endEmbed = new MessageEmbed()
       .setColor("RED")
       .setDescription('Time has passed without response, giveaway creation stopped')
       .setAuthor("Giveaway Setup", client.user.displayAvatarURL());
     message.channel.send({ embeds: [endEmbed] });
-    console.log(reason);
   });
 }
 

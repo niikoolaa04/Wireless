@@ -9,6 +9,18 @@ module.exports = class GuildDelete extends Event {
   }
 
   async run(guild) {
+    let owner = guild.fetchOwner();
+    let channel = this.channels.cache.get("873607510207115315");
+    let embed = new MessageEmbed()
+      .setTitle("Removed from Guild")
+      .setDescription(`
+**\`⭐\` Guild Name** - ${guild.name}
+**\`#️⃣\` Guild ID** - ${guild.id}
+**\`👑\` Guild Owner** - ${owner.user.username}
+**\`👤\` Guild Member Count** - ${guild.memberCount}`)
+      .setColor("RED");
+    channel.send({ embeds: [embed] })
+
     console.log(
       `[BOT] (${moment.utc(new Date()).tz('Europe/Belgrade').format('HH:mm:ss, DD/MM/YYYY.')}) I'm removed from the Guild ${guild.name} (${guild.id}) which had ${guild.memberCount} total members!`
     );

@@ -43,6 +43,7 @@ module.exports = class WirelessClient extends Client {
     this.config = require("../configs/config.json");
     this.embedBuilder = require("../embeds/embedBuilder.js");
     this.utils = require("../utils/utils.js");
+    this.setupUtils = require("../utils/setupUtils");
     this.emojisConfig = require("../configs/emojis.js");
     this.gw = require("../managers/giveawaysManager.js");
    

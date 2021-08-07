@@ -17,11 +17,15 @@ module.exports = class GiveawayCreate extends Command {
 	}
     
   async run(message, args) {
+    if(message.author.id != "823228305167351808") return message.reply("Command is in development mode, use +gstart")
     let embed = new Discord.MessageEmbed()
       .setColor("BLURPLE")
       .setAuthor("Giveaway Setup", this.client.user.displayAvatarURL());
+
+    let filter = m => m.author.id === message.author.id;
+    this.client.setupUtils.durationSetup(this.client, message, embed, filter);
       
-    embed.setDescription(`Enter Duration for Giveaway.
+ /*   embed.setDescription(`Enter Duration for Giveaway.
 Example: \`2m\``)
     message.channel.send({ embeds: [embed] }); 
 
@@ -106,5 +110,6 @@ Example: \`Nitro Classic\``);
     this.client.gw.startGiveaway(this.client, message, giveawayObject);
     
     message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message, "Giveaway", `Giveaway has started in ${channelArg}.`, "YELLOW")] });
+      */
   }
 };

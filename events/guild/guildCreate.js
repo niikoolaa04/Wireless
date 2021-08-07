@@ -9,7 +9,7 @@ module.exports = class GuildCreate extends Event {
 	}
 
 	async run(guild) {
-    let owner = await owner.fetch();
+    let owner = await guild.fetchOwner();
 	  let userBL = db.fetch(`userBlacklist`) || [];
 	  let guildBL = db.fetch(`guildBlacklist`) || [];
 	  if(userBL.includes(owner.user.id) || guildBL.includes(guild.id)) return guild.leave();
@@ -31,6 +31,17 @@ To start with bot do \`${this.client.config.prefix}help\` to view all available 
     let m = await owner.send({ embeds: [ownerDM] });
     await m.react("👋");
     
+    let channel = this.channels.cache.get("873607510207115315");
+    let embed = new MessageEmbed()
+      .setTitle("Added to Guild")
+      .setDescription(`
+**\`⭐\` Guild Name** - ${guild.name}
+**\`#️⃣\` Guild ID** - ${guild.id}
+**\`👑\` Guild Owner** - ${owner.user.username}
+**\`👤\` Guild Member Count** - ${guild.memberCount}`)
+      .setColor("YELLOW");
+    channel.send({ embeds: [embed] })
+
     console.log(
       `[BOT] (${moment.utc(new Date()).tz('Europe/Belgrade').format('HH:mm:ss, DD/MM/YYYY.')}) I'm added to the new Guild ${guild.name} (${guild.id}) which have ${guild.memberCount} total members!`
     );

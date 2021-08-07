@@ -21,6 +21,7 @@ module.exports = class Poll extends Command {
     let embed = new Discord.MessageEmbed()
       .setTitle("📈 • Poll")
       .setDescription(`>>> ${poll}`)
+      .setColor("BLURPLE")
       .setTimestamp()
       .setFooter(message.author.username, message.author.displayAvatarURL({ dynamic: true }));
 

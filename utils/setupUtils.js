@@ -184,7 +184,7 @@ async function durationSetup(client, message, embed, filter) {
       return;
     }
 
-    data.duration = msg.content;
+    currentData.duration = msg.content;
     await channelSetup(client, message, embed, filter, currentData);
     durationCollector.stop();
   });

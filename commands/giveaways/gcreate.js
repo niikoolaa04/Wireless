@@ -35,7 +35,7 @@ Example: \`2m\``)
     let filter = m => m.author.id === message.author.id;
 
     let m = await message.channel.send({ embeds: [embed] }); 
-    let durationCollector = m.createMessageCollector({ filter, time: 60000 });
+    let durationCollector = message.channel.createMessageCollector({ filter, time: 60000 });
 
     durationCollector.on("collect", msg => {
       if(msg.content.toLowerCase() == "cancel") {
@@ -49,7 +49,7 @@ Example: \`2m\``)
     embed.setDescription(`Mention Channel in which to start Giveaway.
 Example: \`#general\``);
     m = await message.channel.send({ embeds: [embed] });
-    let channelCollector = m.createMessageCollector({ filter, time: 60000 });
+    let channelCollector = message.channel.createMessageCollector({ filter, time: 60000 });
 
     channelCollector.on("collect", msg => {
       if(msg.content.toLowerCase() == "cancel") {
@@ -66,7 +66,7 @@ Example: \`#general\``);
 Example: \`2\``);
     m = await message.channel.send({ embeds: [embed] });
     
-    let winnersCollector = m.createMessageCollector({ filter, time: 60000 });
+    let winnersCollector = message.channel.createMessageCollector({ filter, time: 60000 });
 
     winnersCollector.on("collect", msg => {
       if(msg.content.toLowerCase() == "cancel") {
@@ -82,7 +82,7 @@ Example: \`2\``);
 Example: \`500\``);
     m = await message.channel.send({ embeds: [embed] });
 
-    let msgCollector = m.createMessageCollector({ filter, time: 60000 });
+    let msgCollector = message.channel.createMessageCollector({ filter, time: 60000 });
 
     msgCollector.on("collect", msg => {
       if(msg.content.toLowerCase() == "cancel") {
@@ -98,7 +98,7 @@ Example: \`500\``);
 Example: \`10\``);
     m = await message.channel.send({ embeds: [embed] });
     
-    let invCollector = m.createMessageCollector({ filter, time: 60000 });
+    let invCollector = message.channel.createMessageCollector({ filter, time: 60000 });
 
     invCollector.on("collect", msg => {
       if(msg.content.toLowerCase() == "cancel") {
@@ -114,7 +114,7 @@ Example: \`10\``);
 Example: \`Nitro Classic\``);
     m = await message.channel.send({ embeds: [embed] });
 
-    let prizeCollector = m.createMessageCollector({ filter, time: 60000 });
+    let prizeCollector = message.channel.createMessageCollector({ filter, time: 60000 });
 
     prizeCollector.on("collect", msg => {
       if(msg.content.toLowerCase() == "cancel") {

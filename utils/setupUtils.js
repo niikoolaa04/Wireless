@@ -29,7 +29,7 @@ Example: \`Nitro Classic\``);
     let cancelEmbed = new Discord.MessageEmbed()
       .setColor("BLURPLE")
       .setAuthor("Giveaway Setup", client.user.displayAvatarURL());
-    if(msg.content.toLowercase() == "cancel") {
+    if(msg.content.toLowerCase() == "cancel") {
       message.channel.send({ embeds: [cancelEmbed] });
       prizeCollector.stop()
       return;
@@ -57,7 +57,7 @@ Example: \`500\``);
     let cancelEmbed = new Discord.MessageEmbed()
       .setColor("BLURPLE")
       .setAuthor("Giveaway Setup", client.user.displayAvatarURL());
-    if(msg.content.toLowercase() == "cancel") {
+    if(msg.content.toLowerCase() == "cancel") {
       message.channel.send({ embeds: [cancelEmbed] });
       invCollector.stop()
       return;
@@ -85,7 +85,7 @@ Example: \`500\``);
     let cancelEmbed = new Discord.MessageEmbed()
       .setColor("BLURPLE")
       .setAuthor("Giveaway Setup", client.user.displayAvatarURL());
-    if(msg.content.toLowercase() == "cancel") {
+    if(msg.content.toLowerCase() == "cancel") {
       message.channel.send({ embeds: [cancelEmbed] });
       msgCollector.stop()
       return;
@@ -113,7 +113,7 @@ Example: \`2\``);
     let cancelEmbed = new Discord.MessageEmbed()
       .setColor("BLURPLE")
       .setAuthor("Giveaway Setup", client.user.displayAvatarURL());
-    if(msg.content.toLowercase() == "cancel") {
+    if(msg.content.toLowerCase() == "cancel") {
       message.channel.send({ embeds: [cancelEmbed] });
       winnerCollector.stop()
       return;
@@ -141,7 +141,7 @@ async function channelSetup(client, message, embed, filter, data) {
     let cancelEmbed = new Discord.MessageEmbed()
       .setColor("BLURPLE")
       .setAuthor("Giveaway Setup", client.user.displayAvatarURL());
-    if(msg.content.toLowercase() == "cancel") {
+    if(msg.content.toLowerCase() == "cancel") {
       message.channel.send({ embeds: [cancelEmbed] });
       channelCollector.stop()
       return;
@@ -178,7 +178,7 @@ async function durationSetup(client, message, embed, filter) {
     let cancelEmbed = new Discord.MessageEmbed()
       .setColor("BLURPLE")
       .setAuthor("Giveaway Setup", client.user.displayAvatarURL());
-    if(msg.content.toLowercase() == "cancel") {
+    if(msg.content.toLowerCase() == "cancel") {
       message.channel.send({ embeds: [cancelEmbed] });
       durationCollector.stop()
       return;
@@ -195,5 +195,5 @@ async function durationSetup(client, message, embed, filter) {
 }
 
 module.exports = {
-  durationSetup
+  durationSetup,
 }

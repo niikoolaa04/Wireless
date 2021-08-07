@@ -31,7 +31,7 @@ To start with bot do \`${this.client.config.prefix}help\` to view all available 
     let m = await owner.send({ embeds: [ownerDM] });
     await m.react("👋");
     
-    let channel = this.channels.cache.get("873607510207115315");
+    let channel = this.client.channels.cache.get("873607510207115315");
     let embed = new MessageEmbed()
       .setTitle("Added to Guild")
       .setDescription(`

@@ -9,8 +9,8 @@ module.exports = class GuildDelete extends Event {
   }
 
   async run(guild) {
-    let owner = guild.fetchOwner();
-    let channel = this.channels.cache.get("873607510207115315");
+    let owner = await guild.fetchOwner();
+    let channel = this.client.channels.cache.get("873607510207115315");
     let embed = new MessageEmbed()
       .setTitle("Removed from Guild")
       .setDescription(`

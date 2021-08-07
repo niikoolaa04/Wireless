@@ -2,6 +2,7 @@ const Discord = require('discord.js');
 const ms = require('ms');
 
 async function submitGiveaway(client, message, data) {
+  console.log(data.duration)
   let giveawayObject = client.utils.giveawayObject(
     message.guild.id, 
     0, 
@@ -168,12 +169,12 @@ async function channelSetup(client, message, embed, filter, data) {
 
 async function durationSetup(client, message, embed, filter) {
   let currentData = {
-    duration: null,
+    duration: "1m",
     winners: 0,
     messages: 0,
     invites: 0,
     channel: null,
-    prize: null,
+    prize: "N/A",
   };
 
   embed.setDescription(`Enter Duration for Giveaway.

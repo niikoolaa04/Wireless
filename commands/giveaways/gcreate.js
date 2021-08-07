@@ -28,13 +28,17 @@ module.exports = class GiveawayCreate extends Command {
     let messagesArg
     let invitesArg;
     let prizeArg;
+    let channelCollector;
+    let msgCollector;
+    let invCollector;
+    let prizeCollector;
     
     embed.setDescription(`Enter Duration for Giveaway.
 Example: \`2m\``)
 
     let filter = m => m.author.id === message.author.id;
 
-    let m = await message.channel.send({ embeds: [embed] }); 
+    message.channel.send({ embeds: [embed] }); 
     let durationCollector = message.channel.createMessageCollector({ filter, time: 60000 });
 
     durationCollector.on("collect", msg => {
@@ -43,13 +47,14 @@ Example: \`2m\``)
       }
 
       durationArg = msg.content;
+
+      embed.setDescription(`Mention Channel in which to start Giveaway.
+      Example: \`#general\``);
+      message.channel.send({ embeds: [embed] });
+      channelCollector = message.channel.createMessageCollector({ filter, time: 60000 });
+
       durationCollector.stop();
     });
-    
-    embed.setDescription(`Mention Channel in which to start Giveaway.
-Example: \`#general\``);
-    m = await message.channel.send({ embeds: [embed] });
-    let channelCollector = message.channel.createMessageCollector({ filter, time: 60000 });
 
     channelCollector.on("collect", msg => {
       if(msg.content.toLowerCase() == "cancel") {
@@ -59,14 +64,15 @@ Example: \`#general\``);
       let channel = msg.mentions.channels.first();
       if(!channel) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message, "Error", "You haven't mentioned Channel.", "RED")] });
       channelArg = channel;
+
+      embed.setDescription(`Enter Number of Winners you want.
+      Example: \`2\``);
+      message.channel.send({ embeds: [embed] });
+          
+      winnersCollector = message.channel.createMessageCollector({ filter, time: 60000 });
+
       channelCollector.stop();
     });
-
-    embed.setDescription(`Enter Number of Winners you want.
-Example: \`2\``);
-    m = await message.channel.send({ embeds: [embed] });
-    
-    let winnersCollector = message.channel.createMessageCollector({ filter, time: 60000 });
 
     winnersCollector.on("collect", msg => {
       if(msg.content.toLowerCase() == "cancel") {
@@ -75,14 +81,15 @@ Example: \`2\``);
 
       winnersArg = msg.content;
       if(isNaN(winnersArg)) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message, "Error", "You have entered invalid Number of Winners.", "RED")] });
+
+      embed.setDescription(`Enter Number of Messages Required in order to Enter Giveaway - 0 for none.
+      Example: \`500\``);
+      message.channel.send({ embeds: [embed] });
+      
+      msgCollector = message.channel.createMessageCollector({ filter, time: 60000 });
+
       winnersCollector.stop();
     });
-
-    embed.setDescription(`Enter Number of Messages Required in order to Enter Giveaway - 0 for none.
-Example: \`500\``);
-    m = await message.channel.send({ embeds: [embed] });
-
-    let msgCollector = message.channel.createMessageCollector({ filter, time: 60000 });
 
     msgCollector.on("collect", msg => {
       if(msg.content.toLowerCase() == "cancel") {
@@ -91,14 +98,15 @@ Example: \`500\``);
 
       messagesArg = msg.content;
       if(isNaN(messagesArg)) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message, "Error", "You have entered invalid Number of Messages Required for Entering Giveaway.", "RED")] });
+
+      embed.setDescription(`Enter Number of Invites Required in order to Enter Giveaway - 0 for none.
+      Example: \`10\``);
+      message.channel.send({ embeds: [embed] });
+          
+      invCollector = message.channel.createMessageCollector({ filter, time: 60000 });
+
       msgCollector.stop();
     });
-
-    embed.setDescription(`Enter Number of Invites Required in order to Enter Giveaway - 0 for none.
-Example: \`10\``);
-    m = await message.channel.send({ embeds: [embed] });
-    
-    let invCollector = message.channel.createMessageCollector({ filter, time: 60000 });
 
     invCollector.on("collect", msg => {
       if(msg.content.toLowerCase() == "cancel") {
@@ -107,14 +115,15 @@ Example: \`10\``);
 
       invitesArg = msg.content;
       if(isNaN(invitesArg)) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message, "Error", "You have entered invalid Number of Invites Required for Entering Giveaway.", "RED")] });
+
+      embed.setDescription(`Enter Prize for this Giveaway.
+      Example: \`Nitro Classic\``);
+      message.channel.send({ embeds: [embed] });
+      
+      prizeCollector = message.channel.createMessageCollector({ filter, time: 60000 });
+
       invCollector.stop();
     });
-
-    embed.setDescription(`Enter Prize for this Giveaway.
-Example: \`Nitro Classic\``);
-    m = await message.channel.send({ embeds: [embed] });
-
-    let prizeCollector = message.channel.createMessageCollector({ filter, time: 60000 });
 
     prizeCollector.on("collect", msg => {
       if(msg.content.toLowerCase() == "cancel") {
@@ -123,6 +132,23 @@ Example: \`Nitro Classic\``);
 
       prizeArg = msg.content;
       if(!prizeArg || prizeArg.length < 3 || prizeArg.length > 256) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message, "Error", "You have entered invalid Prize.", "RED")] })
+
+      let giveawayObject = this.client.utils.giveawayObject(
+        message.guild.id, 
+        0, 
+        ms(durationArg), 
+        channelArg.id, 
+        parseInt(winnersArg), 
+        parseInt(messagesArg), 
+        parseInt(invitesArg), 
+        (Date.now() + ms(durationArg)), 
+        message.author.id,
+        prizeArg,
+      );
+      this.client.gw.startGiveaway(this.client, message, giveawayObject);
+      
+      message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message, "Giveaway", `Giveaway has started in ${channelArg}.`, "YELLOW")] });
+
       prizeCollector.stop();
     });
 
@@ -150,21 +176,5 @@ Example: \`Nitro Classic\``);
       if(prizeArg) return;
       console.log('prize end');
     })
-
-    let giveawayObject = this.client.utils.giveawayObject(
-      message.guild.id, 
-      0, 
-      ms(durationArg), 
-      channelArg.id, 
-      parseInt(winnersArg), 
-      parseInt(messagesArg), 
-      parseInt(invitesArg), 
-      (Date.now() + ms(durationArg)), 
-      message.author.id,
-      prizeArg,
-    );
-    this.client.gw.startGiveaway(this.client, message, giveawayObject);
-    
-    message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message, "Giveaway", `Giveaway has started in ${channelArg}.`, "YELLOW")] });
   }
 };

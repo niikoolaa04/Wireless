@@ -147,7 +147,7 @@ async function channelSetup(client, message, embed, filter, data) {
       return;
     }
 
-    if(msg.mentions.channels.first()) return message.channel.send({ content: 'Mention Channel' })
+    if(!msg.mentions.channels.first()) return message.channel.send({ content: 'Mention Channel' })
     data.channel = msg.mentions.channels.first();
     await winnersSetup(client, message, embed, filter, data);
     channelCollector.stop();

@@ -14,16 +14,17 @@ module.exports = class InteractionCreate extends Event {
       const cmd = this.client.slashCommands.get(interaction.commandName);
       if (!cmd) return interaction.followUp({ content: "> Error occured, please contact Bot Developer." });
 
-      // let userPerms = [];
-      // cmd.permissions.forEach((perm) => {
-      //   if(!interaction.channel.permissionsFor(interaction.member).has(perm)) {
-      //     userPerms.push(perm);
-      //   }
-      // });
-      // if(userPerms.length > 0) return interaction.followUp({ embeds: [ this.client.embedInteraction(this.client, interaction, "Error", "You don't have permission to run this command.", "RED")] });
+      interaction.member = interaction.guild.members.cache.get(interaction.user.id);
+      
+      let userPerms = [];
+      cmd.permissions.forEach((perm) => {
+        if(!interaction.channel.permissionsFor(interaction.member).has(perm)) {
+          userPerms.push(perm);
+        }
+      });
+      if(userPerms.length > 0) return interaction.followUp({ embeds: [ this.client.embedInteraction(this.client, interaction, "Error", "You don't have permission to run this command.", "RED")] });
 
       const args = [];
-      interaction.member = interaction.guild.members.cache.get(interaction.user.id);
 
       cmd.slashRun(interaction, args);
     }

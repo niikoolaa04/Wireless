@@ -15,10 +15,10 @@ module.exports = class Ready extends Event {
     console.log(`[BOT] Total Member Count on all servers is ${this.client.users.cache.size}`);
   
     const activities_list = [
-        `${this.client.config.prefix}help | ${this.client.channels.cache.size} Channels`,
-        `${this.client.config.prefix}help | ${this.client.users.cache.size} Members`,
-        `${this.client.config.prefix}help | ${this.client.guilds.cache.size} Guilds`,
-        `${this.client.config.prefix}help | v${this.client.config.version}`,
+        `version v${this.client.config.version}`,
+        `${this.client.users.cache.size} Members Across ${this.client.guilds.cache.size} Guilds`,
+        `${this.client.slashArray.length} slash commands`,
+        `${this.client.db.all().filter(data => data.ID.startsWith(`giveaways_`)).length} Giveaways`,
     ];
     const rand = Math.floor(Math.random() * (activities_list.length - 1) + 1);
       

@@ -8,3 +8,7 @@ client.login(process.env.BOT_TOKEN);
 ["commands", "events"].forEach(handler => {
   require(`./handlers/${handler}`)(client);
 });
+
+["slash"].forEach(slash => {
+  require(`./handlers/slash`)(client);
+});

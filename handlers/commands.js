@@ -13,6 +13,11 @@ module.exports = client => {
             const f = require(`../commands/${category}/${file}`);
             const command = new f(client);
             client.commands.set(command.name.toLowerCase(), command);
+            if(command.slash == true) {
+              client.slashCommands.set(command.name.toLowerCase(), command);
+              console.log(command);
+              client.slashArray.push(command);
+            }
             //console.log("[BOT] Komanda " + file + " je uspešno učitana ✔");
             /*if (command.aliases && Array.isArray(command.aliases)) {
               for (let i = 0; i < command.aliases.length; i++) {

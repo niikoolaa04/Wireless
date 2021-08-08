@@ -26,7 +26,7 @@ module.exports = class InteractionCreate extends Event {
       // }
       interaction.member = interaction.guild.members.cache.get(interaction.user.id);
 
-      cmd.run(interaction, args);
+      cmd.slashRun(interaction, args);
   }
   }
 };

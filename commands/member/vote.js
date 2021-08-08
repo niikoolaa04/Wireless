@@ -11,6 +11,7 @@ module.exports = class Vote extends Command {
       aliases: ["upvote"],
       category: "member",
       listed: true,
+      slash: true,
     });
   }
 
@@ -27,5 +28,9 @@ module.exports = class Vote extends Command {
       .setDescription(`Vote for me by clicking on Button.`)
       .setColor("BLURPLE");
     message.channel.send({ embeds: [embed], components: [row] });
+  }
+
+  async slashRun(interaction, message) {
+    await interaction.followUp({ content: `${this.client.ws.ping}ms!` });
   }
 };

@@ -94,7 +94,7 @@ module.exports = class Help extends Command {
       .addField(`${this.client.emojisConfig.gem} Informations`, `[Invite Me](${this.client.config.links.inviteURL}) | [Vote for me](${this.client.config.links.voteURL}) | [Website](${this.client.config.links.website}) | [Support Server](${this.client.config.links.supportServer})`)
       .setTimestamp()
       .setColor("BLURPLE")
-      .setThumbnail(user.displayAvatarURL({ size: 1024, dynamic: true }))
+      .setThumbnail(interaction.user.displayAvatarURL({ size: 1024, dynamic: true }))
       .setFooter(`Total Commands ${loadedCommands.length}`, interaction.user.displayAvatarURL({ size: 1024, dynamic: true }));
     interaction.followUp({ embeds: [cmdEmbed] });
   }

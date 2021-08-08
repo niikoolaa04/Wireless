@@ -13,6 +13,38 @@ module.exports = class GiveawayStart extends Command {
 			aliases: ["gwstart"],
 			category: "giveaway",
 			listed: true,
+      slash: true,
+      options: [{
+        name: 'duration',
+        type: 'STRING',
+        description: 'Enter Duration for Giveaway',
+        required: true,
+      },{
+        name: 'channel',
+        type: 'CHANNEL',
+        description: 'Mention Channel to start Giveaway in',
+        required: true,
+      },{
+        name: 'winners',
+        type: 'INTEGER',
+        description: 'Enter Number of Winners',
+        required: true,
+      },{
+        name: 'messages',
+        type: 'INTEGER',
+        description: 'Enter Number of Messages Required',
+        required: true,
+      },{
+        name: 'invites',
+        type: 'INTEGER',
+        description: 'Enter Number of Invites Required',
+        required: true,
+      },{
+        name: 'prize',
+        type: 'STRING',
+        description: 'Enter Prize',
+        required: true,
+      }]
 		});
 	}
     
@@ -46,5 +78,29 @@ module.exports = class GiveawayStart extends Command {
     this.client.gw.startGiveaway(this.client, message, giveawayObject);
     
     message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message, "Giveaway", `Giveaway has started in Channel ${channelArg}.`, "YELLOW")] });
+  }
+  async slashRun(interaction, args) {
+    let durationArg = interaction.options.getString("duration");
+    let channelArg = interaction.options.getChannel("channel");
+    let winnersArg = interaction.options.getInteger("winners");
+    let messagesArg = interaction.options.getInteger("messages");
+    let invitesArg = interaction.options.getInteger("invites");
+    let prizeArg = interaction.options.getString("prize");
+
+    let giveawayObject = this.client.utils.giveawayObject(
+      message.guild.id, 
+      0, 
+      ms(durationArg), 
+      channelArg.id, 
+      winnersArg, 
+      parseInt(messagesArg), 
+      parseInt(invitesArg), 
+      (Date.now() + ms(durationArg)), 
+      message.author.id,
+      prizeArg,
+    );
+    this.client.gw.startGiveaway(this.client, interaction, giveawayObject);
+    
+    interaction.followUp({ embeds: [ this.client.embedInteraction(this.client, interaction, "Giveaway", `Giveaway has started in Channel ${channelArg}.`, "YELLOW")] });
   }
 };

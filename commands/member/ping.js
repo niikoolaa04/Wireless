@@ -34,7 +34,6 @@ module.exports = class Ping extends Command {
     m.edit({ embeds: [embedEdit] });
   }
   async slashRun(interaction, args) {
-    interaction.deferUpdate();
     const row = new MessageActionRow()
 			.addComponents(
 				new MessageButton()

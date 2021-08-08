@@ -13,10 +13,20 @@ module.exports = class GiveawayCreate extends Command {
 			aliases: ["gwcreate", "gwsetup", "gsetup"],
 			category: "giveaway",
 			listed: true,
+			slash: true,
 		});
 	}
     
   async run(message, args) {
+    let embed = new Discord.MessageEmbed()
+      .setColor("BLURPLE")
+      .setAuthor("Giveaway Setup", this.client.user.displayAvatarURL());
+
+    let filter = m => m.author.id === message.author.id;
+    this.client.setupUtils.durationSetup(this.client, message, embed, filter);
+  }
+
+  async slashRun(interaction, args) {
     let embed = new Discord.MessageEmbed()
       .setColor("BLURPLE")
       .setAuthor("Giveaway Setup", this.client.user.displayAvatarURL());

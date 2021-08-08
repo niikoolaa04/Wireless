@@ -11,6 +11,13 @@ module.exports = class Prefix extends Command {
 			permissions: ["ADMINISTRATOR"],
 			category: "utility",
 			listed: true,
+      slash: true,
+      options: [{
+        name: 'prefix',
+        type: 'STRING',
+        description: "New Prefix",
+        required: true,
+      }]
 		});
 	}
   
@@ -29,5 +36,19 @@ module.exports = class Prefix extends Command {
     .setColor("BLURPLE");
   
     message.channel.send({ embeds: [embed] });
+  }
+  async slashRun(interaction, args) {
+    let prefix = interaction.options.getString("prefix");
+    let real = db.fetch(`settings_${interaction.guild.id}_prefix`);
+    if (prefix === real) return interaction.followUp({ embeds: [ this.client.embedInteraction(this.client, interaction, 
+        `Error`, "New Prefix cannot be same as old one.", "RED") ]});
+    db.set(`settings_${interaction.guild.id}_prefix`, prefix);
+  
+    let embed = new Discord.MessageEmbed()
+      .setAuthor("Prefix", this.client.user.displayAvatarURL())
+      .setDescription(`Guild prefix have been successfully changed to \`${prefix}\``)
+      .setColor("BLURPLE");
+  
+    interaction.followUp({ embeds: [embed] });
   }
 };

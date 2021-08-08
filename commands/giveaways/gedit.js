@@ -14,7 +14,6 @@ module.exports = class GiveawayEdit extends Command {
       category: "giveaway",
       listed: true,
       slash: true,
-      slash: true,
       options: [{
         name: 'msgId',
         type: 'INTEGER',

@@ -11,6 +11,7 @@ module.exports = class Help extends Command {
 			permissions: [],
 			category: "korisnik",
 			listed: false,
+      slash: true,
 		});
 	} 
 	async run(message, args) {

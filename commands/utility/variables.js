@@ -11,6 +11,7 @@ module.exports = class Variables extends Command {
       permissions: ["MANAGE_MESSAGES"],
       category: "utility",
       listed: true,
+      slash: true,
     });
   }
 

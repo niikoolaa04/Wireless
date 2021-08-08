@@ -10,6 +10,7 @@ module.exports = class TopMessages extends Command {
       permissions: [],
       category: "member",
       listed: true,
+      slash: true,
     });
   }
 

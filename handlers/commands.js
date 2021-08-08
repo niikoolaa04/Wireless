@@ -16,7 +16,7 @@ module.exports = client => {
             if(command.slash == true) {
               console.log("-----------------");
               console.log(command.name)
-              if(command.options) console.log(command.options[0].name);
+              if(command.options) console.log(command.options[0]);
               client.slashCommands.set(command.name.toLowerCase(), command);
               client.slashArray.push(command);
             }

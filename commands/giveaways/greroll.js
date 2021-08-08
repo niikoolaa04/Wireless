@@ -15,7 +15,7 @@ module.exports = class GiveawayReroll extends Command {
       listed: true,
       slash: true,
       options: [{
-        name: 'msgId',
+        name: 'msgid',
         type: 'INTEGER',
         description: 'Message ID of Giveaway',
         required: true,
@@ -36,7 +36,7 @@ module.exports = class GiveawayReroll extends Command {
     this.client.gw.rerollGiveaway(this.client, message, messageID);
   }
   async slashRun(interaction, args) {
-    let messageID = interaction.options.getInteger("msgId");
+    let messageID = interaction.options.getInteger("msgid");
     let giveaways = db.fetch(`giveaways_${interaction.guild.id}`);
     let gwData = giveaways.find(g => g.messageID == messageID && g.ended == true);
 

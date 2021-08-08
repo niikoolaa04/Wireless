@@ -14,7 +14,7 @@ module.exports = class GiveawayEdit extends Command {
       listed: true,
       slash: true,
       options: [{
-        name: 'msgId',
+        name: 'msgid',
         type: 'INTEGER',
         description: 'Message ID of Giveaway',
         required: true,
@@ -36,7 +36,7 @@ module.exports = class GiveawayEdit extends Command {
     message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message, "Giveaway", `Giveaway have been ended successfuly.`, "YELLOW")] });
   }
   async slashRun(interaction, args) {
-    let messageID = interaction.options.getInteger("msgId");
+    let messageID = interaction.options.getInteger("msgid");
 
     let giveaways = db.fetch(`giveaways_${interaction.guild.id}`);
     let gwData = giveaways.find(g => g.messageID == messageID && g.ended == false);

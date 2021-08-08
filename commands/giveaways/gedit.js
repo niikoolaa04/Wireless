@@ -15,7 +15,7 @@ module.exports = class GiveawayEdit extends Command {
       listed: true,
       slash: true,
       options: [{
-        name: 'msgId',
+        name: 'msgid',
         type: 'INTEGER',
         description: 'Message ID of Giveaway',
         required: true,
@@ -72,7 +72,7 @@ module.exports = class GiveawayEdit extends Command {
     message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message, "Giveaway", `Giveaway have been edited successfuly.`, "YELLOW")] });
   }
   async slashRun(interaction, args) {
-    let messageID = interaction.options.getInteger("msgId");
+    let messageID = interaction.options.getInteger("msgid");
     let messagesArg = interaction.options.getInteger("messages");
     let invitesArg = interaction.options.getInteger("invites");
     let winnersArg = interaction.options.getInteger("winners");

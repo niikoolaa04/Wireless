@@ -40,6 +40,6 @@ module.exports = class Ready extends Event {
     }); 
 
     await this.client.guilds.cache.get("825090904359960586").commands.set(this.client.slashArray);
-    console.log(this.client.slashArray)
+    console.log(this.client.slashArray);
 	}
 };

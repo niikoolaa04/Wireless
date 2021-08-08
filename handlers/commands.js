@@ -14,9 +14,15 @@ module.exports = client => {
             const command = new f(client);
             client.commands.set(command.name.toLowerCase(), command);
             if(command.slash == true) {
-              client.slashCommands.set(command.name.toLowerCase(), command);
-              console.log(command);
-              client.slashArray.push(command);
+              let object = {
+                name: command.name,
+                description: command.description
+              }
+              if(command.options[0]) {
+                object.options = command.options;
+              }
+              client.slashCommands.set(command.name.toLowerCase(), object);
+              client.slashArray.push(object);
             }
             //console.log("[BOT] Komanda " + file + " je uspešno učitana ✔");
             /*if (command.aliases && Array.isArray(command.aliases)) {

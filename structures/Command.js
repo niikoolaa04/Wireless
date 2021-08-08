@@ -7,6 +7,7 @@ module.exports = class Command {
     this.aliases = options.aliases || 'N/A';
     this.enabled = options.enabled || true;
     this.slash = options.slash || false;
+    this.options = options.options || [];
     this.permissions = options.permissions || [];
     this.listed = options.listed || false;
     this.category = options.category || "member";

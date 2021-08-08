@@ -30,7 +30,18 @@ module.exports = class Vote extends Command {
     message.channel.send({ embeds: [embed], components: [row] });
   }
 
-  async slashRun(interaction, message) {
-    await interaction.followUp({ content: `${this.client.ws.ping}ms!` });
+  async slashRun(interaction, args) {
+    const row = new MessageActionRow()
+			.addComponents(
+				new MessageButton()
+          .setURL("https://top.gg/bot/855321650706513940/vote/")
+					.setLabel('Vote for me')
+					.setStyle('LINK'),
+			);
+
+    let embed = new MessageEmbed()
+      .setDescription(`Vote for me by clicking on Button.`)
+      .setColor("BLURPLE");
+    interaction.followUp({ embeds: [embed], components: [row] });
   }
 };

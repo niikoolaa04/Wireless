@@ -13,7 +13,7 @@ module.exports = class Invites extends Command {
 			listed: true,
       slash: true,
       options: [{
-        name: 'user',
+        name: 'target',
         type: 'USER',
         description: "User which Invites to view",
         required: false,
@@ -48,7 +48,7 @@ module.exports = class Invites extends Command {
     message.channel.send({ embeds: [embed] });
   }
   async slashRun(interaction, args) {
-    var user = interaction.options.getUser("user") || interaction.user;
+    var user = interaction.options.getUser("target") || interaction.user;
   
     let joins = db.fetch(`invitesJoins_${interaction.guild.id}_${user.id}`) || 0;
     let left = db.fetch(`invitesLeaves_${interaction.guild.id}_${user.id}`) || 0;

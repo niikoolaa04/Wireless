@@ -13,7 +13,7 @@ module.exports = class Messages extends Command {
 			listed: true,
       slash: true,
       options: [{
-        name: 'user',
+        name: 'target',
         type: 'USER',
         description: "User which Messages to view",
         required: false,
@@ -39,7 +39,7 @@ module.exports = class Messages extends Command {
     message.channel.send({ embeds: [embed] });
   }
   async slashRun(interaction, args) {
-    var user = interaction.options.getUser("user");
+    var user = interaction.options.getUser("target");
   
     let messages = db.fetch(`messages_${interaction.guild.id}_${user.id}`) || 0;
 

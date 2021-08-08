@@ -21,7 +21,7 @@ module.exports = client => {
               if(command.options[0]) {
                 object.options = command.options;
               }
-              client.slashCommands.set(command.name.toLowerCase(), object);
+              client.slashCommands.set(command.name.toLowerCase(), command);
               client.slashArray.push(command);
             }
             //console.log("[BOT] Komanda " + file + " je uspešno učitana ✔");

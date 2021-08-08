@@ -97,7 +97,7 @@ const endGiveaway = async (client, message, messageID, guild) => {
         .setDescription(`\`👑\` Congratulations, you have Won Giveaway in **${message.guild.name}**!
 >>> **\`🎊\` Giveaway:** ${gwData.prize}`)
         .setColor("YELLOW");
-      randomWinner.send(endEmbed).catch((err) => {
+      randomWinner.send({ embeds: [endEmbed] }).catch((err) => {
         return 'DM Closed';
       });
       break;
@@ -110,7 +110,7 @@ const endGiveaway = async (client, message, messageID, guild) => {
         .setDescription(`\`👑\` Congratulations, you have Won Giveaway in **${message.guild.name}**!
 >>> **\`🎊\` Giveaway:** ${gwData.prize}`)
         .setColor("YELLOW");
-      randomWinner.send(endEmbed).catch((err) => {
+      randomWinner.send({ embeds: [endEmbed] }).catch((err) => {
         return 'DM Closed';
       });
     }
@@ -236,7 +236,7 @@ const checkGiveaway = async (client, guild) => {
             .setDescription(`\`👑\` Congratulations, you have Won Giveaway in **${guild.name}**!
 >>> **\`🎊\` Giveaway:** ${giveaways[i].prize}`)
             .setColor("YELLOW");
-          randomWinner.send(endEmbed).catch((err) => {
+          randomWinner.send({ embeds: [endEmbed] }).catch((err) => {
             return 'DM Closed';
           });
           break;
@@ -249,7 +249,7 @@ const checkGiveaway = async (client, guild) => {
             .setDescription(`\`👑\` Congratulations, you have Won Giveaway in **${guild.name}**!
 >>> **\`🎊\` Giveaway:** ${giveaways[i].prize}`)
             .setColor("YELLOW");
-          randomWinner.send(endEmbed).catch((err) => {
+          randomWinner.send({ embeds: [endEmbed] }).catch((err) => {
             return 'DM Closed';
           });
         }

@@ -41,9 +41,9 @@ module.exports = class GiveawayEdit extends Command {
     let giveaways = db.fetch(`giveaways_${interaction.guild.id}`);
     let gwData = giveaways.find(g => g.messageID == messageID && g.ended == false);
 
-    if (!gwData) return interaction.followUp({ embeds: [ this.client.embedBuilder(this.client, message, "Error", "You have entered invalid Message ID.", "RED")] });
+    if (!gwData) return interaction.followUp({ embeds: [ this.client.embedInteraction(this.client, interaction, "Error", "You have entered invalid Message ID.", "RED")] });
 
-    this.client.gw.endGiveaway(this.client, message, messageID, message.guild);
-    interaction.followUp({ embeds: [ this.client.embedBuilder(this.client, message, "Giveaway", `Giveaway have been ended successfuly.`, "YELLOW")] });
+    this.client.gw.endGiveaway(this.client, interaction, messageID, interaction.guild);
+    interaction.followUp({ embeds: [ this.client.embedInteraction(this.client, interaction, "Giveaway", `Giveaway have been ended successfuly.`, "YELLOW")] });
   }
 };

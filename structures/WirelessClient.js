@@ -21,10 +21,12 @@ module.exports = class WirelessClient extends Client {
 
     super({ intents: myIntents, partials: ['MESSAGE', 'CHANNEL', 'REACTION', 'USER', 'GUILD_MEMBER']});
     
+    const api = new Topgg.api(process.env.TOP_GG_TOKEN);
+    console.log(api);
+
     const poster = AutoPoster(process.env.TOP_GG_TOKEN, this)
     
     const app = express();
-    
     const webhook = new Topgg.Webhook('wireless_wh11551');
     
     app.post('/dblwebhook', webhook.listener(vote => {
@@ -55,9 +57,7 @@ module.exports = class WirelessClient extends Client {
     
     // Filip, Nikola Novi Acc, LA HAINE
     this.dev_ids = [
-      "419609616943546378",
       "823228305167351808", 
-      "186158262855401472"
     ];
     this.disabledGuilds = [
       "110373943822540800"

@@ -12,9 +12,7 @@ module.exports = class InteractionCreate extends Event {
       await interaction.deferReply({ ephemeral: false }).catch(() => {});
 
       const cmd = this.client.slashCommands.get(interaction.commandName);
-      if (!cmd) return interaction.followUp({ content: "An error has occured " });
-      console.log("------------------------")
-      console.log(cmd)
+      if (!cmd || cmd.slash == false) return interaction.followUp({ content: "An error has occured " });
 
       const args = [];
 

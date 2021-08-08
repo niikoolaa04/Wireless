@@ -28,4 +28,19 @@ module.exports = class Invite extends Command {
       .setColor("BLURPLE");
     message.channel.send({ embeds: [embed], components: [row] });
   }
+
+  async slashRun(interaction, args) {
+    const row = new MessageActionRow()
+			.addComponents(
+				new MessageButton()
+          .setURL("https://invites.wireless-bot.tech")
+					.setLabel('Invite Me')
+					.setStyle('LINK'),
+			);
+
+    let embed = new MessageEmbed()
+      .setDescription(`Invite Me to your Server by clicking on Button.`)
+      .setColor("BLURPLE");
+    interaction.reply({ embeds: [embed], components: [row] });
+  }
 };

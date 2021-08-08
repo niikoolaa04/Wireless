@@ -32,4 +32,19 @@ module.exports = class Ping extends Command {
 
     m.edit({ embeds: [embedEdit] });
   }
+  async slashRun(interaction, args) {
+    interaction.deferUpdate();
+    const row = new MessageActionRow()
+			.addComponents(
+				new MessageButton()
+          .setURL("https://top.gg/bot/855321650706513940/vote/")
+					.setLabel('Vote for me')
+					.setStyle('LINK'),
+			);
+
+    let embed = new MessageEmbed()
+      .setDescription(`Vote for me by clicking on Button.`)
+      .setColor("BLURPLE");
+    interaction.followUp({ embeds: [embed], components: [row] });
+  }
 };

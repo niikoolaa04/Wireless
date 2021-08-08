@@ -12,7 +12,7 @@ module.exports = class InteractionCreate extends Event {
       await interaction.deferReply({ ephemeral: false }).catch(() => {});
 
       const cmd = this.client.slashCommands.get(interaction.commandName);
-      if (!cmd || cmd.slash == false) return interaction.followUp({ content: "> Error occured, please contact Bot Developer." });
+      if (!cmd) return interaction.followUp({ content: "> Error occured, please contact Bot Developer." });
 
       let userPerms = [];
       cmd.permissions.forEach((perm) => {

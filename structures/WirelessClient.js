@@ -20,9 +20,6 @@ module.exports = class WirelessClient extends Client {
     );
 
     super({ intents: myIntents, partials: ['MESSAGE', 'CHANNEL', 'REACTION', 'USER', 'GUILD_MEMBER']});
-    
-    const api = new Topgg.Api(process.env.TOP_GG_TOKEN);
-    console.log(api);
 
     const poster = AutoPoster(process.env.TOP_GG_TOKEN, this)
     

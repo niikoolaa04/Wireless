@@ -26,7 +26,7 @@ module.exports = class Poll extends Command {
     );
     let poll = args.join(" ");
     let embed = new Discord.MessageEmbed()
-      .setTitle("📈 • Poll")
+      .setTitle("📈︲Poll")
       .setDescription(`>>> ${poll}`)
       .setColor("BLURPLE")
       .setTimestamp()
@@ -40,7 +40,7 @@ module.exports = class Poll extends Command {
   async slashRun(interaction, args) {
     let poll = interaction.options.getString("poll");
     let embed = new Discord.MessageEmbed()
-      .setTitle("📈 • Poll")
+      .setTitle("📈︲Poll")
       .setDescription(`>>> ${poll}`)
       .setColor("BLURPLE")
       .setTimestamp()

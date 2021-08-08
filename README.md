@@ -1,2 +1,2 @@
 # Wireless
-Giveaways Bot featuring Giveaway Requirements, Messages Counter, Invites System and other!
+Advanced Giveaways Bot with Invites Tracking, Interaction Giveaway Creation, Slash Commands and more.

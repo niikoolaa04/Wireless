@@ -92,11 +92,22 @@ const endGiveaway = async (client, message, messageID, guild) => {
       randomWinner = rArray[0];
       winners.push(randomWinner);
       rArray.splice(rArray.indexOf(randomWinner), 1);
+      console.log("----- PRVI -----")
+      console.log(randomWinner)
       break;
     } else {
       randomWinner = rArray[~~(Math.random() * rArray.length)]; 
       winners.push(randomWinner);
       rArray.splice(rArray.indexOf(randomWinner), 1);
+      console.log("----- PRVI -----")
+      console.log(randomWinner)
+      const endEmbed = new Discord.MessageEmbed()
+        .setTitle("🎁︲Giveaway")
+        .setDescription(`\`👑\` Congratulations, you have Won Giveaway in **T**
+
+**\`🎊\` Giveaway:** ${gwData.prize}`)
+        .setColor("YELLOW");
+      // STAO OVDE, URADITI EMBED ZA DM, DODATI CONFIG COMMAND
     }
   }
 

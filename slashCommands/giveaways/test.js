@@ -11,6 +11,6 @@ module.exports = class Test extends SlashCommands {
   }
 
   async run(interaction, args) {
-    interaction.followUp({ content: `${client.ws.ping}ms!` });
+    interaction.followUp({ content: `${this.client.ws.ping}ms!` });
   }
 };

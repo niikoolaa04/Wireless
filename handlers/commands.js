@@ -22,7 +22,7 @@ module.exports = client => {
                 object.options = command.options;
               }
               client.slashCommands.set(command.name.toLowerCase(), object);
-              client.slashArray.push(object);
+              client.slashArray.push(command);
             }
             //console.log("[BOT] Komanda " + file + " je uspešno učitana ✔");
             /*if (command.aliases && Array.isArray(command.aliases)) {

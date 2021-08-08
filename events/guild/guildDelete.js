@@ -9,6 +9,7 @@ module.exports = class GuildDelete extends Event {
   }
 
   async run(guild) {
+    db.delete(`giveaways_${guild.id}`);
     let owner = await guild.fetchOwner();
     let channel = this.client.channels.cache.get(this.client.config.logs);
     let embed = new Discord.MessageEmbed()
@@ -24,6 +25,5 @@ module.exports = class GuildDelete extends Event {
     console.log(
       `[BOT] (${moment.utc(new Date()).tz('Europe/Belgrade').format('HH:mm:ss, DD/MM/YYYY.')}) I'm removed from the Guild ${guild.name} (${guild.id}) which had ${guild.memberCount} total members!`
     );
-    db.delete(`giveaways_${guild.id}`);
   }
 };

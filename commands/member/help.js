@@ -51,7 +51,7 @@ module.exports = class Help extends Command {
         , `You have entered invalid command/category.`, "RED") ]});
       if (
         cmd.category === "dev" &&
-        message.author.id !== this.client.config.dev.id
+        message.author.id !== this.client.config.developer.id
       ) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message, `Error`
         , `You have entered command/category which doesn't exist.`, "RED") ]});
   

@@ -18,7 +18,7 @@ module.exports = class Botinfo extends Command {
     const memory = process.memoryUsage().heapUsed / 1024 / 1024;
     let embed = new Discord.MessageEmbed()
       .setAuthor("Bot Informations", this.client.user.displayAvatarURL())
-      .setDescription(`\`👤\` Developer: <@${this.client.config.dev.id}>
+      .setDescription(`\`👤\` Developer: <@${this.client.config.developer.id}>
 \`🤖\` Bot Version: \`${this.client.config.version}\`
 \`⭐\` Guilds: \`${this.client.guilds.cache.size}\`
 \`📚\` Programming Language: \`JavaScript\`
@@ -32,7 +32,7 @@ module.exports = class Botinfo extends Command {
     const memory = process.memoryUsage().heapUsed / 1024 / 1024;
     let embed = new Discord.MessageEmbed()
       .setAuthor("Bot Informations", this.client.user.displayAvatarURL())
-      .setDescription(`\`👤\` Developer: <@${this.client.config.dev.id}>
+      .setDescription(`\`👤\` Developer: <@${this.client.config.developer.id}>
 \`🤖\` Bot Version: \`${this.client.config.version}\`
 \`⭐\` Guilds: \`${this.client.guilds.cache.size}\`
 \`📚\` Programming Language: \`JavaScript\`

@@ -19,6 +19,8 @@ module.exports = class Ready extends Event {
         `${this.client.users.cache.size} Members Across ${this.client.guilds.cache.size} Guilds`,
         `${this.client.slashArray.length} slash commands`,
         `${this.client.db.all().filter(data => data.ID.startsWith(`giveaways_`)).length} Giveaways`,
+        `${this.client.config.links.invite_site} Website`,
+        `votes on ${this.client.config.links.voteURL.replace("https://", "")}`,
     ];
     const rand = Math.floor(Math.random() * (activities_list.length - 1) + 1);
       

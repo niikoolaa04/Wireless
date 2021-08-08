@@ -88,7 +88,7 @@ module.exports = class GiveawayStart extends Command {
     let prizeArg = interaction.options.getString("prize");
 
     let giveawayObject = this.client.utils.giveawayObject(
-      message.guild.id, 
+      interaction.guild.id, 
       0, 
       ms(durationArg), 
       channelArg.id, 
@@ -96,7 +96,7 @@ module.exports = class GiveawayStart extends Command {
       parseInt(messagesArg), 
       parseInt(invitesArg), 
       (Date.now() + ms(durationArg)), 
-      message.author.id,
+      interaction.user.id,
       prizeArg,
     );
     this.client.gw.startGiveaway(this.client, interaction, giveawayObject);

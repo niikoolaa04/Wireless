@@ -14,13 +14,6 @@ module.exports = client => {
             const command = new f(client);
             client.commands.set(command.name.toLowerCase(), command);
             if(command.slash == true) {
-              let object = {
-                name: command.name,
-                description: command.description
-              }
-              if(command.options[0]) {
-                object.options = command.options;
-              }
               client.slashCommands.set(command.name.toLowerCase(), command);
               client.slashArray.push(command);
             }

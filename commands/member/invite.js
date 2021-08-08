@@ -11,6 +11,7 @@ module.exports = class Invite extends Command {
       aliases: ["link"],
       category: "member",
       listed: true,
+      slash: true,
     });
   }
 

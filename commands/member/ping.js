@@ -11,6 +11,7 @@ module.exports = class Ping extends Command {
       aliases: ["uptime"], 
       category: "member",
       listed: true,
+      slash: true,
     });
   }
 

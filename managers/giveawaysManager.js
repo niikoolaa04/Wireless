@@ -99,7 +99,7 @@ const endGiveaway = async (client, message, messageID, guild) => {
       randomWinner = rArray[~~(Math.random() * rArray.length)]; 
       winners.push(randomWinner);
       rArray.splice(rArray.indexOf(randomWinner), 1);
-      console.log("----- PRVI -----")
+      console.log("----- DRUGI -----")
       console.log(randomWinner)
       const endEmbed = new Discord.MessageEmbed()
         .setTitle("🎁︲Giveaway")
@@ -224,7 +224,6 @@ const checkGiveaway = async (client, guild) => {
       for(let j = 0; j < giveaways[i].winnerCount; j++) {
         if(giveaways[i].winnerCount > 1 && rArray.length < 2) {
           randomWinner = rArray[0];
-
           winners.push(randomWinner);
           rArray.splice(rArray.indexOf(randomWinner), 1);
           break;

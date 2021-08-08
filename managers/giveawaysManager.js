@@ -92,22 +92,27 @@ const endGiveaway = async (client, message, messageID, guild) => {
       randomWinner = rArray[0];
       winners.push(randomWinner);
       rArray.splice(rArray.indexOf(randomWinner), 1);
-      console.log("----- PRVI -----")
-      console.log(randomWinner)
+      const endEmbed = new Discord.MessageEmbed()
+        .setTitle("🎁︲Giveaway")
+        .setDescription(`\`👑\` Congratulations, you have Won Giveaway in **${message.guild.name}**!
+>>> **\`🎊\` Giveaway:** ${gwData.prize}`)
+        .setColor("YELLOW");
+      randomWinner.send(endEmbed).catch((err) => {
+        return 'DM Closed';
+      });
       break;
     } else {
       randomWinner = rArray[~~(Math.random() * rArray.length)]; 
       winners.push(randomWinner);
       rArray.splice(rArray.indexOf(randomWinner), 1);
-      console.log("----- DRUGI -----")
-      console.log(randomWinner)
       const endEmbed = new Discord.MessageEmbed()
         .setTitle("🎁︲Giveaway")
-        .setDescription(`\`👑\` Congratulations, you have Won Giveaway in **T**
-
-**\`🎊\` Giveaway:** ${gwData.prize}`)
+        .setDescription(`\`👑\` Congratulations, you have Won Giveaway in **${message.guild.name}**!
+>>> **\`🎊\` Giveaway:** ${gwData.prize}`)
         .setColor("YELLOW");
-      // STAO OVDE, URADITI EMBED ZA DM, DODATI CONFIG COMMAND
+      randomWinner.send(endEmbed).catch((err) => {
+        return 'DM Closed';
+      });
     }
   }
 
@@ -226,11 +231,27 @@ const checkGiveaway = async (client, guild) => {
           randomWinner = rArray[0];
           winners.push(randomWinner);
           rArray.splice(rArray.indexOf(randomWinner), 1);
+          const endEmbed = new Discord.MessageEmbed()
+            .setTitle("🎁︲Giveaway")
+            .setDescription(`\`👑\` Congratulations, you have Won Giveaway in **${guild.name}**!
+>>> **\`🎊\` Giveaway:** ${giveaways[i].prize}`)
+            .setColor("YELLOW");
+          randomWinner.send(endEmbed).catch((err) => {
+            return 'DM Closed';
+          });
           break;
         } else {
           randomWinner = rArray[~~(Math.random() * rArray.length)]; 
           winners.push(randomWinner);
           rArray.splice(rArray.indexOf(randomWinner), 1);
+          const endEmbed = new Discord.MessageEmbed()
+            .setTitle("🎁︲Giveaway")
+            .setDescription(`\`👑\` Congratulations, you have Won Giveaway in **${guild.name}**!
+>>> **\`🎊\` Giveaway:** ${giveaways[i].prize}`)
+            .setColor("YELLOW");
+          randomWinner.send(endEmbed).catch((err) => {
+            return 'DM Closed';
+          });
         }
       }
       

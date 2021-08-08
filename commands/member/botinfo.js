@@ -10,6 +10,7 @@ module.exports = class Botinfo extends Command {
       permissions: [],
       category: "member",
       listed: true,
+      slash: true,
     });
   }
 
@@ -26,5 +27,19 @@ module.exports = class Botinfo extends Command {
       .setColor("BLURPLE");
   
     message.channel.send({ embeds: [embed] });
+  }
+  async slashRun(interaction, args) {
+    const memory = process.memoryUsage().heapUsed / 1024 / 1024;
+    let embed = new Discord.MessageEmbed()
+      .setAuthor("Bot Informations", this.client.user.displayAvatarURL())
+      .setDescription(`\`👤\` Developer: <@${this.client.config.dev.id}>
+\`🤖\` Bot Version: \`${this.client.config.version}\`
+\`⭐\` Guilds: \`${this.client.guilds.cache.size}\`
+\`📚\` Programming Language: \`JavaScript\`
+\`🎮\` Library: \`discord.js\`
+\`🖥️\` Memory: \`${memory.toFixed(2)}MB\``)
+      .setColor("BLURPLE");
+  
+    interaction.followUp({ embeds: [embed] });
   }
 };

@@ -68,4 +68,33 @@ module.exports = class Help extends Command {
       message.channel.send({ embeds: [embed] });
     }
   }
+  async slashRun(interaction, args) {
+    let prefix = await db.fetch(`settings_${interaction.guild.id}_prefix`);
+    if (prefix === null) prefix = this.client.config.prefix;
+    
+    let commandsArray = this.client.commands.filter(
+      c => c.listed === true
+    );
+    let loadedCommands = [...commandsArray.values()];
+    
+    let contentMember = this.client.utils.commandsList(this.client, interaction, "member");
+    let contentGiveaway = this.client.utils.commandsList(this.client, interaction, "giveaway");
+    let contentUtility = this.client.utils.commandsList(this.client, interaction, "utility");
+    
+    let cmdEmbed = new Discord.MessageEmbed()
+      .setTitle(`🚀 · Help Menu`)
+      .setDescription(`Use \`${prefix}help [command]\` to view more informations about command.`)
+      .addField(`${this.client.emojisConfig.members} Member`, 
+  `${contentMember}`)
+      .addField(`${this.client.emojisConfig.prize} Giveaway`, 
+  `${contentGiveaway}`)
+      .addField(`${this.client.emojisConfig.utility} Utility`,
+  `${contentUtility}`)
+      .addField(`${this.client.emojisConfig.gem} Informations`, `[Invite Me](${this.client.config.links.inviteURL}) | [Vote for me](${this.client.config.links.voteURL}) | [Website](${this.client.config.links.website}) | [Support Server](${this.client.config.links.supportServer})`)
+      .setTimestamp()
+      .setColor("BLURPLE")
+      .setThumbnail(user.displayAvatarURL({ size: 1024, dynamic: true }))
+      .setFooter(`Total Commands ${loadedCommands.length}`, interaction.user.displayAvatarURL({ size: 1024, dynamic: true }));
+    interaction.followUp({ embeds: [cmdEmbed] });
+  }
 };

@@ -26,4 +26,17 @@ ${content}`)
 
     message.channel.send({ embeds: [embed] });
   }
+  async slashRun(interaction, args) {
+    let content = this.client.utils.lbContent(this.client, interaction, "messages");
+
+    let embed = new Discord.MessageEmbed()
+      .setDescription(content)
+      .setTitle("💬︲Top Messages")
+      .setDescription(`\`Top 10 Users by sent Messages.\`
+
+${content}`)
+      .setColor("BLURPLE");
+
+    interaction.followUp({ embeds: [embed] });
+  }
 };

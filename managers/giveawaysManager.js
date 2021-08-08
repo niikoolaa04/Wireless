@@ -42,11 +42,11 @@ const editGiveaway = async (client, message, messageID, guild, msgReq, invReq, w
   let channel = client.channels.cache.get(gwData.channelID);
   let msg = await channel.messages.fetch(gwData.messageID);
   
-  if(msgReq == "none") msgReq = gwData.requirements.messagesReq;
-  if(invReq == "none") invReq = gwData.requirements.invitesReq;
-  if(winners == "none") winners = gwData.winnerCount;
-  if(prize == "none") prize = gwData.prize;
-  if(ending == "none") ending = gwData.duration;
+  if(msgReq == "none" || msgReq == 0) msgReq = gwData.requirements.messagesReq;
+  if(invReq == "none" || invReq == 0) invReq = gwData.requirements.invitesReq;
+  if(winners == "none" || winners == 0) winners = gwData.winnerCount;
+  if(prize == "none" || prize == 0) prize = gwData.prize;
+  if(ending == "none" || ending == 0) ending = gwData.duration;
   else ending = gwData.endsAt + ending;
   
   let newObject = client.utils.giveawayObject(

@@ -11,6 +11,13 @@ module.exports = class Invites extends Command {
 			permissions: [],
 			category: "member",
 			listed: true,
+      slash: true,
+      options: [{
+        name: 'user',
+        type: 'USER',
+        description: "User which Invites to view",
+        required: false,
+      }]
 		});
 	}
 
@@ -39,5 +46,31 @@ module.exports = class Invites extends Command {
 **Invited by:** ${inviter}`);
   
     message.channel.send({ embeds: [embed] });
+  }
+  async slashRun(interaction, args) {
+    var user = interaction.options.getUser("user") || interaction.user;
+  
+    let joins = db.fetch(`invitesJoins_${interaction.guild.id}_${user.id}`) || 0;
+    let left = db.fetch(`invitesLeaves_${interaction.guild.id}_${user.id}`) || 0;
+    let regular = db.fetch(`invitesRegular_${interaction.guild.id}_${user.id}`) || 0;
+    let bonus = db.fetch(`invitesBonus_${interaction.guild.id}_${user.id}`) || 0;
+    let invitedBy = db.fetch(`inviter_${interaction.guild.id}_${user.id}`);
+    let inviter = this.client.users.cache.get(invitedBy);
+    inviter = inviter ? inviter.username : 'Unknown User';
+
+    let every = db.all().filter(i => i.ID.startsWith(`invitesTotal_${interaction.guild.id}_`)).sort((a, b) => b.data - a.data);
+    let rank = every.map(x => x.ID).indexOf(`invitesTotal_${interaction.guild.id}_${user.id}`) + 1 || 'N/A';
+  
+    let embed = new Discord.MessageEmbed()
+      .setAuthor("Invites Count", this.client.user.displayAvatarURL())
+      .setColor("BLURPLE")
+      .setDescription(`> **User** · ${user.username}
+
+> **${regular}** Invites \`(${regular + bonus} total, ${joins} joins, ${left} leaves, ${bonus} bonus)\`
+
+**Leaderboard Rank:** #${rank}
+**Invited by:** ${inviter}`);
+  
+    interaction.followUp({ embeds: [embed] });
   }
 };

@@ -11,7 +11,6 @@ module.exports = class Ping extends Command {
       aliases: ["uptime"], 
       category: "member",
       listed: true,
-      slash: true,
     });
   }
 
@@ -32,19 +31,5 @@ module.exports = class Ping extends Command {
       .setColor("BLURPLE");
 
     m.edit({ embeds: [embedEdit] });
-  }
-  async slashRun(interaction, args) {
-    const row = new MessageActionRow()
-			.addComponents(
-				new MessageButton()
-          .setURL("https://top.gg/bot/855321650706513940/vote/")
-					.setLabel('Vote for me')
-					.setStyle('LINK'),
-			);
-
-    let embed = new MessageEmbed()
-      .setDescription(`Vote for me by clicking on Button.`)
-      .setColor("BLURPLE");
-    interaction.followUp({ embeds: [embed], components: [row] });
   }
 };

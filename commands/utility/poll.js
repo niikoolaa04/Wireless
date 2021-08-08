@@ -10,6 +10,13 @@ module.exports = class Poll extends Command {
       permissions: ["MANAGE_MESSAGES"],
       category: "utility",
       listed: true,
+      slash: true,
+      options: [{
+        name: 'poll',
+        type: 'STRING',
+        description: "Poll Message",
+        required: true,
+      }]
     });
   }
 
@@ -29,5 +36,19 @@ module.exports = class Poll extends Command {
       msg.react("1️⃣");
       msg.react("2️⃣");
     })
+  }
+  async slashRun(interaction, args) {
+    let poll = interaction.options.getString("poll");
+    let embed = new Discord.MessageEmbed()
+      .setTitle("📈 • Poll")
+      .setDescription(`>>> ${poll}`)
+      .setColor("BLURPLE")
+      .setTimestamp()
+      .setFooter(interaction.user.username, interaction.user.displayAvatarURL({ dynamic: true }));
+
+    interaction.channel.send({ embeds: [embed] }).then((msg) => {
+      msg.react("1️⃣");
+      msg.react("2️⃣");
+    });
   }
 };

@@ -13,6 +13,13 @@ module.exports = class GiveawayReroll extends Command {
       aliases: ["gwreroll"], 
       category: "giveaway",
       listed: true,
+      slash: true,
+      options: [{
+        name: 'msgId',
+        type: 'INTEGER',
+        description: 'Message ID of Giveaway',
+        required: true,
+      }]
     });
   }
 
@@ -27,5 +34,14 @@ module.exports = class GiveawayReroll extends Command {
     if (!gwData) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message, "Error", "You have entered invalid Message ID or that Giveaway haven't ended.", "RED")] });
 
     this.client.gw.rerollGiveaway(this.client, message, messageID);
+  }
+  async slashRun(interaction, args) {
+    let messageID = interaction.options.getInteger("msgId");
+    let giveaways = db.fetch(`giveaways_${interaction.guild.id}`);
+    let gwData = giveaways.find(g => g.messageID == messageID && g.ended == true);
+
+    if (!gwData) return interaction.followUp({ embeds: [ this.client.embedInteraction(this.client, interaction, "Error", "You have entered invalid Message ID or that Giveaway haven't ended.", "RED")] });
+
+    this.client.gw.rerollGiveaway(this.client, interaction, messageID);
   }
 };

@@ -31,4 +31,21 @@ module.exports = class Variables extends Command {
 \`{leavesInvites}\` - Leaves Invites
 \`{totalInvites}\` - Regular + Bonus Invites`, "BLURPLE") ]});
   }
+  async slashRun(interaction, args) {
+    interaction.followUp({ embeds: [ this.client.embedInteraction(this.client, interaction, "Variables", `You can use this Variables in Join \`(joinmessage)\` & Leave \`(leavemessage)\` Messages.
+    
+**VARIABLES**
+
+\`{username}\` - Username of Member
+\`{userTag}\` - Username & Tag of Member
+\`{members}\` - Number of Members
+\`{userID}\` - Member ID
+\`{created}\` - Date of Account Creation
+\`{invitedBy}\` - Username of Inviter
+\`{joinsInvites}\` - Join Invites 
+\`{regularInvites}\` - Regular Invites
+\`{bonusInvites}\` - Bonus Invites
+\`{leavesInvites}\` - Leaves Invites
+\`{totalInvites}\` - Regular + Bonus Invites`, "BLURPLE") ]});
+  }
 };

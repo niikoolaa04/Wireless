@@ -17,32 +17,32 @@ module.exports = class GiveawayStart extends Command {
       options: [{
         name: 'duration',
         type: 'STRING',
-        description: 'Enter Duration for Giveaway',
+        description: 'Duration of Giveaway',
         required: true,
       },{
         name: 'channel',
         type: 'CHANNEL',
-        description: 'Mention Channel to start Giveaway in',
+        description: 'Channel in which to Start Giveaway',
         required: true,
       },{
         name: 'winners',
         type: 'INTEGER',
-        description: 'Enter Number of Winners',
+        description: 'Number of Winners',
         required: true,
       },{
         name: 'messages',
         type: 'INTEGER',
-        description: 'Enter Number of Messages Required',
+        description: 'Number of Messages Required to enter Giveaway',
         required: true,
       },{
         name: 'invites',
         type: 'INTEGER',
-        description: 'Enter Number of Invites Required',
+        description: 'Number of Invites Required to enter Giveaway',
         required: true,
       },{
         name: 'prize',
         type: 'STRING',
-        description: 'Enter Prize',
+        description: 'Prize for Giveaway',
         required: true,
       }]
 		});

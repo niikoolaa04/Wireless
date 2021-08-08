@@ -11,6 +11,13 @@ module.exports = class Messages extends Command {
 			permissions: [],
 			category: "member",
 			listed: true,
+      slash: true,
+      options: [{
+        name: 'user',
+        type: 'USER',
+        description: "User which Messages to view",
+        required: false,
+      }]
 		});
 	}
 
@@ -30,5 +37,22 @@ module.exports = class Messages extends Command {
 > **Leaderboard Rank:** #${rank}`);
   
     message.channel.send({ embeds: [embed] });
+  }
+  async slashRun(interaction, args) {
+    var user = interaction.options.getUser("user");
+  
+    let messages = db.fetch(`messages_${interaction.guild.id}_${user.id}`) || 0;
+
+    let every = db.all().filter(i => i.ID.startsWith(`messages_${interaction.guild.id}_`)).sort((a, b) => b.data - a.data);
+    let rank = every.map(x => x.ID).indexOf(`messages_${interaction.guild.id}_${user.id}`) + 1 || 'N/A';
+  
+    let embed = new Discord.MessageEmbed()
+      .setAuthor("Messages Count", this.client.user.displayAvatarURL())
+      .setColor("BLURPLE")
+      .setDescription(`> ${user.id == interaction.user.id ? "You" : user} sent **${messages}** Messages in Total.
+> 
+> **Leaderboard Rank:** #${rank}`);
+  
+  interaction.followUp({ embeds: [embed] });
   }
 };

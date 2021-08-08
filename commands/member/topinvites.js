@@ -10,6 +10,7 @@ module.exports = class TopInvites extends Command {
       permissions: [],
       category: "member",
       listed: true,
+      slash: true,
     });
   }
 
@@ -25,5 +26,18 @@ ${content}`)
       .setColor("BLURPLE");
 
     message.channel.send({ embeds: [embed] });
+  }
+  async slashRun(interaction, args) {
+    let content = this.client.utils.lbContent(this.client, interaction, "regularInvites");
+
+    let embed = new Discord.MessageEmbed()
+      .setDescription(content)
+      .setTitle("🎫︲Top Invites")
+      .setDescription(`\`Top 10 Users by Invites.\`
+
+${content}`)
+      .setColor("BLURPLE");
+
+    interaction.followUp({ embeds: [embed] });
   }
 };

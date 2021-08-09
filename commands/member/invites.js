@@ -58,14 +58,13 @@ module.exports = class Invites extends Command {
     let inviter = this.client.users.cache.get(invitedBy);
     inviter = inviter ? inviter.username : 'Unknown User';
 
-    let every = db.all().filter(i => i.ID.startsWith(`invitesTotal_${interaction.guild.id}_`)).sort((a, b) => b.data - a.data);
-    let rank = every.map(x => x.ID).indexOf(`invitesTotal_${interaction.guild.id}_${user.id}`) + 1 || 'N/A';
+    let every = db.all().filter(i => i.ID.startsWith(`invitesRegular_${interaction.guild.id}_`)).sort((a, b) => b.data - a.data);
+    let rank = every.map(x => x.ID).indexOf(`invitesRegular_${interaction.guild.id}_${user.id}`) + 1 || 'N/A';
   
     let embed = new Discord.MessageEmbed()
       .setAuthor("Invites Count", this.client.user.displayAvatarURL())
       .setColor("BLURPLE")
       .setDescription(`> **User** · ${user.username}
-
 > **${regular}** Invites \`(${regular + bonus} total, ${joins} joins, ${left} leaves, ${bonus} bonus)\`
 
 **Leaderboard Rank:** #${rank}

@@ -39,7 +39,7 @@ module.exports = class Messages extends Command {
     message.channel.send({ embeds: [embed] });
   }
   async slashRun(interaction, args) {
-    var user = interaction.options.getUser("target");
+    var user = interaction.options.getUser("target") || interaction.user;
   
     let messages = db.fetch(`messages_${interaction.guild.id}_${user.id}`) || 0;
 

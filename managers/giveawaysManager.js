@@ -155,13 +155,14 @@ ${reqContent}
   
   channel.send({ embeds: [endEmbed] });
 
+  let dmStatus = db.fetch(`server_${message.guild.id}_dmWinners`);
   const dmWin = new Discord.MessageEmbed()
     .setTitle("🎁︲Giveaway")
     .setDescription(`\`👑\` Congratulations, you have Won Giveaway in **${message.guild.name}**!
 
 >>> **\`🎊\` Giveaway:** ${gwData.prize}`)
     .setColor("YELLOW");
-  if(randomWinner) winners.forEach((u) => u.send({ embeds: [dmWin] }));
+  if(randomWinner && dmStatus != null) winners.forEach((u) => u.send({ embeds: [dmWin] }));
 }
 
 const rerollGiveaway = async (client, message, messageID) => {
@@ -286,13 +287,14 @@ ${reqContent}
       
       channel.send({ embeds: [endEmbed] });
 
+      let dmStatus = db.fetch(`server_${guild.id}_dmWinners`);
       const dmWin = new Discord.MessageEmbed()
         .setTitle("🎁︲Giveaway")
         .setDescription(`\`👑\` Congratulations, you have Won Giveaway in **${message.guild.name}**!
   
  >>> **\`🎊\` Giveaway:** ${giveaways[i].prize}`)
         .setColor("YELLOW");
-      if(randomWinner) winners.forEach((u) => u.send({ embeds: [dmWin] }));
+      if(randomWinner && dmStatus != null) winners.forEach((u) => u.send({ embeds: [dmWin] }));
 
     } else {
       let reqContent = "";

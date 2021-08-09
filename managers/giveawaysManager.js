@@ -92,31 +92,11 @@ const endGiveaway = async (client, message, messageID, guild) => {
       randomWinner = rArray[0];
       winners.push(randomWinner);
       rArray.splice(rArray.indexOf(randomWinner), 1);
-//       if(!randomWinner) return;
-//       const endEmbed = new Discord.MessageEmbed()
-//         .setTitle("🎁︲Giveaway")
-//         .setDescription(`\`👑\` Congratulations, you have Won Giveaway in **${message.guild.name}**!
-
-// >>> **\`🎊\` Giveaway:** ${gwData.prize}`)
-//         .setColor("YELLOW");
-//       randomWinner.send({ embeds: [endEmbed] }).catch((err) => {
-//         return 'DM Closed';
-//       });
       break;
     } else {
       randomWinner = rArray[~~(Math.random() * rArray.length)]; 
       winners.push(randomWinner);
       rArray.splice(rArray.indexOf(randomWinner), 1);
-//       if(!randomWinner) return;
-//       const endEmbed = new Discord.MessageEmbed()
-//         .setTitle("🎁︲Giveaway")
-//         .setDescription(`\`👑\` Congratulations, you have Won Giveaway in **${message.guild.name}**!
-
-// >>> **\`🎊\` Giveaway:** ${gwData.prize}`)
-//         .setColor("YELLOW");
-//       randomWinner.send({ embeds: [endEmbed] }).catch((err) => {
-//         return 'DM Closed';
-//       });
     }
   }
 
@@ -174,6 +154,14 @@ ${reqContent}
     .setColor("YELLOW");
   
   channel.send({ embeds: [endEmbed] });
+
+  const endEmbed = new Discord.MessageEmbed()
+    .setTitle("🎁︲Giveaway")
+    .setDescription(`\`👑\` Congratulations, you have Won Giveaway in **${message.guild.name}**!
+
+>>> **\`🎊\` Giveaway:** ${gwData.prize}`)
+    .setColor("YELLOW");
+  if(randomWinner) winners.forEach((u) => u.send({ embeds: [endEmbed] }));
 }
 
 const rerollGiveaway = async (client, message, messageID) => {
@@ -235,31 +223,11 @@ const checkGiveaway = async (client, guild) => {
           randomWinner = rArray[0];
           winners.push(randomWinner);
           rArray.splice(rArray.indexOf(randomWinner), 1);
-//           if(!randomWinner) return;
-//           const endEmbed = new Discord.MessageEmbed()
-//             .setTitle("🎁︲Giveaway")
-//             .setDescription(`\`👑\` Congratulations, you have Won Giveaway in **${guild.name}**!
-
-// >>> **\`🎊\` Giveaway:** ${giveaways[i].prize}`)
-//             .setColor("YELLOW");
-//           randomWinner.send({ embeds: [endEmbed] }).catch((err) => {
-//             return 'DM Closed';
-//           });
           break;
         } else {
           randomWinner = rArray[~~(Math.random() * rArray.length)]; 
           winners.push(randomWinner);
           rArray.splice(rArray.indexOf(randomWinner), 1);
-//           if(!randomWinner) return;
-//           const endEmbed = new Discord.MessageEmbed()
-//             .setTitle("🎁︲Giveaway")
-//             .setDescription(`\`👑\` Congratulations, you have Won Giveaway in **${guild.name}**!
-
-// >>> **\`🎊\` Giveaway:** ${giveaways[i].prize}`)
-//             .setColor("YELLOW");
-//           randomWinner.send({ embeds: [endEmbed] }).catch((err) => {
-//             return 'DM Closed';
-//           });
         }
       }
       
@@ -317,6 +285,15 @@ ${reqContent}
         .setColor("YELLOW");
       
       channel.send({ embeds: [endEmbed] });
+
+      const endEmbed = new Discord.MessageEmbed()
+        .setTitle("🎁︲Giveaway")
+        .setDescription(`\`👑\` Congratulations, you have Won Giveaway in **${message.guild.name}**!
+  
+ >>> **\`🎊\` Giveaway:** ${giveaways[i].prize}`)
+        .setColor("YELLOW");
+      if(randomWinner) winners.forEach((u) => u.send({ embeds: [endEmbed] }));
+
     } else {
       let reqContent = "";
       if(giveaways[i].requirements.messagesReq > 0 || giveaways[i].requirements.invitesReq > 0) reqContent += `\n**${client.emojisConfig.tasks} Requirements**`;

@@ -75,10 +75,27 @@ function lbContent(client, message, lbType) {
   return content;
 }
 
+function configStrings() {
+  const opcije = [
+      "`1.` **-** Requirements Bypass Role",
+      "`2.` **-** Giveaway Blacklist Role",
+      "`3.` **-** Invites Messages Channel",
+      "`4.` **-** Join Messages",
+      "`5.` **-** Leave Messages",
+      "`6.` **-** DM Winners"
+    ];
+  let text = "";
+  for(const opcija of opcije) {
+    text += `\n> ${opcija}`
+  }
+  return text;
+}
+
 module.exports = {
   giveawayObject, 
   commandsList, 
   capitalizeFirstLetter, 
   formatVreme, 
   lbContent, 
+  configStrings,
 }

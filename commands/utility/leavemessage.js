@@ -19,7 +19,7 @@ module.exports = class InvitesLeaveMessage extends Command {
       this.client.embedBuilder(this.client, message, "Error", "You need to enter join message or in order to clear it just type 'none'", "RED")
     );
     if (args[0].toLowerCase() == "none") {
-      db.delete(`server_${message.guild.id}_joinMessage`);
+      db.delete(`server_${message.guild.id}_leaveMessage`);
       let msgEmbedClear = new Discord.MessageEmbed()
         .setDescription(`Leave Message have been reseted.`)
         .setColor("BLURPLE");

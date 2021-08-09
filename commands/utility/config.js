@@ -100,7 +100,7 @@ To reset it just use command without arguments.`, "YELLOW") ]});
         message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message,
           `Config`, "Join Message have been reseted.", "RED") ]});
       }
-      if (args[1]) {
+      if (args[1] && args[1].toLowerCase() != "none") {
         let content = args.slice(1).join(" ");
         db.set(`server_${message.guild.id}_joinMessage`, content);
         message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message,
@@ -118,7 +118,7 @@ Use \`variables\` Command to view all available Variables.`, "YELLOW") ]});
         message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message,
           `Config`, "Leave Message have been reseted.", "RED") ]});
       }
-      if (args[1]) {
+      if (args[1] && args[1].toLowerCase() != "none") {
         let content = args.slice(1).join(" ");
         db.set(`server_${message.guild.id}_leaveMessage`, content);
         message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message,

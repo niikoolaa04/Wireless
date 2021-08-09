@@ -7,7 +7,7 @@ module.exports = class Config extends Command {
 		super(client, {
 			name: "config",
 			description: "change some config values",
-			usage: "config [Option]",
+			usage: "config [Option] [Value]",
 			permissions: ["ADMINISTRATOR"],
 			category: "config",
 			listed: true,
@@ -18,31 +18,30 @@ module.exports = class Config extends Command {
     let option = args[0];
     
     if(!option) {
-      let bypass = db.fetch(`server_${message.guild.id}_bypassRole`) || 'N/A';
-      let blacklist = db.fetch(`server_${message.guild.id}_blacklistRole`) || 'N/A';
-      let channel = db.fetch(`channel_${message.guild.id}_invites`) || 'N/A';
-      let join = db.fetch(`server_${message.guild.id}_joinMessage`) || 'N/A';
-      let leave = db.fetch(`server_${message.guild.id}_leaveMessage`) || 'N/A';
-      let winners = db.fetch(`server_${message.guild.id}_dmWinners`) || 'No';
+      let prefix = db.fetch(`settings_${message.guild.id}_prefix`) || this.client.config.prefix;
+      let bypass = db.fetch(`server_${message.guild.id}_bypassRole`);
+      let blacklist = db.fetch(`server_${message.guild.id}_blacklistRole`);
+      let channel = db.fetch(`channel_${message.guild.id}_invites`);
+      let join = db.fetch(`server_${message.guild.id}_joinMessage`) || 'No Message';
+      let leave = db.fetch(`server_${message.guild.id}_leaveMessage`) || 'No Message';
+      let winners = db.fetch(`server_${message.guild.id}_dmWinners`);
 
       let noOption = new Discord.MessageEmbed()
-        .setAuthor("Config", this.client.user.displayAvatarURL())
-        .addField(`Bypass Role`, bypass)
-        .addField(`Blacklist Role`, blacklist)
-        .addField(`Invites Channel`, channel)
-        .addField(`Join Message`, join)
-        .addField(`Leave Message`, leave)
-        .addField(`DM Winners`, winners)
-        .setColor("BLURPLE");
+        .setAuthor("Configuration", this.client.user.displayAvatarURL())
+        .setDescription(`To Change Config Value do \`${prefix}config [Option] [Value]\``)
+        .addField(`🌙 Bypass Role (1)`, bypass ? `<@${bypass}>` : 'No Role')
+        .addField(`❌ Blacklist Role (2)`, blacklist ? `<@${blacklist}>` : 'No Role')
+        .addField(`🎫 Invites Channel (3)`, channel ? `<#${channel}>` : 'No Channel')
+        .addField(`🚪 Join Message (4)`, join)
+        .addField(`✨ Leave Message (5)`, leave)
+        .addField(`💬 DM Winners (6)`, winners ? `Yes` : 'No')
+        .setColor("BLURPLE")
+        .setThumbnail(this.client.user.displayAvatarURL())
+        .setFooter(message.author.username, message.author.displayAvatarURL({ dynamic: true }));
 
-      message.channel.send({ embeds:  [noOption] })
+      message.channel.send({ embeds:  [noOption] });
     }
 
-    if (option > 6 || option < 1 || isNaN(option))
-      return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message, 
-        `Error`, 
-        `You need to enter Number of Option.\n**Options:**\n${this.client.utils.configStrings()}`, "RED")] });
-  
     if(option == 1) {
       let role = message.mentions.roles.first();
       let gwRole = db.fetch(`server_${message.guild.id}_bypassRole`);

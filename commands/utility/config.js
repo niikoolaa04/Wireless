@@ -9,7 +9,7 @@ module.exports = class Config extends Command {
 			description: "change some config values",
 			usage: "config [Option] [Value]",
 			permissions: ["ADMINISTRATOR"],
-			category: "config",
+			category: "utility",
 			listed: true,
 		});
 	}

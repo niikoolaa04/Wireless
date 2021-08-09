@@ -9,7 +9,7 @@ module.exports = class MessageCreate extends Event {
 	}
 
 	async run(message) {
-    // if(this.client.disabledGuilds.includes(message.guild.id) && message.author.id != this.client.config.developer.id) return;
+    if(this.client.disabledGuilds.includes(message.guild.id) && message.author.id != this.client.config.developer.id) return;
     if (message.channel.type === "DM") return;
     let prefix = await db.fetch(`settings_${message.guild.id}_prefix`);
     if (prefix == null) prefix = this.client.config.prefix;

@@ -8,6 +8,7 @@ module.exports = class InteractionCreate extends Event {
 	}
 
 	async run(interaction) {
+    if(this.client.disabledGuilds.includes(interaction.guild.id)) return;
     if (interaction.isCommand()) {
       await interaction.deferReply({ ephemeral: false }).catch(() => {});
 

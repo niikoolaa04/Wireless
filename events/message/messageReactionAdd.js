@@ -11,6 +11,7 @@ module.exports = class MessageReactionAdd extends Event {
 	async run(reaction, user) {
     if(user.bot) return;
     const message = reaction.message;
+    if(this.client.disabledGuilds.includes(message.guild.id)) return;
     if(message.channel.type === "dm") return;
     
     if(reaction.emoji.name == "🎉") {

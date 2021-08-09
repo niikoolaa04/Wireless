@@ -57,7 +57,8 @@ module.exports = class WirelessClient extends Client {
       "823228305167351808", 
     ];
     this.disabledGuilds = [
-      "110373943822540800"
+      "110373943822540800",
+      "361577445704466432",
     ];
     this.invites = {};
     this.aliases = new Collection();

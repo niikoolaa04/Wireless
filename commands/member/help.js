@@ -199,7 +199,7 @@ module.exports = class Help extends Command {
       .setFooter(`Total Commands ${loadedCommands.length}`, interaction.user.displayAvatarURL({ size: 1024, dynamic: true }));
     interaction.followUp({ embeds: [cmdEmbed], components: [helpRow] });
 
-    let filter = m => m.user.id === message.author.id;
+    let filter = m => m.user.id === interaction.user.id;
     const collector = interaction.channel.createMessageComponentCollector({ filter, time: 120000, errors: ["time"] });
 
     collector.on("collect", async i => {

@@ -11,7 +11,6 @@ module.exports = class Help extends Command {
 			permissions: [],
 			category: "korisnik",
 			listed: false,
-      slash: true,
 		});
 	} 
 	async run(message, args) {
@@ -141,7 +140,7 @@ module.exports = class Help extends Command {
       message.channel.send({ embeds: [embed] });
     }
   }
-  async slashRun(interaction, args) {
+  /*async slashRun(interaction, args) {
     let prefix = await db.fetch(`settings_${interaction.guild.id}_prefix`);
     if (prefix === null) prefix = this.client.config.prefix;
     
@@ -241,5 +240,5 @@ module.exports = class Help extends Command {
         interaction.editReply({ embeds: [cmdEmbed], components: [helpRow] })
       }
     })
-  }
+  }*/
 };

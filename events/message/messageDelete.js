@@ -19,7 +19,7 @@ module.exports = class MessageDelete extends Event {
     if (message.attachments.size > 0) return;
     let snStatus = await db.fetch(`server_${message.guild.id}_snipes`);
     if(snStatus == true) this.client.snipes.set(message.guild.id, {
-      author: message.author.id,
+      author: message.author,
       content: content
     });
 	} 

@@ -1,5 +1,5 @@
 const Command = require("../../structures/Command");
-const { MessageEmbed, MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
+const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
 const db = require("quick.db");
 
 module.exports = class Help extends Command {

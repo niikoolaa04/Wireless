@@ -19,7 +19,6 @@ module.exports = class GuildMemberAdd extends Event {
     let imgChannel = db.fetch(`channel_${member.guild.id}_welcome`);
 
     if(wlcmImg != null && imgChannel != null) {
-      if(member.guild.id != "823820599528390657") return;
       const applyText = (canvas, text) => {
       const ctx = canvas.getContext('2d');
       let fontSize = 40;

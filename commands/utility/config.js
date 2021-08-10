@@ -146,7 +146,6 @@ Use \`variables\` Command to view all available Variables.`, "YELLOW") ]});
       }
     }
     if(option == 7) {
-      if(message.guild.id != this.client.config.developer.server) return;
       let snStatus = db.fetch(`server_${message.guild.id}_snipes`);
       if(snStatus == null) {
         db.set(`server_${message.guild.id}_snipes`, true);
@@ -160,7 +159,6 @@ Use \`variables\` Command to view all available Variables.`, "YELLOW") ]});
       }
     }
     if(option == 8) {
-      if(message.guild.id != this.client.config.developer.server) return;
       let img = db.fetch(`server_${message.guild.id}_welcomeImg`);
       if(img == null) {
         db.set(`server_${message.guild.id}_welcomeImg`, true);
@@ -173,7 +171,6 @@ Use \`variables\` Command to view all available Variables.`, "YELLOW") ]});
       }
     }
     if(option == 9) {
-      if(message.guild.id != this.client.config.developer.server) return;
       let channel = message.mentions.channels.first();
       if (!channel) {
         db.delete(`channel_${message.guild.id}_welcome`);

@@ -1,14 +1,14 @@
 const Command = require("../../structures/Command");
 const { MessageEmbed } = require('discord.js');
 
-module.exports = class Snipes extends Command {
+module.exports = class Snipe extends Command {
   constructor(client) {
     super(client, {
-      name: "snipes",
+      name: "snipe",
       description: "View last Deleted Message",
-      usage: "snipes",
+      usage: "snipe",
       permissions: [],
-      aliases: ["snipe"],
+      aliases: ["snipes"],
       category: "member",
       listed: true,
       slash: true,
@@ -42,6 +42,8 @@ module.exports = class Snipes extends Command {
     let embed = new MessageEmbed()
       .setAuthor(snipe.author.username, av)
       .setDescription(snipe.content)
+      .setTimestamp(snipe.time)
+      .setFooter("Message Deleted at", this.client.user.displayAvatarURL())
       .setColor("BLURPLE");
 
     interaction.followUp({ embeds: [embed] });

@@ -22,6 +22,11 @@ module.exports = class Help extends Command {
 
     const helpRow = new MessageActionRow()
 			.addComponents(
+			  new MessageButton()
+          .setCustomId("home")
+          .setEmoji("⭐")
+					.setLabel('Main Menu')
+					.setStyle('PRIMARY'), 
 				new MessageButton()
           .setCustomId("members")
           .setEmoji("👤")
@@ -59,11 +64,11 @@ module.exports = class Help extends Command {
         .addField(`${this.client.emojisConfig.utility} Utility`,
 `View all available Utility Commands`)
         .addField(`${this.client.emojisConfig.vote} Vote for Bot`,
-`[Help Developers by Voting for Bot](${this.client.config.voteURL})`)
+`[Help Developers by Voting for Bot](${this.client.config.links.voteURL})`)
         .addField(`${this.client.emojisConfig.invite} Invite Bot`,
-`[Invite Bot to your Server](${this.client.config.inviteURL})`)
+`[Invite Bot to your Server](${this.client.config.links.inviteURL})`)
         .addField(`${this.client.emojisConfig.website} Website`,
-`[Checkout Offical Bot Website](${this.client.config.website})`)
+`[Checkout Offical Bot Website](${this.client.config.links.website})`)
         .setTimestamp()
         .setColor("BLURPLE")
         .setThumbnail(user.displayAvatarURL({ size: 1024, dynamic: true }))
@@ -85,7 +90,7 @@ module.exports = class Help extends Command {
             .setThumbnail(user.displayAvatarURL({ size: 1024, dynamic: true }))
             .setFooter(`Total Commands ${loadedCommands.length}`, message.author.displayAvatarURL({ size: 1024, dynamic: true }));
           mainMenu.edit({ embeds: [memberEmbed], components: [helpRow] });
-        } else if(i.customId == "giveaways") {
+        } else if(i.customId == "giveaway") {
           await i.deferUpdate();
           let gwEmbed = new MessageEmbed()
             .setTitle("🎁︲Giveaways Commands")
@@ -107,8 +112,9 @@ module.exports = class Help extends Command {
             .setThumbnail(user.displayAvatarURL({ size: 1024, dynamic: true }))
             .setFooter(`Total Commands ${loadedCommands.length}`, message.author.displayAvatarURL({ size: 1024, dynamic: true }));
           mainMenu.edit({ embeds: [utilityEmbed], components: [helpRow] });
-        } else if(i.customId == "menu") {
-
+        } else if(i.customId == "home") {
+            await i.deferUpdate();
+            mainMenu.edit({ embeds: [cmdEmbed], components: [helpRow] })
         }
       });
     } else {
@@ -141,6 +147,11 @@ module.exports = class Help extends Command {
     
     const helpRow = new MessageActionRow()
 			.addComponents(
+			  new MessageButton()
+			    .setCustomId("home")
+			    .setEmoji("⭐")
+			    .setLabel('Main Menu')
+			    .setStyle('PRIMARY'),
 				new MessageButton()
           .setCustomId("members")
           .setEmoji("👤")
@@ -177,16 +188,16 @@ module.exports = class Help extends Command {
       .addField(`🛠 Utility`,
   `View all available Utility Commands`)
       .addField(`🔝 Vote for Bot`,
-  `[Help Developers by Voting for Bot](${this.client.config.voteURL})`)
+  `[Help Developers by Voting for Bot](${this.client.config.links.voteURL})`)
       .addField(`➕ Invite Bot`,
-  `[Invite Bot to your Server](${this.client.config.inviteURL})`)
+  `[Invite Bot to your Server](${this.client.config.links.inviteURL})`)
       .addField(`🌐 Website`,
-  `[Checkout Offical Bot Website](${this.client.config.website})`)
+  `[Checkout Offical Bot Website](${this.client.config.links.website})`)
       .setTimestamp()
       .setColor("BLURPLE")
       .setThumbnail(user.displayAvatarURL({ size: 1024, dynamic: true }))
       .setFooter(`Total Commands ${loadedCommands.length}`, interaction.user.displayAvatarURL({ size: 1024, dynamic: true }));
-    let mainMenu = await interaction.followUp({ embeds: [cmdEmbed], components: [helpRow] });
+    interaction.followUp({ embeds: [cmdEmbed], components: [helpRow] });
 
     let filter = m => m.user.id === message.author.id;
     const collector = interaction.channel.createMessageComponentCollector({ filter, time: 120000, errors: ["time"] });
@@ -202,8 +213,8 @@ module.exports = class Help extends Command {
           .setTimestamp()
           .setThumbnail(interaction.user.displayAvatarURL({ size: 1024, dynamic: true }))
           .setFooter(`Total Commands ${loadedCommands.length}`, interaction.user.displayAvatarURL({ size: 1024, dynamic: true }));
-        mainMenu.editReply({ embeds: [memberEmbed], components: [helpRow] });
-      } else if(i.customId == "giveaways") {
+        interaction.editReply({ embeds: [memberEmbed], components: [helpRow] });
+      } else if(i.customId == "giveaway") {
         await i.deferUpdate();
         let gwEmbed = new MessageEmbed()
           .setTitle("🎁︲Giveaways Commands")
@@ -213,7 +224,7 @@ module.exports = class Help extends Command {
           .setTimestamp()
           .setThumbnail(interaction.user.displayAvatarURL({ size: 1024, dynamic: true }))
           .setFooter(`Total Commands ${loadedCommands.length}`, interaction.user.displayAvatarURL({ size: 1024, dynamic: true }));
-        mainMenu.editReply({ embeds: [gwEmbed], components: [helpRow] });
+        interaction.editReply({ embeds: [gwEmbed], components: [helpRow] });
       } else if(i.customId == "utility") {
         await i.deferUpdate();
         let utilityEmbed = new MessageEmbed()
@@ -224,10 +235,10 @@ module.exports = class Help extends Command {
           .setTimestamp()
           .setThumbnail(interaction.user.displayAvatarURL({ size: 1024, dynamic: true }))
           .setFooter(`Total Commands ${loadedCommands.length}`, interaction.user.displayAvatarURL({ size: 1024, dynamic: true }));
-        mainMenu.editReply({ embeds: [utilityEmbed], components: [helpRow] });
-      } else if(i.customId == "menu") {
+        interaction.editReply({ embeds: [utilityEmbed], components: [helpRow] });
+      } else if(i.customId == "home") {
         await i.deferUpdate();
-        mainMenu.editReply({ embeds: [cmdEmbed], components: [helpRow] })
+        interaction.editReply({ embeds: [cmdEmbed], components: [helpRow] })
       }
     })
   }

@@ -9,8 +9,7 @@ async function submitGiveaway(client, message, data) {
         .setCustomId('createGw')
         .setEmoji("🎉")
         .setLabel("Yes, Start Giveaway")
-        .setStyle('PRIMARY'))
-    .addComponents(
+        .setStyle('PRIMARY'),
       new MessageButton()
         .setCustomId('cancelGw')
         .setEmoji("❌")

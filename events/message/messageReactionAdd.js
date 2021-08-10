@@ -12,7 +12,10 @@ module.exports = class MessageReactionAdd extends Event {
     if(user.bot) return;
     const message = reaction.message;
     if(this.client.disabledGuilds.includes(message.guild.id)) return;
-    if(message.channel.type === "dm") return;
+    if(reaction.partial) await reaction.fetch();
+    if(reaction.message.partial) await reaction.message.fetch();
+    if(user.partial) await user.fetch();
+    if(message.channel.type === "DM") return;
     
     if(reaction.emoji.name == "🎉") {
       let giveaways = db.fetch(`giveaways_${message.guild.id}`);

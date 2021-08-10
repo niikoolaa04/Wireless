@@ -65,6 +65,8 @@ module.exports = class WirelessClient extends Client {
     this.commands = new Collection();
     this.slashCommands = new Collection();
     this.slashArray = [];
+    // SNIPES
+    // WELCOMER IMG, SLOWMODE
   }
   async login(token = this.token) {
     super.login(token);

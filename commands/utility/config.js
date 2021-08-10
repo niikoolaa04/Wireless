@@ -17,7 +17,7 @@ module.exports = class Config extends Command {
   async run(message, args) {
     let option = args[0];
     
-    if(!option) {
+    if(!option || option > 9 || option < 1) {
       let prefix = db.fetch(`settings_${message.guild.id}_prefix`) || this.client.config.prefix;
       let bypass = db.fetch(`server_${message.guild.id}_bypassRole`);
       let blacklist = db.fetch(`server_${message.guild.id}_blacklistRole`);
@@ -25,6 +25,9 @@ module.exports = class Config extends Command {
       let join = db.fetch(`server_${message.guild.id}_joinMessage`) || 'No Message';
       let leave = db.fetch(`server_${message.guild.id}_leaveMessage`) || 'No Message';
       let winners = db.fetch(`server_${message.guild.id}_dmWinners`);
+      let snipes = db.fetch(`server_${message.guild.id}_snipes`);
+      let image = db.fetch(`server_${message.guild.id}_welcomeImg`);
+      let wlcmChannel = db.fetch(`channel_${message.guild.id}_welcome`);
 
       let noOption = new Discord.MessageEmbed()
         .setAuthor("Configuration", this.client.user.displayAvatarURL())
@@ -35,6 +38,9 @@ module.exports = class Config extends Command {
         .addField(`🚪 - Join Message (4)`, "`" + join + "`")
         .addField(`✨ - Leave Message (5)`, "`" + leave + "`")
         .addField(`💬 - DM Winners (6)`, winners ? `Yes` : 'No')
+        .addField(`🔎 - Snipes (7)`, snipes ? `Yes` : 'No')
+        .addField(`👋 - Welcome Image (8)`, image ? `Yes` : 'No')
+        .addField(`📞 - Welcome Channel (9)`, wlcmChannel ? `<#${wlcmChannel}>` : 'No Channel')
         .setColor("BLURPLE")
         .setThumbnail(this.client.user.displayAvatarURL())
         .setTimestamp()
@@ -137,6 +143,48 @@ Use \`variables\` Command to view all available Variables.`, "YELLOW") ]});
         db.delete(`server_${message.guild.id}_dmWinners`);
         message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message,
           `Config`, "You have Disabled DM Winners Option.", "RED") ]});
+      }
+    }
+    if(option == 7) {
+      if(message.guild.id != this.client.config.developer.server) return;
+      let snStatus = db.fetch(`server_${message.guild.id}_snipes`);
+      if(snStatus == null) {
+        db.set(`server_${message.guild.id}_snipes`, true);
+        message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message,
+          `Config`, "You have Enabled Snipes Option.", "YELLOW") ]});
+      } else {
+        db.delete(`server_${message.guild.id}_snipes`);
+        db.delete(`snipes_${message.guild.id}`);
+        message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message,
+          `Config`, "You have Disabled Snipes Option.", "RED") ]});
+      }
+    }
+    if(option == 8) {
+      if(message.guild.id != this.client.config.developer.server) return;
+      let img = db.fetch(`server_${message.guild.id}_welcomeImg`);
+      if(img == null) {
+        db.set(`server_${message.guild.id}_welcomeImg`, true);
+        message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message,
+          `Config`, "You have Enabled Welcome Image Option.", "YELLOW") ]});
+      } else {
+        db.delete(`server_${message.guild.id}_welcomeImg`);
+        message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message,
+          `Config`, "You have Disabled Welcome Image Option.", "RED") ]});
+      }
+    }
+    if(option == 9) {
+      if(message.guild.id != this.client.config.developer.server) return;
+      let channel = message.mentions.channels.first();
+      if (!channel) {
+        db.delete(`channel_${message.guild.id}_welcome`);
+        message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message,
+          `Config`, `Welcome Channel have been rested.`, "RED") ]});
+      }
+      if (channel) {
+        db.set(`channel_${message.guild.id}_welcome`, channel.id);
+        message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message,
+          `Config`, `Welcome Channel has been set to ${channel}.
+To reset it just use command without arguments.`, "YELLOW") ]});
       }
     }
   }

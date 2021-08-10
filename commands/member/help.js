@@ -1,5 +1,5 @@
 const Command = require("../../structures/Command");
-const Discord = require("discord.js");
+const { MessageEmbed, MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
 const db = require("quick.db");
 
 module.exports = class Help extends Command {
@@ -20,6 +20,26 @@ module.exports = class Help extends Command {
     let user = message.author;
     let commandArg = args[0];
     
+    const row = new MessageActionRow()
+			.addComponents(
+				new MessageButton()
+          .setURL(this.client.config.links.inviteSite)
+					.setLabel('Invite Me')
+					.setStyle('LINK'),
+        new MessageButton()
+          .setURL(this.client.config.links.voteURL)
+					.setLabel('Vote for Me')
+					.setStyle('LINK'),
+        new MessageButton()
+          .setURL(this.client.config.links.website)
+					.setLabel('Website')
+					.setStyle('LINK'),
+        new MessageButton()
+          .setURL(this.client.config.links.supportServer)
+					.setLabel('Support Server')
+					.setStyle('LINK')
+			);
+
     if(!commandArg) {
       let commandsArray = this.client.commands.filter(
           c => c.listed === true
@@ -30,7 +50,7 @@ module.exports = class Help extends Command {
       let contentGiveaway = this.client.utils.commandsList(this.client, message, "giveaway");
       let contentUtility = this.client.utils.commandsList(this.client, message, "utility");
       
-      let cmdEmbed = new Discord.MessageEmbed()
+      let cmdEmbed = new MessageEmbed()
         .setTitle(`🚀 · Help Menu`)
         .setDescription(`Use \`${prefix}help [command]\` to view more informations about command.`)
         .addField(`${this.client.emojisConfig.members} Member`, 
@@ -39,12 +59,11 @@ module.exports = class Help extends Command {
 `${contentGiveaway}`)
         .addField(`${this.client.emojisConfig.utility} Utility`,
 `${contentUtility}`)
-        .addField(`${this.client.emojisConfig.gem} Informations`, `[Invite Me](${this.client.config.links.inviteURL}) | [Vote for me](${this.client.config.links.voteURL}) | [Website](${this.client.config.links.website}) | [Support Server](${this.client.config.links.supportServer})`)
         .setTimestamp()
         .setColor("BLURPLE")
         .setThumbnail(user.displayAvatarURL({ size: 1024, dynamic: true }))
         .setFooter(`Total Commands ${loadedCommands.length}`, message.author.displayAvatarURL({ size: 1024, dynamic: true }));
-      message.channel.send({ embeds: [cmdEmbed] });
+      message.channel.send({ embeds: [cmdEmbed], components: [row] });
     } else {
       let cmd = this.client.commands.get(commandArg);
       if (!cmd) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message, `Error`
@@ -55,7 +74,7 @@ module.exports = class Help extends Command {
       ) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message, `Error`
         , `You have entered command/category which doesn't exist.`, "RED") ]});
   
-      let embed = new Discord.MessageEmbed()
+      let embed = new MessageEmbed()
         .setTitle("🚀 · Informations About Command")
         .setDescription(
   `> **Command** · \`${cmd.name}\`
@@ -73,6 +92,26 @@ module.exports = class Help extends Command {
     let prefix = await db.fetch(`settings_${interaction.guild.id}_prefix`);
     if (prefix === null) prefix = this.client.config.prefix;
     
+    const row = new MessageActionRow()
+			.addComponents(
+				new MessageButton()
+          .setURL(this.client.config.links.inviteSite)
+					.setLabel('Invite Me')
+					.setStyle('LINK'),
+        new MessageButton()
+          .setURL(this.client.config.links.voteURL)
+					.setLabel('Vote for Me')
+					.setStyle('LINK'),
+        new MessageButton()
+          .setURL(this.client.config.links.website)
+					.setLabel('Website')
+					.setStyle('LINK'),
+        new MessageButton()
+          .setURL(this.client.config.links.supportServer)
+					.setLabel('Support Server')
+					.setStyle('LINK')
+			);
+
     let commandsArray = this.client.commands.filter(
       c => c.listed === true
     );
@@ -82,20 +121,19 @@ module.exports = class Help extends Command {
     let contentGiveaway = this.client.utils.commandsList(this.client, interaction, "giveaway");
     let contentUtility = this.client.utils.commandsList(this.client, interaction, "utility");
     
-    let cmdEmbed = new Discord.MessageEmbed()
+    let cmdEmbed = new MessageEmbed()
       .setTitle(`🚀 · Help Menu`)
       .setDescription(`Use \`${prefix}help [command]\` to view more informations about command.`)
-      .addField(`${this.client.emojisConfig.members} Member`, 
+      .addField(`👤 Member`, 
   `${contentMember}`)
-      .addField(`${this.client.emojisConfig.prize} Giveaway`, 
+      .addField(`🎁 Giveaway`, 
   `${contentGiveaway}`)
-      .addField(`${this.client.emojisConfig.utility} Utility`,
+      .addField(`🛠 Utility`,
   `${contentUtility}`)
-      .addField(`${this.client.emojisConfig.gem} Informations`, `[Invite Me](${this.client.config.links.inviteURL}) | [Vote for me](${this.client.config.links.voteURL}) | [Website](${this.client.config.links.website}) | [Support Server](${this.client.config.links.supportServer})`)
       .setTimestamp()
       .setColor("BLURPLE")
       .setThumbnail(interaction.user.displayAvatarURL({ size: 1024, dynamic: true }))
       .setFooter(`Total Commands ${loadedCommands.length}`, interaction.user.displayAvatarURL({ size: 1024, dynamic: true }));
-    interaction.followUp({ embeds: [cmdEmbed] });
+    interaction.followUp({ embeds: [cmdEmbed], components: [row] });
   }
 };

@@ -200,9 +200,9 @@ module.exports = class Help extends Command {
           .addField(`👤 Member`, `${contentMember}`)
           .addField(`💎 Informations`, `[Invite Me](${this.client.config.links.inviteURL}) | [Vote for me](${this.client.config.links.voteURL}) | [Website](${this.client.config.links.website}) | [Support Server](${this.client.config.links.supportServer})`)
           .setTimestamp()
-          .setThumbnail(user.displayAvatarURL({ size: 1024, dynamic: true }))
+          .setThumbnail(interaction.user.displayAvatarURL({ size: 1024, dynamic: true }))
           .setFooter(`Total Commands ${loadedCommands.length}`, interaction.user.displayAvatarURL({ size: 1024, dynamic: true }));
-        mainMenu.edit({ embeds: [memberEmbed], components: [helpRow] });
+        mainMenu.editReply({ embeds: [memberEmbed], components: [helpRow] });
       } else if(i.customId == "giveaways") {
         await i.deferUpdate();
         let gwEmbed = new MessageEmbed()
@@ -211,9 +211,9 @@ module.exports = class Help extends Command {
           .addField(`🎉 Giveaways`, `${contentGiveaway}`)
           .addField(`💎 Informations`, `[Invite Me](${this.client.config.links.inviteURL}) | [Vote for me](${this.client.config.links.voteURL}) | [Website](${this.client.config.links.website}) | [Support Server](${this.client.config.links.supportServer})`)
           .setTimestamp()
-          .setThumbnail(user.displayAvatarURL({ size: 1024, dynamic: true }))
+          .setThumbnail(interaction.user.displayAvatarURL({ size: 1024, dynamic: true }))
           .setFooter(`Total Commands ${loadedCommands.length}`, interaction.user.displayAvatarURL({ size: 1024, dynamic: true }));
-        mainMenu.edit({ embeds: [gwEmbed], components: [helpRow] });
+        mainMenu.editReply({ embeds: [gwEmbed], components: [helpRow] });
       } else if(i.customId == "utility") {
         await i.deferUpdate();
         let utilityEmbed = new MessageEmbed()
@@ -222,12 +222,12 @@ module.exports = class Help extends Command {
           .addField(`🔨 Utility`, `${contentUtility}`)
           .addField(`💎 Informations`, `[Invite Me](${this.client.config.links.inviteURL}) | [Vote for me](${this.client.config.links.voteURL}) | [Website](${this.client.config.links.website}) | [Support Server](${this.client.config.links.supportServer})`)
           .setTimestamp()
-          .setThumbnail(user.displayAvatarURL({ size: 1024, dynamic: true }))
+          .setThumbnail(interaction.user.displayAvatarURL({ size: 1024, dynamic: true }))
           .setFooter(`Total Commands ${loadedCommands.length}`, interaction.user.displayAvatarURL({ size: 1024, dynamic: true }));
-        mainMenu.edit({ embeds: [utilityEmbed], components: [helpRow] });
+        mainMenu.editReply({ embeds: [utilityEmbed], components: [helpRow] });
       } else if(i.customId == "menu") {
         await i.deferUpdate();
-        mainMenu.edit({ embeds: [cmdEmbed], components: [helpRow] })
+        mainMenu.editReply({ embeds: [cmdEmbed], components: [helpRow] })
       }
     })
   }

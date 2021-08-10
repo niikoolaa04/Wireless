@@ -31,7 +31,10 @@ module.exports = class GiveawayCreate extends Command {
       .setColor("BLURPLE")
       .setAuthor("Giveaway Setup", this.client.user.displayAvatarURL());
 
+    if(this.client.gwCreation.get(message.author.id) == true) return message.channel.send({ embeds: [ this.client.embedBuilder(client, message, "Error", `You have already started Giveaway Creation, type cancel to stop it.`, "RED")] });
+
     let filter = m => m.author.id === interaction.user.id;
     this.client.setupUtils.durationSetup(this.client, interaction, embed, filter);
+    this.client.gwCreation.set(message.author.id, true);
   }
 };

@@ -95,13 +95,13 @@ module.exports = class Help extends Command {
           let gwEmbed = new MessageEmbed()
             .setTitle("🎁︲Giveaways Commands")
             .setDescription(`Use \`${prefix}help [command]\` to view more informations about command.`)
-            .addField(`${this.client.emojisConfig.prize} Member`, `${contentGiveaway}`)
+            .addField(`${this.client.emojisConfig.prize} Giveaway`, `${contentGiveaway}`)
             .addField(`${this.client.emojisConfig.gem} Informations`, `[Invite Me](${this.client.config.links.inviteURL}) | [Vote for me](${this.client.config.links.voteURL}) | [Website](${this.client.config.links.website}) | [Support Server](${this.client.config.links.supportServer})`)
             .setTimestamp()
             .setThumbnail(user.displayAvatarURL({ size: 1024, dynamic: true }))
             .setFooter(`Total Commands ${loadedCommands.length}`, message.author.displayAvatarURL({ size: 1024, dynamic: true }));
           mainMenu.edit({ embeds: [gwEmbed], components: [helpRow] });
-        } else if(i.customID == "utility") {
+        } else if(i.customId == "utility") {
           await i.deferUpdate();
           let utilityEmbed = new MessageEmbed()
             .setTitle("🛠︲Utility Commands")
@@ -195,7 +195,7 @@ module.exports = class Help extends Command {
   `[Checkout Offical Bot Website](${this.client.config.links.website})`)
       .setTimestamp()
       .setColor("BLURPLE")
-      .setThumbnail(user.displayAvatarURL({ size: 1024, dynamic: true }))
+      .setThumbnail(interaction.user.displayAvatarURL({ size: 1024, dynamic: true }))
       .setFooter(`Total Commands ${loadedCommands.length}`, interaction.user.displayAvatarURL({ size: 1024, dynamic: true }));
     interaction.followUp({ embeds: [cmdEmbed], components: [helpRow] });
 
@@ -204,7 +204,6 @@ module.exports = class Help extends Command {
 
     collector.on("collect", async i => {
       if(i.customId == "members") {
-        await i.deferUpdate();
         let memberEmbed = new MessageEmbed()
           .setTitle("👤︲Member Commands")
           .setDescription(`Use \`${prefix}help [command]\` to view more informations about command.`)
@@ -213,20 +212,18 @@ module.exports = class Help extends Command {
           .setTimestamp()
           .setThumbnail(interaction.user.displayAvatarURL({ size: 1024, dynamic: true }))
           .setFooter(`Total Commands ${loadedCommands.length}`, interaction.user.displayAvatarURL({ size: 1024, dynamic: true }));
-        interaction.editReply({ embeds: [memberEmbed], components: [helpRow] });
+        interaction.update({ embeds: [memberEmbed], components: [helpRow] });
       } else if(i.customId == "giveaway") {
-        await i.deferUpdate();
         let gwEmbed = new MessageEmbed()
-          .setTitle("🎁︲Giveaways Commands")
+          .setTitle("🎁︲Giveaway Commands")
           .setDescription(`Use \`${prefix}help [command]\` to view more informations about command.`)
-          .addField(`🎉 Giveaways`, `${contentGiveaway}`)
+          .addField(`🎉 Giveaway`, `${contentGiveaway}`)
           .addField(`💎 Informations`, `[Invite Me](${this.client.config.links.inviteURL}) | [Vote for me](${this.client.config.links.voteURL}) | [Website](${this.client.config.links.website}) | [Support Server](${this.client.config.links.supportServer})`)
           .setTimestamp()
           .setThumbnail(interaction.user.displayAvatarURL({ size: 1024, dynamic: true }))
           .setFooter(`Total Commands ${loadedCommands.length}`, interaction.user.displayAvatarURL({ size: 1024, dynamic: true }));
-        interaction.editReply({ embeds: [gwEmbed], components: [helpRow] });
+        interaction.update({ embeds: [gwEmbed], components: [helpRow] });
       } else if(i.customId == "utility") {
-        await i.deferUpdate();
         let utilityEmbed = new MessageEmbed()
           .setTitle("🛠︲Utility Commands")
           .setDescription(`Use \`${prefix}help [command]\` to view more informations about command.`)
@@ -235,10 +232,9 @@ module.exports = class Help extends Command {
           .setTimestamp()
           .setThumbnail(interaction.user.displayAvatarURL({ size: 1024, dynamic: true }))
           .setFooter(`Total Commands ${loadedCommands.length}`, interaction.user.displayAvatarURL({ size: 1024, dynamic: true }));
-        interaction.editReply({ embeds: [utilityEmbed], components: [helpRow] });
+        interaction.update({ embeds: [utilityEmbed], components: [helpRow] });
       } else if(i.customId == "home") {
-        await i.deferUpdate();
-        interaction.editReply({ embeds: [cmdEmbed], components: [helpRow] })
+        interaction.update({ embeds: [cmdEmbed], components: [helpRow] })
       }
     })
   }

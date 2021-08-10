@@ -26,6 +26,8 @@ module.exports = class Snipe extends Command {
     let embed = new MessageEmbed()
       .setAuthor(snipe.author.username, av)
       .setDescription(snipe.content)
+      .setTimestamp(snipe.time)
+      .setFooter("Message Deleted at", this.client.user.displayAvatarURL())
       .setColor("BLURPLE");
 
     message.channel.send({ embeds: [embed]});

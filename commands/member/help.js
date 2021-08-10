@@ -39,7 +39,7 @@ module.exports = class Help extends Command {
 					.setStyle('PRIMARY'),
         new MessageButton()
           .setCustomId("utility")
-          .setEmoji("🛠")
+          .setEmoji("🔎")
 					.setLabel('Utility')
 					.setStyle('PRIMARY'),
 			); 
@@ -164,7 +164,7 @@ module.exports = class Help extends Command {
 					.setStyle('PRIMARY'),
         new MessageButton()
           .setCustomId("utility")
-          .setEmoji("🛠")
+          .setEmoji("🔎")
 					.setLabel('Utility')
 					.setStyle('PRIMARY'),
 			); 

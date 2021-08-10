@@ -19,26 +19,25 @@ module.exports = class Help extends Command {
     if (prefix === null) prefix = this.client.config.prefix;
     let user = message.author;
     let commandArg = args[0];
-    
-    const row = new MessageActionRow()
+
+    const helpRow = new MessageActionRow()
 			.addComponents(
 				new MessageButton()
-          .setURL(this.client.config.links.inviteSite)
-					.setLabel('Invite Me')
-					.setStyle('LINK'),
+          .setCustomId("members")
+          .setEmoji("👤")
+					.setLabel('Members')
+					.setStyle('PRIMARY'),
         new MessageButton()
-          .setURL(this.client.config.links.voteURL)
-					.setLabel('Vote for Me')
-					.setStyle('LINK'),
+          .setCustomId("giveaway")
+          .setEmoji("🎉")
+					.setLabel('Giveaway')
+					.setStyle('PRIMARY'),
         new MessageButton()
-          .setURL(this.client.config.links.website)
-					.setLabel('Website')
-					.setStyle('LINK'),
-        new MessageButton()
-          .setURL(this.client.config.links.supportServer)
-					.setLabel('Support Server')
-					.setStyle('LINK')
-			);
+          .setCustomId("utility")
+          .setEmoji("🛠")
+					.setLabel('Utility')
+					.setStyle('PRIMARY'),
+			); 
 
     if(!commandArg) {
       let commandsArray = this.client.commands.filter(
@@ -51,19 +50,67 @@ module.exports = class Help extends Command {
       let contentUtility = this.client.utils.commandsList(this.client, message, "utility");
       
       let cmdEmbed = new MessageEmbed()
-        .setTitle(`🚀 · Help Menu`)
+        .setTitle(`🚀︲Help Menu`)
         .setDescription(`Use \`${prefix}help [command]\` to view more informations about command.`)
-        .addField(`${this.client.emojisConfig.members} Member`, 
-`${contentMember}`)
+        .addField(`${this.client.emojisConfig.members} Member Commands`, 
+`View all available Member Commands`)
         .addField(`${this.client.emojisConfig.prize} Giveaway`, 
-`${contentGiveaway}`)
+`View all available Giveaway Commands`)
         .addField(`${this.client.emojisConfig.utility} Utility`,
-`${contentUtility}`)
+`View all available Utility Commands`)
+        .addField(`${this.client.emojisConfig.vote} Vote for Bot`,
+`[Help Developers by Voting for Bot](${this.client.config.voteURL})`)
+        .addField(`${this.client.emojisConfig.invite} Invite Bot`,
+`[Invite Bot to your Server](${this.client.config.inviteURL})`)
+        .addField(`${this.client.emojisConfig.website} Website`,
+`[Checkout Offical Bot Website](${this.client.config.website})`)
         .setTimestamp()
         .setColor("BLURPLE")
         .setThumbnail(user.displayAvatarURL({ size: 1024, dynamic: true }))
         .setFooter(`Total Commands ${loadedCommands.length}`, message.author.displayAvatarURL({ size: 1024, dynamic: true }));
-      message.channel.send({ embeds: [cmdEmbed], components: [row] });
+      let mainMenu = await message.channel.send({ embeds: [cmdEmbed], components: [helpRow] });
+
+      let filter = m => m.user.id === message.author.id;
+      const collector = message.channel.createMessageComponentCollector({ filter, time: 120000, errors: ["time"] });
+
+      collector.on("collect", async i => {
+        if(i.customId == "members") {
+          await i.deferUpdate();
+          let memberEmbed = new MessageEmbed()
+            .setTitle("👤︲Member Commands")
+            .setDescription(`Use \`${prefix}help [command]\` to view more informations about command.`)
+            .addField(`${this.client.emojisConfig.members} Member`, `${contentMember}`)
+            .addField(`${this.client.emojisConfig.gem} Informations`, `[Invite Me](${this.client.config.links.inviteURL}) | [Vote for me](${this.client.config.links.voteURL}) | [Website](${this.client.config.links.website}) | [Support Server](${this.client.config.links.supportServer})`)
+            .setTimestamp()
+            .setThumbnail(user.displayAvatarURL({ size: 1024, dynamic: true }))
+            .setFooter(`Total Commands ${loadedCommands.length}`, message.author.displayAvatarURL({ size: 1024, dynamic: true }));
+          mainMenu.edit({ embeds: [memberEmbed], components: [helpRow] });
+        } else if(i.customId == "giveaways") {
+          await i.deferUpdate();
+          let gwEmbed = new MessageEmbed()
+            .setTitle("🎁︲Giveaways Commands")
+            .setDescription(`Use \`${prefix}help [command]\` to view more informations about command.`)
+            .addField(`${this.client.emojisConfig.prize} Member`, `${contentGiveaway}`)
+            .addField(`${this.client.emojisConfig.gem} Informations`, `[Invite Me](${this.client.config.links.inviteURL}) | [Vote for me](${this.client.config.links.voteURL}) | [Website](${this.client.config.links.website}) | [Support Server](${this.client.config.links.supportServer})`)
+            .setTimestamp()
+            .setThumbnail(user.displayAvatarURL({ size: 1024, dynamic: true }))
+            .setFooter(`Total Commands ${loadedCommands.length}`, message.author.displayAvatarURL({ size: 1024, dynamic: true }));
+          mainMenu.edit({ embeds: [gwEmbed], components: [helpRow] });
+        } else if(i.customID == "utility") {
+          await i.deferUpdate();
+          let utilityEmbed = new MessageEmbed()
+            .setTitle("🛠︲Utility Commands")
+            .setDescription(`Use \`${prefix}help [command]\` to view more informations about command.`)
+            .addField(`${this.client.emojisConfig.utility} Utility`, `${contentUtility}`)
+            .addField(`${this.client.emojisConfig.gem} Informations`, `[Invite Me](${this.client.config.links.inviteURL}) | [Vote for me](${this.client.config.links.voteURL}) | [Website](${this.client.config.links.website}) | [Support Server](${this.client.config.links.supportServer})`)
+            .setTimestamp()
+            .setThumbnail(user.displayAvatarURL({ size: 1024, dynamic: true }))
+            .setFooter(`Total Commands ${loadedCommands.length}`, message.author.displayAvatarURL({ size: 1024, dynamic: true }));
+          mainMenu.edit({ embeds: [utilityEmbed], components: [helpRow] });
+        } else if(i.customId == "menu") {
+
+        }
+      });
     } else {
       let cmd = this.client.commands.get(commandArg);
       if (!cmd) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message, `Error`
@@ -92,25 +139,24 @@ module.exports = class Help extends Command {
     let prefix = await db.fetch(`settings_${interaction.guild.id}_prefix`);
     if (prefix === null) prefix = this.client.config.prefix;
     
-    const row = new MessageActionRow()
+    const helpRow = new MessageActionRow()
 			.addComponents(
 				new MessageButton()
-          .setURL(this.client.config.links.inviteSite)
-					.setLabel('Invite Me')
-					.setStyle('LINK'),
+          .setCustomId("members")
+          .setEmoji("👤")
+					.setLabel('Members')
+					.setStyle('PRIMARY'),
         new MessageButton()
-          .setURL(this.client.config.links.voteURL)
-					.setLabel('Vote for Me')
-					.setStyle('LINK'),
+          .setCustomId("giveaway")
+          .setEmoji("🎉")
+					.setLabel('Giveaway')
+					.setStyle('PRIMARY'),
         new MessageButton()
-          .setURL(this.client.config.links.website)
-					.setLabel('Website')
-					.setStyle('LINK'),
-        new MessageButton()
-          .setURL(this.client.config.links.supportServer)
-					.setLabel('Support Server')
-					.setStyle('LINK')
-			);
+          .setCustomId("utility")
+          .setEmoji("🛠")
+					.setLabel('Utility')
+					.setStyle('PRIMARY'),
+			); 
 
     let commandsArray = this.client.commands.filter(
       c => c.listed === true
@@ -122,18 +168,67 @@ module.exports = class Help extends Command {
     let contentUtility = this.client.utils.commandsList(this.client, interaction, "utility");
     
     let cmdEmbed = new MessageEmbed()
-      .setTitle(`🚀 · Help Menu`)
+      .setTitle(`🚀︲Help Menu`)
       .setDescription(`Use \`${prefix}help [command]\` to view more informations about command.`)
-      .addField(`👤 Member`, 
-  `${contentMember}`)
-      .addField(`🎁 Giveaway`, 
-  `${contentGiveaway}`)
+      .addField(`👤 Member Commands`, 
+  `View all available Member Commands`)
+      .addField(`🎉 Giveaway`, 
+  `View all available Giveaway Commands`)
       .addField(`🛠 Utility`,
-  `${contentUtility}`)
+  `View all available Utility Commands`)
+      .addField(`🔝 Vote for Bot`,
+  `[Help Developers by Voting for Bot](${this.client.config.voteURL})`)
+      .addField(`➕ Invite Bot`,
+  `[Invite Bot to your Server](${this.client.config.inviteURL})`)
+      .addField(`🌐 Website`,
+  `[Checkout Offical Bot Website](${this.client.config.website})`)
       .setTimestamp()
       .setColor("BLURPLE")
-      .setThumbnail(interaction.user.displayAvatarURL({ size: 1024, dynamic: true }))
+      .setThumbnail(user.displayAvatarURL({ size: 1024, dynamic: true }))
       .setFooter(`Total Commands ${loadedCommands.length}`, interaction.user.displayAvatarURL({ size: 1024, dynamic: true }));
-    interaction.followUp({ embeds: [cmdEmbed], components: [row] });
+    let mainMenu = await interaction.followUp({ embeds: [cmdEmbed], components: [helpRow] });
+
+    let filter = m => m.user.id === message.author.id;
+    const collector = interaction.channel.createMessageComponentCollector({ filter, time: 120000, errors: ["time"] });
+
+    collector.on("collect", async i => {
+      if(i.customId == "members") {
+        await i.deferUpdate();
+        let memberEmbed = new MessageEmbed()
+          .setTitle("👤︲Member Commands")
+          .setDescription(`Use \`${prefix}help [command]\` to view more informations about command.`)
+          .addField(`👤 Member`, `${contentMember}`)
+          .addField(`💎 Informations`, `[Invite Me](${this.client.config.links.inviteURL}) | [Vote for me](${this.client.config.links.voteURL}) | [Website](${this.client.config.links.website}) | [Support Server](${this.client.config.links.supportServer})`)
+          .setTimestamp()
+          .setThumbnail(user.displayAvatarURL({ size: 1024, dynamic: true }))
+          .setFooter(`Total Commands ${loadedCommands.length}`, interaction.user.displayAvatarURL({ size: 1024, dynamic: true }));
+        mainMenu.edit({ embeds: [memberEmbed], components: [helpRow] });
+      } else if(i.customId == "giveaways") {
+        await i.deferUpdate();
+        let gwEmbed = new MessageEmbed()
+          .setTitle("🎁︲Giveaways Commands")
+          .setDescription(`Use \`${prefix}help [command]\` to view more informations about command.`)
+          .addField(`🎉 Giveaways`, `${contentGiveaway}`)
+          .addField(`💎 Informations`, `[Invite Me](${this.client.config.links.inviteURL}) | [Vote for me](${this.client.config.links.voteURL}) | [Website](${this.client.config.links.website}) | [Support Server](${this.client.config.links.supportServer})`)
+          .setTimestamp()
+          .setThumbnail(user.displayAvatarURL({ size: 1024, dynamic: true }))
+          .setFooter(`Total Commands ${loadedCommands.length}`, interaction.user.displayAvatarURL({ size: 1024, dynamic: true }));
+        mainMenu.edit({ embeds: [gwEmbed], components: [helpRow] });
+      } else if(i.customId == "utility") {
+        await i.deferUpdate();
+        let utilityEmbed = new MessageEmbed()
+          .setTitle("🛠︲Utility Commands")
+          .setDescription(`Use \`${prefix}help [command]\` to view more informations about command.`)
+          .addField(`🔨 Utility`, `${contentUtility}`)
+          .addField(`💎 Informations`, `[Invite Me](${this.client.config.links.inviteURL}) | [Vote for me](${this.client.config.links.voteURL}) | [Website](${this.client.config.links.website}) | [Support Server](${this.client.config.links.supportServer})`)
+          .setTimestamp()
+          .setThumbnail(user.displayAvatarURL({ size: 1024, dynamic: true }))
+          .setFooter(`Total Commands ${loadedCommands.length}`, interaction.user.displayAvatarURL({ size: 1024, dynamic: true }));
+        mainMenu.edit({ embeds: [utilityEmbed], components: [helpRow] });
+      } else if(i.customId == "menu") {
+        await i.deferUpdate();
+        mainMenu.edit({ embeds: [cmdEmbed], components: [helpRow] })
+      }
+    })
   }
 };

@@ -204,6 +204,7 @@ module.exports = class Help extends Command {
 
     collector.on("collect", async i => {
       if(i.customId == "members") {
+        await i.deferUpdate();
         let memberEmbed = new MessageEmbed()
           .setTitle("👤︲Member Commands")
           .setDescription(`Use \`${prefix}help [command]\` to view more informations about command.`)
@@ -212,8 +213,9 @@ module.exports = class Help extends Command {
           .setTimestamp()
           .setThumbnail(interaction.user.displayAvatarURL({ size: 1024, dynamic: true }))
           .setFooter(`Total Commands ${loadedCommands.length}`, interaction.user.displayAvatarURL({ size: 1024, dynamic: true }));
-        interaction.update({ embeds: [memberEmbed], components: [helpRow] });
+        interaction.editReply({ embeds: [memberEmbed], components: [helpRow] });
       } else if(i.customId == "giveaway") {
+        await i.deferUpdate();
         let gwEmbed = new MessageEmbed()
           .setTitle("🎁︲Giveaway Commands")
           .setDescription(`Use \`${prefix}help [command]\` to view more informations about command.`)
@@ -222,8 +224,9 @@ module.exports = class Help extends Command {
           .setTimestamp()
           .setThumbnail(interaction.user.displayAvatarURL({ size: 1024, dynamic: true }))
           .setFooter(`Total Commands ${loadedCommands.length}`, interaction.user.displayAvatarURL({ size: 1024, dynamic: true }));
-        interaction.update({ embeds: [gwEmbed], components: [helpRow] });
+        interaction.editReply({ embeds: [gwEmbed], components: [helpRow] });
       } else if(i.customId == "utility") {
+        await i.deferUpdate(); 
         let utilityEmbed = new MessageEmbed()
           .setTitle("🛠︲Utility Commands")
           .setDescription(`Use \`${prefix}help [command]\` to view more informations about command.`)
@@ -232,9 +235,10 @@ module.exports = class Help extends Command {
           .setTimestamp()
           .setThumbnail(interaction.user.displayAvatarURL({ size: 1024, dynamic: true }))
           .setFooter(`Total Commands ${loadedCommands.length}`, interaction.user.displayAvatarURL({ size: 1024, dynamic: true }));
-        interaction.update({ embeds: [utilityEmbed], components: [helpRow] });
+        interaction.editReply({ embeds: [utilityEmbed], components: [helpRow] });
       } else if(i.customId == "home") {
-        interaction.update({ embeds: [cmdEmbed], components: [helpRow] })
+        await i.deferUpdate();
+        interaction.editReply({ embeds: [cmdEmbed], components: [helpRow] })
       }
     })
   }

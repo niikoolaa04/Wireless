@@ -11,6 +11,7 @@ module.exports = class Help extends Command {
 			permissions: [],
 			category: "korisnik",
 			listed: false,
+			slash: true, 
 		});
 	} 
 	async run(message, args) {
@@ -140,7 +141,7 @@ module.exports = class Help extends Command {
       message.channel.send({ embeds: [embed] });
     }
   }
-  /*async slashRun(interaction, args) {
+  async slashRun(interaction, args) {
     let prefix = await db.fetch(`settings_${interaction.guild.id}_prefix`);
     if (prefix === null) prefix = this.client.config.prefix;
     
@@ -203,7 +204,7 @@ module.exports = class Help extends Command {
 
     collector.on("collect", async i => {
       if(i.customId == "members") {
-        await i.deferUpdate();
+        //await i.deferUpdate();
         let memberEmbed = new MessageEmbed()
           .setTitle("👤︲Member Commands")
           .setDescription(`Use \`${prefix}help [command]\` to view more informations about command.`)
@@ -212,9 +213,9 @@ module.exports = class Help extends Command {
           .setTimestamp()
           .setThumbnail(interaction.user.displayAvatarURL({ size: 1024, dynamic: true }))
           .setFooter(`Total Commands ${loadedCommands.length}`, interaction.user.displayAvatarURL({ size: 1024, dynamic: true }));
-        interaction.editReply({ embeds: [memberEmbed], components: [helpRow] });
+        await i.update({ embeds: [memberEmbed], components: [helpRow] });
       } else if(i.customId == "giveaway") {
-        await i.deferUpdate();
+        //await i.deferUpdate();
         let gwEmbed = new MessageEmbed()
           .setTitle("🎁︲Giveaway Commands")
           .setDescription(`Use \`${prefix}help [command]\` to view more informations about command.`)
@@ -223,9 +224,9 @@ module.exports = class Help extends Command {
           .setTimestamp()
           .setThumbnail(interaction.user.displayAvatarURL({ size: 1024, dynamic: true }))
           .setFooter(`Total Commands ${loadedCommands.length}`, interaction.user.displayAvatarURL({ size: 1024, dynamic: true }));
-        interaction.editReply({ embeds: [gwEmbed], components: [helpRow] });
+        await i.update({ embeds: [gwEmbed], components: [helpRow] });
       } else if(i.customId == "utility") {
-        await i.deferUpdate(); 
+        //await i.deferUpdate(); 
         let utilityEmbed = new MessageEmbed()
           .setTitle("🛠︲Utility Commands")
           .setDescription(`Use \`${prefix}help [command]\` to view more informations about command.`)
@@ -234,11 +235,11 @@ module.exports = class Help extends Command {
           .setTimestamp()
           .setThumbnail(interaction.user.displayAvatarURL({ size: 1024, dynamic: true }))
           .setFooter(`Total Commands ${loadedCommands.length}`, interaction.user.displayAvatarURL({ size: 1024, dynamic: true }));
-        interaction.editReply({ embeds: [utilityEmbed], components: [helpRow] });
+        await i.update({ embeds: [utilityEmbed], components: [helpRow] });
       } else if(i.customId == "home") {
-        await i.deferUpdate();
-        interaction.editReply({ embeds: [cmdEmbed], components: [helpRow] })
+        //await i.deferUpdate();
+        await i.update({ embeds: [cmdEmbed], components: [helpRow] })
       }
     })
-  }*/
+  }
 };

@@ -5,7 +5,7 @@ module.exports = class TopMessages extends Command {
   constructor(client) {
     super(client, {
       name: "topmessages",
-      description: "top 10 users by messages",
+      description: "Top 10 users by messages",
       usage: "topmessages",
       permissions: [],
       category: "member",

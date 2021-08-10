@@ -5,7 +5,7 @@ module.exports = class Discriminator extends Command {
   constructor(client) {
     super(client, {
       name: "discriminator",
-      description: "get users with same tag",
+      description: "Get users with same tag",
       usage: "discriminator [4 digits]",
       aliases: ["discrim"],
       permissions: [],

@@ -6,7 +6,7 @@ module.exports = class GiveawayEdit extends Command {
   constructor(client) {
     super(client, {
       name: "gend",
-      description: "end giveaway",
+      description: "End giveaway",
       usage: "gend [Message ID]",
       permissions: ["ADMINISTRATOR"],
       aliases: ["gwend"],

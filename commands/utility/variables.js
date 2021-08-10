@@ -6,7 +6,7 @@ module.exports = class Variables extends Command {
   constructor(client) {
     super(client, {
       name: "variables",
-      description: "list of variables that can be used in join and leave messages",
+      description: "List of variables that can be used in join and leave messages",
       usage: "variables",
       permissions: ["MANAGE_MESSAGES"],
       category: "utility",

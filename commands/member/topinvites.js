@@ -5,7 +5,7 @@ module.exports = class TopInvites extends Command {
   constructor(client) {
     super(client, {
       name: "topinvites",
-      description: "top 10 users by invites",
+      description: "Top 10 users by invites",
       usage: "topinvites",
       permissions: [],
       category: "member",

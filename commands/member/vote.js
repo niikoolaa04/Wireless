@@ -5,7 +5,7 @@ module.exports = class Vote extends Command {
   constructor(client) {
     super(client, {
       name: "vote",
-      description: "vote for bot",
+      description: "Vote for bot",
       usage: "vote",
       permissions: [],
       aliases: ["upvote"],

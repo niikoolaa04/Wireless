@@ -7,7 +7,7 @@ module.exports = class GiveawayStart extends Command {
 	constructor(client) {
 		super(client, {
 			name: "gstart",
-			description: "start new giveaway",
+			description: "Start new giveaway",
 			usage: "gstart [duration] [#channel] [no. of winners] [messages req. || 0] [invites req. || 0] [prize]",
 			permissions: ["ADMINISTRATOR"],
 			aliases: ["gwstart"],

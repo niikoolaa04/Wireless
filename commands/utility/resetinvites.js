@@ -6,7 +6,7 @@ module.exports = class ResetInvites extends Command {
 	constructor(client) {
 		super(client, {
 			name: "resetinvites",
-			description: "reset invites for user or guild",
+			description: "Reset invites for user or guild",
 			usage: "resetinvites [all || user]",
 			permissions: ["ADMINISTRATOR"],
 			category: "utility",

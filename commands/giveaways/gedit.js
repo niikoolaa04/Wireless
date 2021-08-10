@@ -7,7 +7,7 @@ module.exports = class GiveawayEdit extends Command {
   constructor(client) {
     super(client, {
       name: "gedit",
-      description: "edit giveaway informations",
+      description: "Edit giveaway informations",
       usage: "gedit [message id] [messages req. || none] [invites req. || none] [no. of winners || none] [extra time || none] [prize || none]",
       permissions: ["ADMINISTRATOR"],
       aliases: ["gwedit"], 

@@ -6,7 +6,7 @@ module.exports = class Config extends Command {
 	constructor(client) {
 		super(client, {
 			name: "config",
-			description: "change some config values",
+			description: "Edit Bot Configuration",
 			usage: "config [Option] [Value]",
 			permissions: ["ADMINISTRATOR"],
 			category: "utility",

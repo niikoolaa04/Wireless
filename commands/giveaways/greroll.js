@@ -7,7 +7,7 @@ module.exports = class GiveawayReroll extends Command {
   constructor(client) {
     super(client, {
       name: "greroll",
-      description: "reroll giveaway winners",
+      description: "Reroll giveaway winners",
       usage: "greroll [Message ID]",
       permissions: ["ADMINISTRATOR"],
       aliases: ["gwreroll"], 

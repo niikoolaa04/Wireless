@@ -7,7 +7,7 @@ module.exports = class Prefix extends Command {
 		super(client, {
 			name: "prefix",
 			description: "change bot prefix for this guild",
-			usage: "prefix [Prefix]",
+			usage: "Prefix [Prefix]",
 			permissions: ["ADMINISTRATOR"],
 			category: "utility",
 			listed: true,

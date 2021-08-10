@@ -5,7 +5,7 @@ module.exports = class Minecraft extends Command {
   constructor(client) {
     super(client, {
       name: "minecraft",
-      description: "minecraft achievement with your text",
+      description: "Minecraft achievement with your text",
       usage: "minecraft [Tekst]",
       aliases: ["mc", "achievement", "ach", "mcach"],
       permissions: [],

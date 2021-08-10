@@ -6,7 +6,7 @@ module.exports = class UserBlacklist extends Command {
   constructor(client) {
     super(client, {
       name: "userbl",
-      description: "add/remove user from blacklist",
+      description: "Add/remove user from blacklist",
       usage: "userbl [add/remove/list] [User ID]",
       permissions: [],
       category: "dev",

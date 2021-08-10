@@ -5,7 +5,7 @@ module.exports = class Ping extends Command {
   constructor(client) {
     super(client, {
       name: "ping",
-      description: "bot's ping",
+      description: "Bot's ping",
       usage: "ping",
       permissions: [],
       aliases: ["uptime"], 

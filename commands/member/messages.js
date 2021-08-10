@@ -6,7 +6,7 @@ module.exports = class Messages extends Command {
 	constructor(client) {
 		super(client, {
 			name: "messages",
-			description: "number of sent messages",
+			description: "Number of sent messages",
 			usage: "messages [@User]",
 			permissions: [],
 			category: "member",

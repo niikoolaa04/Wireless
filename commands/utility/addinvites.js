@@ -6,7 +6,7 @@ module.exports = class BonusInvites extends Command {
 	constructor(client) {
 		super(client, {
 			name: "bonusinvites",
-			description: "add/remove bonus invites to user",
+			description: "Add/remove bonus invites to user",
 			usage: "bonusinvites [add/remove] [@User] [invites]",
 			permissions: ["ADMINISTRATOR"],
 			category: "utility",

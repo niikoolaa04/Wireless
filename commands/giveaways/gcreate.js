@@ -7,7 +7,7 @@ module.exports = class GiveawayCreate extends Command {
 	constructor(client) {
 		super(client, {
 			name: "gcreate",
-			description: "start new giveaway using interactive menu",
+			description: "Start new giveaway using interactive menu",
 			usage: "gcreate",
 			permissions: ["ADMINISTRATOR"],
 			aliases: ["gwcreate", "gwsetup", "gsetup"],

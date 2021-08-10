@@ -4,7 +4,7 @@ module.exports = class Servers extends Command {
   constructor(client) {
     super(client, {
       name: "servers",
-      description: "list of all servers bot is in",
+      description: "List of all servers bot is in",
       usage: "servers",
       permissions: [],
       aliases: ["serverlist", "serverslist"],

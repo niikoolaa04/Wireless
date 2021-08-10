@@ -6,7 +6,7 @@ module.exports = class GuildBlacklist extends Command {
   constructor(client) {
     super(client, {
       name: "guildbl",
-      description: "add/remove guild from blacklist",
+      description: "Add/remove guild from blacklist",
       usage: "guildbl [add/remove/list] [Guild ID]",
       permissions: [],
       category: "dev",

@@ -16,12 +16,14 @@ module.exports = class Snipes extends Command {
   }
 
   async run(message, args) {
-    if(message.guild.id != this.client.config.developer.server) return;
     let snipe = this.client.snipes.get(message.guild.id);
     if(!snipe) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message, "Error", "There are no Snipes", "RED") ] })
 
+    let user = this.client.users.cache.get(snipe.author.id);
+    if(user) let av = user.displayAvatarURL({ dynamic: true });
+
     let embed = new MessageEmbed()
-      .setAuthor(snipe.author.username, snipe.author.displayAvatarURL)
+      .setAuthor(snipe.author.username, user ? av : 'https://cdn.discordapp.com/embed/avatars/0.png')
       .setDescription(snipe.content)
       .setColor("BLURPLE");
 
@@ -29,12 +31,14 @@ module.exports = class Snipes extends Command {
   }
 
   async slashRun(interaction, args) {
-    if(message.guild.id != this.client.config.developer.server) return;
     let snipe = this.client.snipes.get(message.guild.id);
     if(!snipe) return interaction.followUp({ embeds: [ this.client.embedInteraction(this.client, interaction, "Error", "There are no Snipes", "RED") ] })
     
+    let user = this.client.users.cache.get(snipe.author.id);
+    if(user) let av = user.displayAvatarURL({ dynamic: true });
+
     let embed = new MessageEmbed()
-      .setAuthor(snipe.author.username, snipe.author)
+      .setAuthor(snipe.author.username, user ? av : 'https://cdn.discordapp.com/embed/avatars/0.png')
       .setDescription(snipe.content)
       .setColor("BLURPLE");
 

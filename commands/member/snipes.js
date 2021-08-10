@@ -17,11 +17,11 @@ module.exports = class Snipes extends Command {
 
   async run(message, args) {
     if(message.guild.id != this.client.config.developer.server) return;
-    let snipe = db.fetch(`snipes_${message.guild.id}`);
-    if(!snipe) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message, "Error", "There isn't any Snipes", "RED") ] })
+    let snipe = this.client.snipes.get(message.guild.id);
+    if(!snipe) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message, "Error", "There are no Snipes", "RED") ] })
 
     let embed = new MessageEmbed()
-      .setAuthor(snipe.author.username, snipe.author.displayAvatarURL({ dynamic: true }))
+      .setAuthor(snipe.author.username, snipe.author.displayAvatarURL)
       .setDescription(snipe.content)
       .setColor("BLURPLE");
 
@@ -29,11 +29,12 @@ module.exports = class Snipes extends Command {
   }
 
   async slashRun(interaction, args) {
-    let snipe = db.fetch(`snipes_${interaction.guild.id}`);
-    if(!snipe) return interaction.followUp({ embeds: [ this.client.embedInteraction(this.client, interaction, "Error", "There isn't any Snipes", "RED") ] })
+    if(message.guild.id != this.client.config.developer.server) return;
+    let snipe = this.client.snipes.get(message.guild.id);
+    if(!snipe) return interaction.followUp({ embeds: [ this.client.embedInteraction(this.client, interaction, "Error", "There are no Snipes", "RED") ] })
     
     let embed = new MessageEmbed()
-      .setAuthor(snipe.author.username, snipe.author.displayAvatarURL({ dynamic: true }))
+      .setAuthor(snipe.author.username, snipe.author)
       .setDescription(snipe.content)
       .setColor("BLURPLE");
 

@@ -61,6 +61,7 @@ module.exports = class WirelessClient extends Client {
       "361577445704466432",
     ];
     this.invites = {};
+    this.snipes = new Map();
     this.aliases = new Collection();
     this.commands = new Collection();
     this.slashCommands = new Collection();

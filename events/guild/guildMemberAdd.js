@@ -34,7 +34,7 @@ module.exports = class GuildMemberAdd extends Event {
       const canvas = Canvas.createCanvas(700, 310);
       const ctx = canvas.getContext('2d');
     
-      const background = await Canvas.loadImage("../../assets/wallpaper.jpg");
+      const background = await Canvas.loadImage("./assets/wallpaper.jpg");
       ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
     
       ctx.strokeStyle = '#74037b';

@@ -220,9 +220,8 @@ module.exports = class Help extends Command {
           .setColor("BLURPLE")
           .setThumbnail(interaction.user.displayAvatarURL({ size: 1024, dynamic: true }))
           .setFooter(`Total Commands ${loadedCommands.length}`, interaction.user.displayAvatarURL({ size: 1024, dynamic: true }));
-        i.update({ embeds: [memberEmbed], components: [helpRow] });
+        await i.update({ embeds: [memberEmbed], components: [helpRow] });
       } else if(i.customId == "giveaway") {
-        await i.deferUpdate();
         let gwEmbed = new MessageEmbed()
           .setTitle("🎁︲Giveaway Commands")
           .setDescription(`Use \`${prefix}help [command]\` to view more informations about command.`)

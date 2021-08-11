@@ -205,12 +205,14 @@ module.exports = class Help extends Command {
       .setThumbnail(interaction.user.displayAvatarURL({ size: 1024, dynamic: true }))
       .setFooter(`Total Commands ${loadedCommands.length}`, interaction.user.displayAvatarURL({ size: 1024, dynamic: true }));
     interaction.followUp({ embeds: [cmdEmbed], components: [helpRow] });
+    console.log("sendd")
 
     let filter = m => m.user.id === interaction.user.id;
-    const collector = interaction.channel.createMessageComponentCollector({ filter, time: 120000, errors: ["time"] });
+    const collector = interaction.channel.createMessageComponentCollector({ filter, componentType: 'BUTTON', time: 120000, errors: ["time"] });
 
     collector.on("collect", async i => {
-      await i.deferUpdate();
+      console.log("coll")
+      await i.deferReply();
       if(i.customId == "members") {
         let memberEmbed = new MessageEmbed()
           .setTitle("👤︲Member Commands")

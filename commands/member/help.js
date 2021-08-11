@@ -311,7 +311,7 @@ module.exports = class Help extends Command {
             .setStyle('SECONDARY'),
         ); 
       
-      i.update({ embeds: [cmdEmbed], components: [disabledRow]});
+      interaction.editReply({ embeds: [cmdEmbed], components: [disabledRow]});
     });
   }
 };

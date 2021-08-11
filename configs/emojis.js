@@ -11,6 +11,7 @@ const gem = "<:red_gem:823820991406669855>";
 const vote = "<:vote:874749965417734165>";
 const website = "<:website:874749910031941632>";
 const invite = "<:invitation:874749944601378888>";
+const support = "<:support:827818816012681266>";
 
 module.exports = {
   tasks, 
@@ -26,4 +27,5 @@ module.exports = {
   vote,
   invite,
   website, 
+  support,
 }

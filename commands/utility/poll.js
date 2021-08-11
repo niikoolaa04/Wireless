@@ -5,7 +5,7 @@ module.exports = class Poll extends Command {
   constructor(client) {
     super(client, {
       name: "poll",
-      description: "create a poll for users to react to",
+      description: "Create a poll for users to react to",
       usage: "Poll [Message]",
       permissions: ["MANAGE_MESSAGES"],
       category: "utility",

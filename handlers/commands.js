@@ -5,7 +5,7 @@ module.exports = client => {
   try {
     categories.forEach(async (category) => {
       fs.readdir(`./commands/${category}/`, (err) => {
-        console.log(`[BOT] Učitavam Kategoriju - ${category}.`);
+        console.log(`[BOT] Loading Command Category - ${category}.`);
         if (err) return console.error(err);
         const init = async () => {
           const commands = fs.readdirSync(`./commands/${category}`).filter(file => file.endsWith('.js'));

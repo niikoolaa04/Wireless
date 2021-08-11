@@ -290,7 +290,7 @@ ${reqContent}
       let dmStatus = db.fetch(`server_${guild.id}_dmWinners`);
       const dmWin = new Discord.MessageEmbed()
         .setTitle("🎁︲Giveaway")
-        .setDescription(`\`👑\` Congratulations, you have Won Giveaway in **${message.guild.name}**!
+        .setDescription(`\`👑\` Congratulations, you have Won Giveaway in **${guild.name}**!
   
  >>> **\`🎊\` Giveaway:** ${giveaways[i].prize}`)
         .setColor("YELLOW");

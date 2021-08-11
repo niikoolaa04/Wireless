@@ -210,6 +210,7 @@ module.exports = class Help extends Command {
     const collector = interaction.channel.createMessageComponentCollector({ filter, time: 120000, errors: ["time"] });
 
     collector.on("collect", async i => {
+      await i.deferUpdate();
       if(i.customId == "members") {
         let memberEmbed = new MessageEmbed()
           .setTitle("👤︲Member Commands")

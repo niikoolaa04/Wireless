@@ -205,13 +205,11 @@ module.exports = class Help extends Command {
       .setThumbnail(interaction.user.displayAvatarURL({ size: 1024, dynamic: true }))
       .setFooter(`Total Commands ${loadedCommands.length}`, interaction.user.displayAvatarURL({ size: 1024, dynamic: true }));
     interaction.followUp({ embeds: [cmdEmbed], components: [helpRow] });
-    console.log("sendd")
 
     let filter = m => m.user.id === interaction.user.id;
     const collector = interaction.channel.createMessageComponentCollector({ filter, componentType: 'BUTTON', time: 120000, errors: ["time"] });
 
     collector.on("collect", async i => {
-      console.log("coll")
       if(i.customId == "members") {
         let memberEmbed = new MessageEmbed()
           .setTitle("👤︲Member Commands")
@@ -222,7 +220,7 @@ module.exports = class Help extends Command {
           .setColor("BLURPLE")
           .setThumbnail(interaction.user.displayAvatarURL({ size: 1024, dynamic: true }))
           .setFooter(`Total Commands ${loadedCommands.length}`, interaction.user.displayAvatarURL({ size: 1024, dynamic: true }));
-        await i.update({ embeds: [memberEmbed], components: [helpRow] });
+        i.update({ embeds: [memberEmbed], components: [helpRow] });
       } else if(i.customId == "giveaway") {
         let gwEmbed = new MessageEmbed()
           .setTitle("🎁︲Giveaway Commands")
@@ -233,7 +231,7 @@ module.exports = class Help extends Command {
           .setColor("BLURPLE")
           .setThumbnail(interaction.user.displayAvatarURL({ size: 1024, dynamic: true }))
           .setFooter(`Total Commands ${loadedCommands.length}`, interaction.user.displayAvatarURL({ size: 1024, dynamic: true }));
-        await i.update({ embeds: [gwEmbed], components: [helpRow] });
+        i.update({ embeds: [gwEmbed], components: [helpRow] });
       } else if(i.customId == "utility") {
         let utilityEmbed = new MessageEmbed()
           .setTitle("🔎︲Utility Commands")
@@ -244,9 +242,9 @@ module.exports = class Help extends Command {
           .setColor("BLURPLE")
           .setThumbnail(interaction.user.displayAvatarURL({ size: 1024, dynamic: true }))
           .setFooter(`Total Commands ${loadedCommands.length}`, interaction.user.displayAvatarURL({ size: 1024, dynamic: true }));
-        await i.update({ embeds: [utilityEmbed], components: [helpRow] });
+        i.update({ embeds: [utilityEmbed], components: [helpRow] });
       } else if(i.customId == "home") {
-        await i.update({ embeds: [cmdEmbed], components: [helpRow] })
+        i.update({ embeds: [cmdEmbed], components: [helpRow] })
       }
     })
   }

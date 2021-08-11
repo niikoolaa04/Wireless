@@ -78,7 +78,7 @@ module.exports = class Help extends Command {
       let mainMenu = await message.channel.send({ embeds: [cmdEmbed], components: [helpRow] });
 
       let filter = m => m.user.id === message.author.id;
-      const collector = message.channel.createMessageComponentCollector({ filter, time: 120000, errors: ["time"] });
+      const collector = message.channel.createMessageComponentCollector({ filter, time: 300000, errors: ["time"] });
 
       collector.on("collect", async i => {
         if(i.customId == "members") {
@@ -121,6 +121,35 @@ module.exports = class Help extends Command {
             await i.deferUpdate();
             mainMenu.edit({ embeds: [cmdEmbed], components: [helpRow] })
         }
+      });
+
+      collector.on("end", async (m, reason) => {
+        if(reason != "time") return;
+        const disabledRow = new MessageActionRow()
+          .addComponents(
+            new MessageButton()
+              .setCustomId("home")
+              .setEmoji("⭐")
+              .setLabel('Main Menu')
+              .setStyle('PRIMARY'),
+            new MessageButton()
+              .setCustomId("members")
+              .setEmoji("👤")
+              .setLabel('Members')
+              .setStyle('PRIMARY'),
+            new MessageButton()
+              .setCustomId("giveaway")
+              .setEmoji("🎉")
+              .setLabel('Giveaway')
+              .setStyle('PRIMARY'),
+            new MessageButton()
+              .setCustomId("utility")
+              .setEmoji("🔎")
+              .setLabel('Utility')
+              .setStyle('PRIMARY'),
+          ); 
+        
+        mainMenu.edit({ embeds: [cmdEmbed], components: [disabledRow]});
       });
     } else {
       let cmd = this.client.commands.get(commandArg);
@@ -192,9 +221,9 @@ module.exports = class Help extends Command {
   `View all available Giveaway Commands`)
       .addField(`🔎 Utility`,
   `View all available Utility Commands`)
-      .addField(`🔝 Vote for Bot`,
+      .addField(`🆙 Vote for Bot`,
   `[Help Developers by Voting for Bot](${this.client.config.links.voteURL})`)
-      .addField(`➕ Invite Bot`,
+      .addField(`💳 Invite Bot`,
   `[Invite Bot to your Server](${this.client.config.links.inviteURL})`)
       .addField(`🌐 Website`,
   `[Checkout Offical Bot Website](${this.client.config.links.website})`)
@@ -207,7 +236,7 @@ module.exports = class Help extends Command {
     interaction.followUp({ embeds: [cmdEmbed], components: [helpRow] });
 
     let filter = m => m.user.id === interaction.user.id;
-    const collector = interaction.channel.createMessageComponentCollector({ filter, componentType: 'BUTTON', time: 120000, errors: ["time"] });
+    const collector = interaction.channel.createMessageComponentCollector({ filter, componentType: 'BUTTON', time: 300000, errors: ["time"] });
 
     collector.on("collect", async i => {
       if(i.customId == "members") {
@@ -246,6 +275,35 @@ module.exports = class Help extends Command {
       } else if(i.customId == "home") {
         i.update({ embeds: [cmdEmbed], components: [helpRow] })
       }
-    })
+    });
+
+    collector.on("end", async (m, reason) => {
+      if(reason != "time") return;
+      const disabledRow = new MessageActionRow()
+			  .addComponents(
+          new MessageButton()
+            .setCustomId("home")
+            .setEmoji("⭐")
+            .setLabel('Main Menu')
+            .setStyle('SECONDARY'),
+          new MessageButton()
+            .setCustomId("members")
+            .setEmoji("👤")
+            .setLabel('Members')
+            .setStyle('SECONDARY'),
+          new MessageButton()
+            .setCustomId("giveaway")
+            .setEmoji("🎉")
+            .setLabel('Giveaway')
+            .setStyle('SECONDARY'),
+          new MessageButton()
+            .setCustomId("utility")
+            .setEmoji("🔎")
+            .setLabel('Utility')
+            .setStyle('SECONDARY'),
+        ); 
+      
+      i.update({ embeds: [cmdEmbed], components: [disabledRow]});
+    });
   }
 };

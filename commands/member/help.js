@@ -212,7 +212,6 @@ module.exports = class Help extends Command {
 
     collector.on("collect", async i => {
       console.log("coll")
-      await i.deferReply();
       if(i.customId == "members") {
         let memberEmbed = new MessageEmbed()
           .setTitle("👤︲Member Commands")

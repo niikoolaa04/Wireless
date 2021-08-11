@@ -131,22 +131,26 @@ module.exports = class Help extends Command {
               .setCustomId("home")
               .setEmoji("⭐")
               .setLabel('Main Menu')
-              .setStyle('PRIMARY'),
+              .setDisabled(true)
+              .setStyle('SECONDARY'),
             new MessageButton()
               .setCustomId("members")
               .setEmoji("👤")
               .setLabel('Members')
-              .setStyle('PRIMARY'),
+              .setDisabled(true)
+              .setStyle('SECONDARY'),
             new MessageButton()
               .setCustomId("giveaway")
               .setEmoji("🎉")
               .setLabel('Giveaway')
-              .setStyle('PRIMARY'),
+              .setDisabled(true)
+              .setStyle('SECONDARY'),
             new MessageButton()
               .setCustomId("utility")
               .setEmoji("🔎")
               .setLabel('Utility')
-              .setStyle('PRIMARY'),
+              .setDisabled(true)
+              .setStyle('SECONDARY'),
           ); 
         
         mainMenu.edit({ embeds: [cmdEmbed], components: [disabledRow]});
@@ -280,26 +284,30 @@ module.exports = class Help extends Command {
     collector.on("end", async (m, reason) => {
       if(reason != "time") return;
       const disabledRow = new MessageActionRow()
-			  .addComponents(
+        .addComponents(
           new MessageButton()
             .setCustomId("home")
             .setEmoji("⭐")
             .setLabel('Main Menu')
+            .setDisabled(true)
             .setStyle('SECONDARY'),
           new MessageButton()
             .setCustomId("members")
             .setEmoji("👤")
             .setLabel('Members')
+            .setDisabled(true)
             .setStyle('SECONDARY'),
           new MessageButton()
             .setCustomId("giveaway")
             .setEmoji("🎉")
             .setLabel('Giveaway')
+            .setDisabled(true)
             .setStyle('SECONDARY'),
           new MessageButton()
             .setCustomId("utility")
             .setEmoji("🔎")
             .setLabel('Utility')
+            .setDisabled(true)
             .setStyle('SECONDARY'),
         ); 
       

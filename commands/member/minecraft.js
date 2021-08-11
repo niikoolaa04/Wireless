@@ -11,6 +11,13 @@ module.exports = class Minecraft extends Command {
       permissions: [],
       category: "member",
       listed: true,
+      slash: true,
+      options: [{
+        name: 'text',
+        type: 'STRING',
+        description: "Text to Disaplay on Achievement",
+        required: true,
+      }]
     });
   }
 
@@ -34,5 +41,26 @@ module.exports = class Minecraft extends Command {
 
     if (!text) return message.channel.send({ embeds: [embedError] });
     message.channel.send({ files: [file] });
+  }
+  slashRun(interaction, args) {
+    var text = interaction.options.getString("text")
+    if (text.toLowerCase().includes("ž") ||
+      text.toLowerCase().includes("č") ||
+      text.toLowerCase().includes("ć") ||
+      text.toLowerCase().includes("š") ||
+      text.toLowerCase().includes("đ")) return interaction.followUp({ content: "> Instead of **'Š, Đ, Č, Ć, Ž'** use **'S, Dj, C, C, Z'**" });
+
+    let embedError = new Discord.MessageEmbed()
+      .setAuthor("Error", this.client.user.displayAvatarURL())
+      .setDescription(`You need to enter text.`)
+      .setTimestamp()
+      .setFooter(interaction.user.username, interaction.user.displayAvatarURL({ size: 1024, dynamic: true }))
+      .setColor("RANDOM");
+
+    var url = "https://minecraftskinstealer.com/achievement/" + (Math.floor(Math.random() * 30) + 1) + "/Achievement+Get%21/" + text;
+    let file = new Discord.MessageAttachment(await url, "MinecraftAchievement.png");
+
+    if (!text) return interaction.followUp({ embeds: [embedError] });
+    interaction.followUp({ files: [file] });
   }
 };

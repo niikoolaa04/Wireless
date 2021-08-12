@@ -91,7 +91,7 @@ Example: \`Nitro Classic\``);
 
     let prizeArg = msg.content;
 
-    if(!prizeArg || prizeArg.length < 3 || prizeArg.length > 256) return message.channel.send({ content: 'prize valid' })
+    if(!prizeArg || prizeArg.length < 3 || prizeArg.length > 256) return message.channel.send({ embeds: [ client.embedBuilder(client, message, "Giveaway Setup", `You have entered Invalid Prize.`, "RED")] });
     data.prize = msg.content;
     await submitGiveaway(client, message, data);
     prizeCollector.stop();
@@ -127,7 +127,7 @@ Example: \`500\``);
       return;
     }
 
-    if(isNaN(msg.content)) return message.channel.send({ content: 'inv num' })
+    if(isNaN(msg.content)) return message.channel.send({ embeds: [ client.embedBuilder(client, message, "Giveaway Setup", `You have entered Invalid Number of Invites.`, "RED")] });
     data.invites = msg.content;
     await prizeSetup(client, message, embed, filter, data);
     invCollector.stop();
@@ -163,7 +163,7 @@ Example: \`500\``);
       return;
     }
 
-    if(isNaN(msg.content)) return message.channel.send({ content: 'msg num' })
+    if(isNaN(msg.content)) return message.channel.send({ embeds: [ client.embedBuilder(client, message, "Giveaway Setup", `You have entered Invalid Number of Messages.`, "RED")] });
     data.messages = msg.content;
     await invitesSetup(client, message, embed, filter, data);
     msgCollector.stop();
@@ -199,7 +199,7 @@ Example: \`2\``);
       return;
     }
 
-    if(isNaN(msg.content)) return message.channel.send({ content: 'winners num' })
+    if(isNaN(msg.content)) return message.channel.send({ embeds: [ client.embedBuilder(client, message, "Giveaway Setup", `You have entered Invalid Number of Winners.`, "RED")] });
     data.winners = msg.content;
     await messagesSetup(client, message, embed, filter, data);
     winnerCollector.stop();
@@ -235,7 +235,7 @@ async function channelSetup(client, message, embed, filter, data) {
       return;
     }
 
-    if(!msg.mentions.channels.first()) return message.channel.send({ content: 'Mention Channel' })
+    if(!msg.mentions.channels.first()) return message.channel.send({ embeds: [ client.embedBuilder(client, message, "Giveaway Setup", `You have entered Invalid Channel.`, "RED")] });
     data.channel = msg.mentions.channels.first();
     await winnersSetup(client, message, embed, filter, data);
     channelCollector.stop();

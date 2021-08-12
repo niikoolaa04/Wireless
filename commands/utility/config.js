@@ -17,7 +17,7 @@ module.exports = class Config extends Command {
   async run(message, args) {
     let option = args[0];
     
-    if(!option || option > 9 || option < 1) {
+    if(!option || option > 10 || option < 1) {
       let prefix = db.fetch(`settings_${message.guild.id}_prefix`) || this.client.config.prefix;
       let bypass = db.fetch(`server_${message.guild.id}_bypassRole`);
       let blacklist = db.fetch(`server_${message.guild.id}_blacklistRole`);
@@ -27,6 +27,7 @@ module.exports = class Config extends Command {
       let winners = db.fetch(`server_${message.guild.id}_dmWinners`);
       let snipes = db.fetch(`server_${message.guild.id}_snipes`);
       let image = db.fetch(`server_${message.guild.id}_welcomeImg`);
+      let roleReq = db.fetch(`server_${message.guild.id}_roleReq`);
       let wlcmChannel = db.fetch(`channel_${message.guild.id}_welcome`);
 
       let noOption = new Discord.MessageEmbed()
@@ -41,6 +42,7 @@ module.exports = class Config extends Command {
         .addField(`🔎 - Snipes (7)`, snipes ? `Yes` : 'No')
         .addField(`👋 - Welcome Image (8)`, image ? `Yes` : 'No')
         .addField(`📞 - Welcome Channel (9)`, wlcmChannel ? `<#${wlcmChannel}>` : 'No Channel')
+        .addField(`🎭 - Role Requirement (10)`, roleReq ? roleReq : 'No Role')
         .setColor("BLURPLE")
         .setThumbnail(this.client.user.displayAvatarURL())
         .setTimestamp()
@@ -181,6 +183,20 @@ Use \`variables\` Command to view all available Variables.`, "YELLOW") ]});
         db.set(`channel_${message.guild.id}_welcome`, channel.id);
         message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message,
           `Config`, `Welcome Channel has been set to ${channel}.
+To reset it just use command without arguments.`, "YELLOW") ]});
+      }
+    }
+    if(option == 10) {
+      let role = message.mentions.roles.first();
+      if (!role) {
+        db.delete(`server_${message.guild.id}_roleReq`);
+        message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message,
+          `Config`, `Role Requirement have been rested.`, "RED") ]});
+      }
+      if (role) {
+        db.delete(`server_${message.guild.id}_roleReq`);
+        message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message,
+          `Config`, `Role Requirement has been set to ${role}.
 To reset it just use command without arguments.`, "YELLOW") ]});
       }
     }

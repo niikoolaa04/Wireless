@@ -27,6 +27,7 @@ module.exports = class MessageReactionAdd extends Event {
       let invitesReq = db.fetch(`invitesRegular_${message.guild.id}_${user.id}`);
       let bonusReq = db.fetch(`invitesBonus_${message.guild.id}_${user.id}`); 
       let msgReq = db.fetch(`messages_${message.guild.id}_${user.id}`);
+      let roleReq = db.fetch(`server_${message.guild.id}_roleReq`);
       let gwInvites = gwRunning.requirements.invitesReq;
       let gwMsg = gwRunning.requirements.messagesReq; 
       let totalReq = parseInt(invitesReq + bonusReq);
@@ -37,11 +38,19 @@ module.exports = class MessageReactionAdd extends Event {
         .setTitle("🎁︲Giveaway Entry")
         .setColor("RED")
         .setThumbnail(this.client.user.displayAvatarURL());
-    
+      let approveEmbed = new Discord.MessageEmbed()
+        .setTitle("🎁︲Giveaway Entry")
+        .setColor("YELLOW")
+        .setThumbnail(this.client.user.displayAvatarURL())
+        .setDescription(`**${this.client.emojisConfig.prize} Giveaway:** ${gwRunning.prize}
+
+Your Giveaway Entry in **${message.guild.name}** has been \`approved\`.`);
+
       if(message.id != gwRunning.messageID) return;
-      if(role != null && message.member.roles.cache.has(role)) return;
+      if(role != null && message.member.roles.cache.has(role)) return user.send({ embeds: [approveEmbed] });
       let haveInvites = true;
       let haveMessages = true;
+      let haveRole = true;
       let isBlacklist = false;
       if(blRole != null && message.member.roles.cache.has(blRole)) {
         denyEmbed.setDescription(`**${this.client.emojisConfig.prize} Giveaway:** ${gwRunning.prize}
@@ -65,7 +74,7 @@ Your Giveaway Entry in **${message.guild.name}** has been \`declined\`.
         haveInvites = false;
         user.send({ embeds: [denyEmbed] });
       }
-      if(isBlacklist == false &&   haveInvites == true && gwMsg > 0 && msgReq < gwMsg) {
+      if(isBlacklist == false && haveInvites == true && gwMsg > 0 && msgReq < gwMsg) {
         denyEmbed.setDescription(`**${this.client.emojisConfig.prize} Giveaway:** ${gwRunning.prize}
 
 Your Giveaway Entry in **${message.guild.name}** has been \`declined\`.
@@ -76,7 +85,18 @@ Your Giveaway Entry in **${message.guild.name}** has been \`declined\`.
         haveMessages = false;
         user.send({ embeds: [denyEmbed] });
       }
-      if(haveInvites == true && haveMessages == true && isBlacklist == false) {
+      if(isBlacklist == false && haveInvites == true && haveMessages == true && roleReq != null && !message.member.roles.cache.has(roleReq)) {
+        denyEmbed.setDescription(`**${this.client.emojisConfig.prize} Giveaway:** ${gwRunning.prize}
+
+Your Giveaway Entry in **${message.guild.name}** has been \`declined\`.
+
+**${this.client.emojisConfig.tasks} You don't meet Requirement:**
+> **›** You need **<@&${roleReq}>** Role to Enter Giveaway.`);
+        reaction.users.remove(user);
+        haveRole = false;
+        user.send({ embeds: [denyEmbed] });
+      }
+      if(haveInvites == true && haveMessages == true && haveRole == true && isBlacklist == false) {
         denyEmbed.setDescription(`**${this.client.emojisConfig.prize} Giveaway:** ${gwRunning.prize}
 
 Your Giveaway Entry in **${message.guild.name}** has been \`approved\`.`);

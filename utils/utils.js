@@ -99,6 +99,5 @@ module.exports = {
   capitalizeFirstLetter, 
   formatVreme, 
   lbContent, 
-  devObject,
   configStrings,
 }

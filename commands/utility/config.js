@@ -194,7 +194,7 @@ To reset it just use command without arguments.`, "YELLOW") ]});
           `Config`, `Role Requirement have been rested.`, "RED") ]});
       }
       if (role) {
-        db.delete(`server_${message.guild.id}_roleReq`);
+        db.set(`server_${message.guild.id}_roleReq`);
         message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message,
           `Config`, `Role Requirement has been set to ${role}.
 To reset it just use command without arguments.`, "YELLOW") ]});

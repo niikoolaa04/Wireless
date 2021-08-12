@@ -1,31 +1,7 @@
 const db = require("quick.db");
 
-function devObject(guild, messageID, time, channel, winners, messages, invites, reqRole, ending, hoster, prize) {
-  let role = db.fetch(`server_${guild.id}_bypassRole`);
-  if(role == null) role = "none";
-  let gwObject = {
-    messageID: messageID,
-    guildID: guild, 
-    channelID: channel,
-    prize: prize,
-    duration: time, 
-    hostedBy: hoster, 
-    winnerCount: winners, 
-    requirements: {
-      messagesReq: messages, 
-      invitesReq: invites, 
-      roleReq: reqRole,
-    },
-    roleBypass: role, 
-    ended: false, 
-    endsAt: ending,
-    winners: []
-  }
-  
-  return gwObject;
-}
 
-function giveawayObject(guild, messageID, time, channel, winners, messages, invites, ending, hoster, prize) {
+function giveawayObject(guild, messageID, time, channel, winners, messages, invites, roles, ending, hoster, prize) {
   let role = db.fetch(`server_${guild.id}_bypassRole`);
   if(role == null) role = "none";
   let gwObject = {
@@ -39,6 +15,7 @@ function giveawayObject(guild, messageID, time, channel, winners, messages, invi
     requirements: {
       messagesReq: messages, 
       invitesReq: invites, 
+      roleReq: roles,
     },
     roleBypass: role, 
     ended: false, 

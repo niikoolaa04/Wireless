@@ -8,7 +8,7 @@ module.exports = class GiveawayStart extends Command {
 		super(client, {
 			name: "gstart",
 			description: "Start new giveaway",
-			usage: "gstart [duration] [#channel] [no. of winners] [messages req. || 0] [invites req. || 0] [prize]",
+			usage: "gstart [duration] [#channel] [no. of winners] [messages req. || 0] [invites req. || 0] [role req. || 0] [prize]",
 			permissions: ["ADMINISTRATOR"],
 			aliases: ["gwstart"],
 			category: "giveaway",
@@ -40,6 +40,11 @@ module.exports = class GiveawayStart extends Command {
         description: 'Number of Invites Required to enter Giveaway',
         required: true,
       },{
+        name: 'role',
+        type: 'INTEGER',
+        description: 'Role Required to enter Giveaway, 0 for none',
+        required: true,
+      },{
         name: 'prize',
         type: 'STRING',
         description: 'Prize for Giveaway',
@@ -54,13 +59,15 @@ module.exports = class GiveawayStart extends Command {
     let winnersArg = parseInt(args[2]);
     let messagesArg = args[3];
     let invitesArg = args[4];
-    let prizeArg = args.slice(5).join(" ");
+    let roleArg = message.mentions.roles.first() || args[5];
+    let prizeArg = args.slice(6).join(" ");
     
     if(!durationArg || isNaN(ms(durationArg))) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message, "Error", "You have entered invalid Giveaway Duration.", "RED")] });
     if(!channelArg) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message, "Error", "You have mentioned invalid Channel.", "RED")] });
     if(!winnersArg || isNaN(winnersArg) || winnersArg <= 0) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message, "Error", "You haven't entered number of winners.", "RED")] });
     if(!messagesArg || isNaN(messagesArg) || messagesArg < 0) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message, "Error", "You have entered invalid Number of Messages Required for Entering Giveaway.", "RED")] });
     if(!invitesArg || isNaN(invitesArg) || invitesArg < 0) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message, "Error", "You have entered invalid Number of Invites Required for Entering Giveaway.", "RED")] });
+    if(!roleArg || (!roleArg.toString().includes("&") && roleArg != 0)) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message, "Error", "You have entered invalid Role Required for Entering Giveaway.", "RED")] });
     if(!prizeArg || prizeArg.length >= 256) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message, "Error", "You have entered invalid Prize.", "RED")] });
 
     let giveawayObject = this.client.utils.giveawayObject(
@@ -71,6 +78,7 @@ module.exports = class GiveawayStart extends Command {
       winnersArg, 
       parseInt(messagesArg), 
       parseInt(invitesArg), 
+      roleArg,
       (Date.now() + ms(durationArg)), 
       message.author.id,
       prizeArg,
@@ -85,7 +93,10 @@ module.exports = class GiveawayStart extends Command {
     let winnersArg = interaction.options.getInteger("winners");
     let messagesArg = interaction.options.getInteger("messages");
     let invitesArg = interaction.options.getInteger("invites");
+    let roleArg = interaction.options.getInteger("role");
     let prizeArg = interaction.options.getString("prize");
+
+    if(roleArg.toString().length < 8 && roleArg != 0) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message, "Error", "You need to Enter Role ID or 0 for none.", "RED")] });
 
     let giveawayObject = this.client.utils.giveawayObject(
       interaction.guild.id, 
@@ -95,6 +106,7 @@ module.exports = class GiveawayStart extends Command {
       winnersArg, 
       parseInt(messagesArg), 
       parseInt(invitesArg), 
+      roleArg, 
       (Date.now() + ms(durationArg)), 
       interaction.user.id,
       prizeArg,

@@ -42,7 +42,7 @@ module.exports = class Minecraft extends Command {
     if (!text) return message.channel.send({ embeds: [embedError] });
     message.channel.send({ files: [file] });
   }
-  slashRun(interaction, args) {
+  async slashRun(interaction, args) {
     var text = interaction.options.getString("text")
     if (text.toLowerCase().includes("ž") ||
       text.toLowerCase().includes("č") ||
@@ -58,7 +58,7 @@ module.exports = class Minecraft extends Command {
       .setColor("RANDOM");
 
     var url = "https://minecraftskinstealer.com/achievement/" + (Math.floor(Math.random() * 30) + 1) + "/Achievement+Get%21/" + text;
-    let file = new Discord.MessageAttachment(url, "MinecraftAchievement.png");
+    let file = new Discord.MessageAttachment(await url, "MinecraftAchievement.png");
 
     if (!text) return interaction.followUp({ embeds: [embedError] });
     interaction.followUp({ files: [file] });

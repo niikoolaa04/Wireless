@@ -86,12 +86,14 @@ Your Giveaway Entry in **${message.guild.name}** has been \`declined\`.
         user.send({ embeds: [denyEmbed] });
       }
       if(isBlacklist == false && haveInvites == true && haveMessages == true && roleReq != null && !message.member.roles.cache.has(roleReq)) {
+        console.log(roleReq);
+        console.log(message.member.roles.cache.has(roleReq))
         denyEmbed.setDescription(`**${this.client.emojisConfig.prize} Giveaway:** ${gwRunning.prize}
 
 Your Giveaway Entry in **${message.guild.name}** has been \`declined\`.
 
 **${this.client.emojisConfig.tasks} You don't meet Requirement:**
-> **›** You need **<@&${roleReq}>** Role to Enter Giveaway.`);
+> **›** You need **${roleReq}** Role to Enter Giveaway.`);
         reaction.users.remove(user);
         haveRole = false;
         user.send({ embeds: [denyEmbed] });

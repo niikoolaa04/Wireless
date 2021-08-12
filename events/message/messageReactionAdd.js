@@ -92,7 +92,7 @@ Your Giveaway Entry in **${message.guild.name}** has been \`declined\`.
 Your Giveaway Entry in **${message.guild.name}** has been \`declined\`.
 
 **${this.client.emojisConfig.tasks} You don't meet Requirement:**
-> **›** You need **${message.guild.roles.cache.get(roleReq)}** Role to Enter Giveaway.`);
+> **›** You need **${message.guild.roles.cache.get(roleReq).name}** Role to Enter Giveaway.`);
         reaction.users.remove(user);
         haveRole = false;
         user.send({ embeds: [denyEmbed] });

@@ -24,7 +24,6 @@ async function submitGiveaway(client, message, data) {
 **\`👑\` Number of Winners:** ${data.winners}
 **\`💬\` Messages Required:** ${data.messages}
 **\`🎫\` Invites Required:** ${data.invites}
-**\`🎭\` Role Required:** ${data.role}
 **\`🎁\` Prize:** ${data.invites}
 `, "BLURPLE");
 
@@ -44,7 +43,6 @@ async function submitGiveaway(client, message, data) {
         parseInt(data.winners), 
         parseInt(data.messages), 
         parseInt(data.invites), 
-        data.role, 
         (Date.now() + ms(data.duration)), 
         message.author.id,
         data.prize,
@@ -93,51 +91,13 @@ Example: \`Nitro Classic\``);
 
     let prizeArg = msg.content;
 
-    if(!prizeArg || prizeArg.length < 3 || prizeArg.length > 256) return message.channel.send({ content: '>>> Invalid Prize' })
+    if(!prizeArg || prizeArg.length < 3 || prizeArg.length > 256) return message.channel.send({ content: 'prize valid' })
     data.prize = msg.content;
     await submitGiveaway(client, message, data);
     prizeCollector.stop();
   });
 
   prizeCollector.on("end", (collected, reason) => {
-    if(reason != "time") return;
-    client.gwCreation.set(message.author.id, false);
-    let endEmbed = new MessageEmbed()
-      .setColor("RED")
-      .setDescription('Time has passed without response, giveaway creation stopped')
-      .setAuthor("Giveaway Setup", client.user.displayAvatarURL());
-    message.channel.send({ embeds: [endEmbed] });
-  });
-}
-
-async function roleSetup(client, message, embed, filter, data) {
-  embed.setDescription(`Enter Role Required in order to Enter Giveaway - 0 for none.
-Example: \`@Member\``);
-  message.channel.send({ embeds: [embed] });
-
-  let roleCollector = message.channel.createMessageCollector({ filter, time: 60000, errors: ["time"] });
-
-  roleCollector.on("collect", async (msg) => {
-    let cancelEmbed = new MessageEmbed()
-      .setColor("BLURPLE")
-      .setDescription('You have canceled Giveaway Creation')
-      .setAuthor("Giveaway Setup", client.user.displayAvatarURL());
-    if(msg.content.toLowerCase() == "cancel") {
-      client.gwCreation.set(message.author.id, false);
-      message.channel.send({ embeds: [cancelEmbed] });
-      roleCollector.stop()
-      return;
-    }
-
-    let roleReq = msg.mentions.roles.first() || msg.content;
-
-    if(!roleReq.toString().includes("&") && roleReq != 0) return message.channel.send({ content: '>>> Invalid Role Mentioned' })
-    data.role = roleReq;
-    await prizeSetup(client, message, embed, filter, data);
-    roleCollector.stop();
-  });
-
-  roleCollector.on("end", (collected, reason) => {
     if(reason != "time") return;
     client.gwCreation.set(message.author.id, false);
     let endEmbed = new MessageEmbed()
@@ -167,9 +127,9 @@ Example: \`500\``);
       return;
     }
 
-    if(isNaN(msg.content)) return message.channel.send({ content: '>>> Invalid Invites Number' })
+    if(isNaN(msg.content)) return message.channel.send({ content: 'inv num' })
     data.invites = msg.content;
-    await roleSetup(client, message, embed, filter, data);
+    await prizeSetup(client, message, embed, filter, data);
     invCollector.stop();
   });
 
@@ -203,7 +163,7 @@ Example: \`500\``);
       return;
     }
 
-    if(isNaN(msg.content)) return message.channel.send({ content: '>>> Invalid Messages Number' })
+    if(isNaN(msg.content)) return message.channel.send({ content: 'msg num' })
     data.messages = msg.content;
     await invitesSetup(client, message, embed, filter, data);
     msgCollector.stop();
@@ -239,7 +199,7 @@ Example: \`2\``);
       return;
     }
 
-    if(isNaN(msg.content)) return message.channel.send({ content: '>>> Invalid Winners Number' })
+    if(isNaN(msg.content)) return message.channel.send({ content: 'winners num' })
     data.winners = msg.content;
     await messagesSetup(client, message, embed, filter, data);
     winnerCollector.stop();
@@ -275,7 +235,7 @@ async function channelSetup(client, message, embed, filter, data) {
       return;
     }
 
-    if(!msg.mentions.channels.first()) return message.channel.send({ content: '>>> Invalid Channel Mentioned' })
+    if(!msg.mentions.channels.first()) return message.channel.send({ content: 'Mention Channel' })
     data.channel = msg.mentions.channels.first();
     await winnersSetup(client, message, embed, filter, data);
     channelCollector.stop();
@@ -298,7 +258,6 @@ async function durationSetup(client, message, embed, filter) {
     winners: 0,
     messages: 0,
     invites: 0,
-    role: 0,
     channel: null,
     prize: "N/A",
   };

@@ -6,12 +6,9 @@ const delay = require("delay");
 
 const startGiveaway = async (client, message, gwObject) => {
   let reqContent = "";
-  let roleCheck = message.guild.roles.cache.get(gwObject.requirements.roleReq.id);
-  if(roleCheck == undefined) gwObject.requirements.roleReq = 0;
-  if(gwObject.requirements.messagesReq > 0 || gwObject.requirements.invitesReq > 0 || typeof(gwObject.requirements.roleReq) == "object") reqContent += `\n**${client.emojisConfig.tasks} Requirements**`;
+  if(gwObject.requirements.messagesReq > 0 || gwObject.requirements.invitesReq > 0) reqContent += `\n**${client.emojisConfig.tasks} Requirements**`;
   if(gwObject.requirements.messagesReq > 0) reqContent += `\n> **›** You need **${gwObject.requirements.messagesReq}** Message(s) to Enter Giveaway.`;
   if(gwObject.requirements.invitesReq > 0) reqContent += `\n> **›** You need **${gwObject.requirements.invitesReq}** Invite(s) to Enter Giveaway.`;
-  if(typeof(gwObject.requirements.roleReq) == "object") reqContent += `\n> **›** You need **${gwObject.requirements.roleReq}** Role to Enter Giveaway.`;
   
   let startEmbed = new Discord.MessageEmbed()
     .setAuthor("New Giveaway", client.user.displayAvatarURL())
@@ -47,7 +44,6 @@ const editGiveaway = async (client, message, messageID, guild, msgReq, invReq, w
   
   if(msgReq == "none" || msgReq == 0) msgReq = gwData.requirements.messagesReq;
   if(invReq == "none" || invReq == 0) invReq = gwData.requirements.invitesReq;
-  // if(roleReq == "none" || invReq == 0) invReq = gwData.requirements.invitesReq;
   if(winners == "none" || winners == 0) winners = gwData.winnerCount;
   if(prize == "none" || prize == 0) prize = gwData.prize;
   if(ending == "none" || ending == 0) ending = gwData.duration;
@@ -61,7 +57,6 @@ const editGiveaway = async (client, message, messageID, guild, msgReq, invReq, w
     winners,
     msgReq,
     invReq,
-    // roleReq,
     ending,
     gwData.hostedBy,
     prize
@@ -113,7 +108,6 @@ const endGiveaway = async (client, message, messageID, guild) => {
     gwData.winnerCount,
     gwData.requirements.messagesReq,
     gwData.requirements.invitesReq,
-    gwData.requirements.roleReq,
     "Ended",
     gwData.hostedBy,
     gwData.prize
@@ -128,11 +122,9 @@ const endGiveaway = async (client, message, messageID, guild) => {
   db.set(`giveaways_${guild.id}`, newData);
 
   let reqContent = "";
-  if(gwData.requirements.roleReq == undefined) gwData.requirements.roleReq = 0;
-  if (gwData.requirements.messagesReq > 0 || gwData.requirements.invitesReq > 0 || typeof(gwData.requirements.roleReq) == "object") reqContent += `\n**${client.emojisConfig.tasks} Requirements**`;
+  if (gwData.requirements.messagesReq > 0 || gwData.requirements.invitesReq > 0) reqContent += `\n**${client.emojisConfig.tasks} Requirements**`;
   if (gwData.requirements.messagesReq > 0) reqContent += `\n> **›** You need **${gwData.requirements.messagesReq}** Message(s) to Enter Giveaway.`;
   if (gwData.requirements.invitesReq > 0) reqContent += `\n> **›** You need **${gwData.requirements.invitesReq}** Invite(s) to Enter Giveaway.`;
-  if (typeof(gwData.requirements.roleReq) == "object") reqContent += `\n> **›** You need **${gwData.requirements.roleReq}** Role to Enter Giveaway.`;
 
   let editEmbed = new Discord.MessageEmbed()
     .setAuthor("Giveaway Ended", client.user.displayAvatarURL())
@@ -248,7 +240,6 @@ const checkGiveaway = async (client, guild) => {
         giveaways[i].winnerCount, 
         giveaways[i].requirements.messagesReq, 
         giveaways[i].requirements.invitesReq, 
-        giveaways[i].requirements.roleReq, 
         "Ended", 
         giveaways[i].hostedBy, 
         giveaways[i].prize
@@ -263,11 +254,9 @@ const checkGiveaway = async (client, guild) => {
       db.set(`giveaways_${guild.id}`, newData);
       
       let reqContent = "";
-      if(giveaways[i].requirements.roleReq == undefined) giveaways[i].requirements.roleReq = 0;
-      if(giveaways[i].requirements.messagesReq > 0 || giveaways[i].requirements.invitesReq > 0 || typeof(giveaways[i].requirements.roleReq) == "object") reqContent += `\n**${client.emojisConfig.tasks} Requirements**`;
+      if(giveaways[i].requirements.messagesReq > 0 || giveaways[i].requirements.invitesReq > 0) reqContent += `\n**${client.emojisConfig.tasks} Requirements**`;
       if(giveaways[i].requirements.messagesReq > 0) reqContent += `\n> **›** You need **${giveaways[i].requirements.messagesReq}** Message(s) to Enter Giveaway.`;
       if(giveaways[i].requirements.invitesReq > 0) reqContent += `\n> **›** You need **${giveaways[i].requirements.invitesReq}** Invite(s) to Enter Giveaway.`;
-      if(typeof(giveaways[i].requirements.roleReq) == "object") reqContent += `\n> **›** You need **${giveaways[i].requirements.roleReq}** Role to Enter Giveaway.`;
 
       let editEmbed = new Discord.MessageEmbed()
         .setAuthor("Giveaway Ended", client.user.displayAvatarURL())
@@ -309,11 +298,9 @@ ${reqContent}
 
     } else {
       let reqContent = "";
-      if(giveaways[i].requirements.roleReq == undefined) giveaways[i].requirements.roleReq = 0;
-      if(giveaways[i].requirements.messagesReq > 0 || giveaways[i].requirements.invitesReq > 0 || typeof(giveaways[i].requirements.roleReq) == "object") reqContent += `\n**${client.emojisConfig.tasks} Requirements**`;
+      if(giveaways[i].requirements.messagesReq > 0 || giveaways[i].requirements.invitesReq > 0) reqContent += `\n**${client.emojisConfig.tasks} Requirements**`;
       if(giveaways[i].requirements.messagesReq > 0) reqContent += `\n> **›** You need **${giveaways[i].requirements.messagesReq}** Message(s) to Enter Giveaway.`;
       if(giveaways[i].requirements.invitesReq > 0) reqContent += `\n> **›** You need **${giveaways[i].requirements.invitesReq}** Invite(s) to Enter Giveaway.`;
-      if(typeof(giveaways[i].requirements.roleReq) == "object") reqContent += `\n> **›** You need **${giveaways[i].requirements.roleReq}** Role to Enter Giveaway.`;
 
       let embedChange = new Discord.MessageEmbed()
         .setAuthor("New Giveaway", client.user.displayAvatarURL())

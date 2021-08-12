@@ -29,7 +29,6 @@ module.exports = class MessageReactionAdd extends Event {
       let msgReq = db.fetch(`messages_${message.guild.id}_${user.id}`);
       let gwInvites = gwRunning.requirements.invitesReq;
       let gwMsg = gwRunning.requirements.messagesReq; 
-      let roleMsg = gwRunning.requirements.roleReq; 
       let totalReq = parseInt(invitesReq + bonusReq);
       let role = db.fetch(`server_${message.guild.id}_bypassRole`);
       let blRole = db.fetch(`server_${message.guild.id}_blacklistRole`);
@@ -43,7 +42,6 @@ module.exports = class MessageReactionAdd extends Event {
       if(role != null && message.member.roles.cache.has(role)) return;
       let haveInvites = true;
       let haveMessages = true;
-      let haveRole = true;
       let isBlacklist = false;
       if(blRole != null && message.member.roles.cache.has(blRole)) {
         denyEmbed.setDescription(`**${this.client.emojisConfig.prize} Giveaway:** ${gwRunning.prize}
@@ -67,7 +65,7 @@ Your Giveaway Entry in **${message.guild.name}** has been \`declined\`.
         haveInvites = false;
         user.send({ embeds: [denyEmbed] });
       }
-      if(isBlacklist == false && haveInvites == true && gwMsg > 0 && msgReq < gwMsg) {
+      if(isBlacklist == false &&   haveInvites == true && gwMsg > 0 && msgReq < gwMsg) {
         denyEmbed.setDescription(`**${this.client.emojisConfig.prize} Giveaway:** ${gwRunning.prize}
 
 Your Giveaway Entry in **${message.guild.name}** has been \`declined\`.
@@ -78,18 +76,7 @@ Your Giveaway Entry in **${message.guild.name}** has been \`declined\`.
         haveMessages = false;
         user.send({ embeds: [denyEmbed] });
       }
-      if(haveInvites == true && haveMessages == true && isBlacklist == false && roleMsg != 0 && !message.member.roles.cache.has(roleMsg.id)) {
-        denyEmbed.setDescription(`**${this.client.emojisConfig.prize} Giveaway:** ${gwRunning.prize}
-
-Your Giveaway Entry in **${message.guild.name}** has been \`declined\`.
-
-**${this.client.emojisConfig.tasks} You don't meet Requirement:**
-> **›** You need **${gwRunning.requirements.roleReq}** Role to Enter Giveaway.`);
-        reaction.users.remove(user);
-        haveRole = false;
-        user.send({ embeds: [denyEmbed] });
-      }
-      if(haveInvites == true && haveMessages == true && haveRole == true && isBlacklist == false) {
+      if(haveInvites == true && haveMessages == true && isBlacklist == false) {
         denyEmbed.setDescription(`**${this.client.emojisConfig.prize} Giveaway:** ${gwRunning.prize}
 
 Your Giveaway Entry in **${message.guild.name}** has been \`approved\`.`);

@@ -1,7 +1,3 @@
-const Discord = require("discord.js");
-const db = require("quick.db");
-const Timeout = require("smart-timeout");
-const delay = require('delay');
 const Event = require("../../structures/Events");
 
 module.exports = class Ready extends Event {

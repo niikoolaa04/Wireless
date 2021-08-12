@@ -42,7 +42,7 @@ module.exports = class Config extends Command {
         .addField(`🔎 - Snipes (7)`, snipes ? `Yes` : 'No')
         .addField(`👋 - Welcome Image (8)`, image ? `Yes` : 'No')
         .addField(`📞 - Welcome Channel (9)`, wlcmChannel ? `<#${wlcmChannel}>` : 'No Channel')
-        .addField(`🎭 - Role Requirement (10)`, roleReq ? roleReq : 'No Role')
+        .addField(`🎭 - Role Requirement (10)`, roleReq ? `<@${roleReq}>` : 'No Role')
         .setColor("BLURPLE")
         .setThumbnail(this.client.user.displayAvatarURL())
         .setTimestamp()

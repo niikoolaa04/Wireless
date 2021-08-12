@@ -16,6 +16,7 @@ module.exports = class MessageReactionAdd extends Event {
     if(reaction.message.partial) await reaction.message.fetch();
     if(user.partial) await user.fetch();
     if(message.channel.type === "DM") return;
+    let member = message.guild.members.cache.get(user.id);
     
     if(reaction.emoji.name == "🎉") {
       let giveaways = db.fetch(`giveaways_${message.guild.id}`);
@@ -47,12 +48,12 @@ module.exports = class MessageReactionAdd extends Event {
 Your Giveaway Entry in **${message.guild.name}** has been \`approved\`.`);
 
       if(message.id != gwRunning.messageID) return;
-      if(role != null && message.member.roles.cache.has(role)) return user.send({ embeds: [approveEmbed] });
+      if(role != null && member.roles.cache.has(role)) return user.send({ embeds: [approveEmbed] });
       let haveInvites = true;
       let haveMessages = true;
       let haveRole = true;
       let isBlacklist = false;
-      if(blRole != null && message.member.roles.cache.has(blRole)) {
+      if(blRole != null && member.roles.cache.has(blRole)) {
         denyEmbed.setDescription(`**${this.client.emojisConfig.prize} Giveaway:** ${gwRunning.prize}
 
 Your Giveaway Entry in **${message.guild.name}** has been \`declined\`.
@@ -85,15 +86,13 @@ Your Giveaway Entry in **${message.guild.name}** has been \`declined\`.
         haveMessages = false;
         user.send({ embeds: [denyEmbed] });
       }
-      if(isBlacklist == false && haveInvites == true && haveMessages == true && roleReq != null && !message.member.roles.cache.has(roleReq)) {
-        console.log(roleReq);
-        console.log(message.member.roles.cache.has(roleReq))
+      if(isBlacklist == false && haveInvites == true && haveMessages == true && roleReq != null && !member.roles.cache.has(roleReq)) {
         denyEmbed.setDescription(`**${this.client.emojisConfig.prize} Giveaway:** ${gwRunning.prize}
 
 Your Giveaway Entry in **${message.guild.name}** has been \`declined\`.
 
 **${this.client.emojisConfig.tasks} You don't meet Requirement:**
-> **›** You need **${roleReq}** Role to Enter Giveaway.`);
+> **›** You need **${message.guild.roles.cache.get(roleReq)}** Role to Enter Giveaway.`);
         reaction.users.remove(user);
         haveRole = false;
         user.send({ embeds: [denyEmbed] });

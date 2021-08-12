@@ -73,7 +73,7 @@ module.exports = class GiveawayStart extends Command {
       winnersArg, 
       parseInt(messagesArg), 
       parseInt(invitesArg), 
-      roleReq,
+      roleArg,
       (Date.now() + ms(durationArg)), 
       message.author.id,
       prizeArg,

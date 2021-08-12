@@ -137,7 +137,7 @@ Example: \`@Member\``);
     roleCollector.stop();
   });
 
-  invCollector.on("end", (collected, reason) => {
+  roleCollector.on("end", (collected, reason) => {
     if(reason != "time") return;
     client.gwCreation.set(message.author.id, false);
     let endEmbed = new MessageEmbed()

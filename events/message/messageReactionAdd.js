@@ -10,11 +10,11 @@ module.exports = class MessageReactionAdd extends Event {
 
 	async run(reaction, user) {
     if(user.bot) return;
-    if(message.channel.type === "DM") return;
     if(reaction.partial) await reaction.fetch();
     if(reaction.message.partial) await reaction.message.fetch();
     if(user.partial) await user.fetch();
     const message = reaction.message;
+    if(message.channel.type === "DM") return;
     let member = message.guild.members.cache.get(user.id);
     if(this.client.disabledGuilds.includes(message.guild.id)) return;
     

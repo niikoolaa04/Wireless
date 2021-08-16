@@ -288,7 +288,7 @@ ${reqContent}
       let hasWinners = `\`🎊\` Congratulations to ${giveaways[i].winnerCount > 1 ? "winners" : "winner"} ${winners} on winning this Giveaway!\nGood Luck to the others next time.`;
       let noWinners = `\`🎊\` Giveaway ended but there is no winner(s).`;
       
-      db.delete(`server_${message.guild.id}_roleReq`);
+      db.delete(`server_${giveaways[i].guildID}_roleReq`);
 
       let endEmbed = new Discord.MessageEmbed()
         .setTitle("🎁︲Giveaway")

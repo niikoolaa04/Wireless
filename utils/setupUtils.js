@@ -50,12 +50,14 @@ async function submitGiveaway(client, message, data) {
       );
       client.gw.startGiveaway(client, message, giveawayObject);
       
-      message.channel.send({ embeds: [ client.embedBuilder(client, message, "Giveaway", `Giveaway has started in ${data.channel}.`, "YELLOW")] });
+
+
+      message.channel.send({ embeds: [ client.embedInteraction(client, message.member, "Giveaway", `Giveaway has started in ${data.channel}.`, "YELLOW")] });
       collector.stop();
     } else if(i.customId == "cancelGw") {
       await i.deferUpdate();
       client.gwCreation.set(message.member.id, false);
-      message.channel.send({ embeds: [ client.embedBuilder(client, message, "Giveaway Setup", `Giveaway creation have been stopped.`, "RED")] });
+      message.channel.send({ embeds: [ client.embedInteraction(client, message.member, "Giveaway Setup", `Giveaway creation have been stopped.`, "RED")] });
       collector.stop();
     }
   });

@@ -30,8 +30,7 @@ async function submitGiveaway(client, message, data) {
 
   message.channel.send({ embeds: [gwConfirm], components: [row] });
 
-
-  let filter = m => m.user.id === message.author.id;
+  let filter = m => m.user.id === message.member.id;
   const collector = message.channel.createMessageComponentCollector({ filter, time: 30000, errors: ["time"] });
 
   collector.on("collect", async i => {
@@ -46,7 +45,7 @@ async function submitGiveaway(client, message, data) {
         parseInt(data.messages), 
         parseInt(data.invites), 
         (Date.now() + ms(data.duration)), 
-        message.author.id,
+        message.member.id,
         data.prize,
       );
       client.gw.startGiveaway(client, message, giveawayObject);

@@ -16,18 +16,20 @@ async function submitGiveaway(client, message, data) {
         .setLabel("No, don't Start Giveaway")
         .setStyle('DANGER'));
 
-  let gwConfirm = client.embedBuilder(client, message, "Giveaway Setup", 
-`Are this Giveaway Details Good? Confirm by clicking Button.
+  let gwConfirm = new MessageEmbed()
+    .setTitle(`🎁︲Giveaway Setup`)
+    .setDescription(`Are this Giveaway Details Good? Confirm by clicking Button.
 
 **\`⏰\` Giveaway Duration:** ${client.utils.formatVreme(ms(data.duration))}
 **\`#️⃣\` Channel to Start in:** ${data.channel}
 **\`👑\` Number of Winners:** ${data.winners}
 **\`💬\` Messages Required:** ${data.messages}
 **\`🎫\` Invites Required:** ${data.invites}
-**\`🎁\` Prize:** ${data.invites}
-`, "BLURPLE");
+**\`🎁\` Prize:** ${data.invites}`)
+    .setColor("BLURPLE")
 
   message.channel.send({ embeds: [gwConfirm], components: [row] });
+
 
   let filter = m => m.user.id === message.author.id;
   const collector = message.channel.createMessageComponentCollector({ filter, time: 30000, errors: ["time"] });
@@ -252,14 +254,15 @@ async function channelSetup(client, message, embed, filter, data) {
   });
 }
 
-async function durationSetup(client, message, embed, filter) {
+async function durationSetup(client, message, embed, filter, inter) {
   let currentData = {
     duration: null,
     winners: 0,
     messages: 0,
     invites: 0,
     channel: null,
-    prize: "N/A"
+    prize: "N/A",
+    interaction: inter
   };
 
   embed.setDescription(`Enter Duration for Giveaway.

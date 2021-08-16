@@ -53,7 +53,7 @@ async function submitGiveaway(client, message, data) {
       collector.stop();
     } else if(i.customId == "cancelGw") {
       await i.deferUpdate();
-      client.gwCreation.set(message.author.id, false);
+      client.gwCreation.set(message.member.id, false);
       message.channel.send({ embeds: [ client.embedBuilder(client, message, "Giveaway Setup", `Giveaway creation have been stopped.`, "RED")] });
       collector.stop();
     }
@@ -61,7 +61,7 @@ async function submitGiveaway(client, message, data) {
 
   collector.on("end", (collected, reason) => {
     if(reason != "time") return;
-    client.gwCreation.set(message.author.id, false);
+    client.gwCreation.set(message.member.id, false);
     let endEmbed = new MessageEmbed()
       .setColor("RED")
       .setDescription('Time has passed without response, giveaway creation stopped')
@@ -83,7 +83,7 @@ Example: \`Nitro Classic\``);
       .setDescription('You have canceled Giveaway Creation')
       .setAuthor("Giveaway Setup", client.user.displayAvatarURL());
     if(msg.content.toLowerCase() == "cancel") {
-      client.gwCreation.set(message.author.id, false);
+      client.gwCreation.set(message.member.id, false);
       message.channel.send({ embeds: [cancelEmbed] });
       prizeCollector.stop()
       return;
@@ -99,7 +99,7 @@ Example: \`Nitro Classic\``);
 
   prizeCollector.on("end", (collected, reason) => {
     if(reason != "time") return;
-    client.gwCreation.set(message.author.id, false);
+    client.gwCreation.set(message.member.id, false);
     let endEmbed = new MessageEmbed()
       .setColor("RED")
       .setDescription('Time has passed without response, giveaway creation stopped')
@@ -121,7 +121,7 @@ Example: \`500\``);
       .setDescription('You have canceled Giveaway Creation')
       .setAuthor("Giveaway Setup", client.user.displayAvatarURL());
     if(msg.content.toLowerCase() == "cancel") {
-      client.gwCreation.set(message.author.id, false);
+      client.gwCreation.set(message.member.id, false);
       message.channel.send({ embeds: [cancelEmbed] });
       invCollector.stop()
       return;
@@ -135,7 +135,7 @@ Example: \`500\``);
 
   invCollector.on("end", (collected, reason) => {
     if(reason != "time") return;
-    client.gwCreation.set(message.author.id, false);
+    client.gwCreation.set(message.member.id, false);
     let endEmbed = new MessageEmbed()
       .setColor("RED")
       .setDescription('Time has passed without response, giveaway creation stopped')
@@ -157,7 +157,7 @@ Example: \`500\``);
       .setDescription('You have canceled Giveaway Creation')
       .setAuthor("Giveaway Setup", client.user.displayAvatarURL());
     if(msg.content.toLowerCase() == "cancel") {
-      client.gwCreation.set(message.author.id, false);
+      client.gwCreation.set(message.member.id, false);
       message.channel.send({ embeds: [cancelEmbed] });
       msgCollector.stop()
       return;
@@ -171,7 +171,7 @@ Example: \`500\``);
 
   msgCollector.on("end", (collected, reason) => {
     if(reason != "time") return;
-    client.gwCreation.set(message.author.id, false);
+    client.gwCreation.set(message.member.id, false);
     let endEmbed = new MessageEmbed()
       .setColor("RED")
       .setDescription('Time has passed without response, giveaway creation stopped')
@@ -193,7 +193,7 @@ Example: \`2\``);
       .setDescription('You have canceled Giveaway Creation')
       .setAuthor("Giveaway Setup", client.user.displayAvatarURL());
     if(msg.content.toLowerCase() == "cancel") {
-      client.gwCreation.set(message.author.id, false);
+      client.gwCreation.set(message.member.id, false);
       message.channel.send({ embeds: [cancelEmbed] });
       winnerCollector.stop()
       return;
@@ -207,7 +207,7 @@ Example: \`2\``);
 
   winnerCollector.on("end", (collected, reason) => {
     if(reason != "time") return;
-    client.gwCreation.set(message.author.id, false);
+    client.gwCreation.set(message.member.id, false);
     let endEmbed = new MessageEmbed()
       .setColor("RED")
       .setDescription('Time has passed without response, giveaway creation stopped')
@@ -229,7 +229,7 @@ async function channelSetup(client, message, embed, filter, data) {
       .setDescription('You have canceled Giveaway Creation')
       .setAuthor("Giveaway Setup", client.user.displayAvatarURL());
     if(msg.content.toLowerCase() == "cancel") {
-      client.gwCreation.set(message.author.id, false);
+      client.gwCreation.set(message.member.id, false);
       message.channel.send({ embeds: [cancelEmbed] });
       channelCollector.stop()
       return;
@@ -243,7 +243,7 @@ async function channelSetup(client, message, embed, filter, data) {
 
   channelCollector.on("end", (collected, reason) => {
     if(reason != "time") return;
-    client.gwCreation.set(message.author.id, false);
+    client.gwCreation.set(message.member.id, false);
     let endEmbed = new MessageEmbed()
       .setColor("RED")
       .setDescription('Time has passed without response, giveaway creation stopped')
@@ -259,7 +259,7 @@ async function durationSetup(client, message, embed, filter) {
     messages: 0,
     invites: 0,
     channel: null,
-    prize: "N/A",
+    prize: "N/A"
   };
 
   embed.setDescription(`Enter Duration for Giveaway.
@@ -274,7 +274,7 @@ async function durationSetup(client, message, embed, filter) {
       .setDescription('You have canceled Giveaway Creation')
       .setAuthor("Giveaway Setup", client.user.displayAvatarURL());
     if(msg.content.toLowerCase() == "cancel") {
-      client.gwCreation.set(message.author.id, false);
+      client.gwCreation.set(message.member.id, false);
       message.channel.send({ embeds: [cancelEmbed] });
       durationCollector.stop()
       return;
@@ -287,7 +287,7 @@ async function durationSetup(client, message, embed, filter) {
 
   durationCollector.on("end", (collected, reason) => {
     if(reason != "time") return;
-    client.gwCreation.set(message.author.id, false);
+    client.gwCreation.set(message.member.id, false);
     let endEmbed = new MessageEmbed()
       .setColor("RED")
       .setDescription('Time has passed without response, giveaway creation stopped')

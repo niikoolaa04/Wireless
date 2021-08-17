@@ -43,8 +43,6 @@ module.exports = class GiveawayEdit extends Command {
 
     if (!gwData) return interaction.followUp({ embeds: [ this.client.embedInteraction(this.client, interaction, "Error", "You have entered invalid Message ID.", "RED")] });
 
-    await interaction.deferReply();
-
     this.client.gw.endGiveaway(this.client, interaction, messageID, interaction.guild);
     interaction.followUp({ embeds: [ this.client.embedInteraction(this.client, interaction, "Giveaway", `Giveaway have been ended successfuly.`, "YELLOW")] });
   }

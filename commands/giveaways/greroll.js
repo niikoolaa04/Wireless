@@ -40,6 +40,8 @@ module.exports = class GiveawayReroll extends Command {
     let giveaways = db.fetch(`giveaways_${interaction.guild.id}`);
     let gwData = giveaways.find(g => g.messageID == messageID && g.ended == true);
 
+    await interaction.deferReply();
+
     if (!gwData) return interaction.followUp({ embeds: [ this.client.embedInteraction(this.client, interaction, "Error", "You have entered invalid Message ID or that Giveaway haven't ended.", "RED")] });
 
     this.client.gw.rerollGiveaway(this.client, interaction, messageID);

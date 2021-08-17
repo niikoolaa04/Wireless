@@ -34,6 +34,7 @@ module.exports = class GiveawayCreate extends Command {
     if(this.client.gwCreation.get(interaction.user.id) == true) return interaction.followUp({ embeds: [ this.client.embedInteraction(client, interaction, "Error", `You have already started Giveaway Creation, type cancel to stop it.`, "RED")] });
 
     let filter = m => m.author.id === interaction.user.id;
+    await interaction.deferReply();
     this.client.setupUtils.durationSetup(this.client, interaction, embed, filter);
     this.client.gwCreation.set(interaction.user.id, true);
   }

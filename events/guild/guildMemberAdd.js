@@ -5,6 +5,8 @@ const delay = require("delay");
 const moment = require('moment-timezone');
 moment.locale('sr-latn');
 const Event = require("../../structures/Events");
+const { isEqual, generateInvitesCache } = require("../../utils/utils.js");
+
 
 module.exports = class GuildMemberAdd extends Event {
 	constructor(...args) {
@@ -66,62 +68,83 @@ module.exports = class GuildMemberAdd extends Event {
       let channelImg = this.client.channels.cache.get(imgChannel);
       await channelImg.send({ files: [attachment] });
     }
+    
+    let invite = null;
+    let vanity = false;
 
-    member.guild.invites.fetch().then(async guildInvites => {
-      const ei = this.client.invites[member.guild.id];
-  
+    await member.guild.invites.fetch().catch(() => {});
+    const guildInvites = generateInvitesCache(member.guild.invites.cache);
+    const oldGuildInvites = this.client.invites[member.guild.id];
+    if (guildInvites && oldGuildInvites) {
       this.client.invites[member.guild.id] = guildInvites;
-  
-      const invite = guildInvites.find(i => !ei.get(i.code) || ei.get(i.code).uses < i.uses) || member.guild.vanityURLCode || null || undefined;
-      
-      let inviter = null;
-      if(!invite || invite == undefined || invite == null) inviter = "Unknown";
-      else if(invite == member.guild.vanityURLCode) inviter = "Vanity URL"
-      else inviter = this.client.users.cache.get(invite.inviter.id);
-      
-      if(inviter != "Unknown" && inviter != "Vanity URL") {
-        db.set(`inviter_${member.guild.id}_${member.id}`, inviter.id);
 
-        if(inviter.id !== member.id) {
-          db.add(`invitesRegular_${member.guild.id}_${inviter.id}`, 1);
-          db.add(`invitesJoins_${member.guild.id}_${inviter.id}`, 1);
+      let inviteUsed = guildInvites.find((i) => oldGuildInvites.get(i.code) && ((Object.prototype.hasOwnProperty.call(oldGuildInvites.get(i.code), "uses") ? oldGuildInvites.get(i.code).uses : "Infinite") < i.uses));
+      if ((isEqual(oldGuildInvites.map((i) => `${i.code}|${i.uses}`).sort(), guildInvites.map((i) => `${i.code}|${i.uses}`).sort())) && !inviteUsed && member.guild.features.includes("VANITY_URL")) {
+        vanity = true;
+      } else if (!inviteUsed) {
+        const newAndUsed = guildInvites.filter((i) => !oldGuildInvites.get(i.code) && i.uses === 1);
+        if (newAndUsed.size === 1) {
+          inviteUsed = newAndUsed.first();
         }
-      } else {
-        db.set(`inviter_${member.guild.id}_${member.id}`, inviter);
       }
-      
-      let invitesChannel = db.fetch(`channel_${member.guild.id}_invites`);
-      invitesChannel = this.client.channels.cache.get(invitesChannel); 
-      
-      let msgJoin = db.fetch(`server_${member.guild.id}_joinMessage`);  
-      if(invitesChannel != null && invitesChannel != undefined && msgJoin != null) {
-        delay(1000);
-        let inviter = db.fetch(`inviter_${member.guild.id}_${member.id}`);
-        let invv = null;
-        if(inviter == "Vanity URL") invv = "Vanity URL";
-        else if(inviter == undefined  || inviter == null || inviter == "Unknown") invv = "Unknown";
-        else invv = this.client.users.cache.get(inviter).tag;
-        
-        let inviterName = invv;
-        
-        let joins = db.fetch(`invitesJoins_${member.guild.id}_${inviter}`) || 0;
-        let regular = db.fetch(`invitesRegular_${member.guild.id}_${inviter}`) || 0;
-        let leaves = db.fetch(`invitesLeaves_${member.guild.id}_${inviter}`) || 0;
-        let bonus = db.fetch(`invitesBonus_${member.guild.id}_${inviter}`) || 0;
+      if (inviteUsed && !vanity) invite = inviteUsed;
+    } else if (guildInvites && !oldGuildInvites) {
+      this.client.invites[member.guild.id] = guildInvites;
+    }
+    if (!invite && guildInvites) {
+      const targetInvite = guildInvites.some((i) => i.targetUser && (i.targetUser.id === member.id));
+      if (targetInvite.uses === 1) {
+        invite = targetInvite;
+      }
+    }
+    
+    let inviter = null;
+    if (!invite || invite == undefined || invite == null) inviter = "Unknown";
+    else if (vanity == true) inviter = "Vanity URL"
+    else inviter = this.client.users.cache.get(invite.inviter.id);
 
-        invitesChannel.send({ content: `${msgJoin
-          .replace("{userTag}", member.user.tag)
-          .replace("{members}", member.guild.memberCount)
-          .replace("{username}", member.user.username)
-          .replace("{userID}", member.user.id)
-          .replace("{invitedBy}", inviterName)
-          .replace("{totalInvites}", parseInt(regular + bonus))
-          .replace("{leavesInvites}", leaves)
-          .replace("{bonusInvites}", bonus)
-          .replace("{regularInvites}", regular)
-          .replace("{joinsInvites}", joins)
-          .replace("{created}", moment.utc(member.user.createdAt).tz("Europe/Belgrade").format("dddd, MMMM Do YYYY, HH:mm:ss"))}` });
-      } 
-    });
+    if (inviter != "Unknown" && inviter != "Vanity URL") {
+      db.set(`inviter_${member.guild.id}_${member.id}`, inviter.id);
+
+      if (inviter.id !== member.id) {
+        db.add(`invitesRegular_${member.guild.id}_${inviter.id}`, 1);
+        db.add(`invitesJoins_${member.guild.id}_${inviter.id}`, 1);
+      }
+    } else {
+      db.set(`inviter_${member.guild.id}_${member.id}`, inviter);
+    }
+
+    let invitesChannel = db.fetch(`channel_${member.guild.id}_invites`);
+    invitesChannel = this.client.channels.cache.get(invitesChannel);
+
+    let msgJoin = db.fetch(`server_${member.guild.id}_joinMessage`);
+    if (invitesChannel != null && invitesChannel != undefined && msgJoin != null) {
+      delay(1000);
+      let inviter = db.fetch(`inviter_${member.guild.id}_${member.id}`);
+      let invv = null;
+      if (inviter == "Vanity URL") invv = "Vanity URL";
+      else if (inviter == undefined || inviter == null || inviter == "Unknown") invv = "Unknown";
+      else invv = this.client.users.cache.get(inviter).tag;
+
+      let inviterName = invv;
+
+      let joins = db.fetch(`invitesJoins_${member.guild.id}_${inviter}`) || 0;
+      let regular = db.fetch(`invitesRegular_${member.guild.id}_${inviter}`) || 0;
+      let leaves = db.fetch(`invitesLeaves_${member.guild.id}_${inviter}`) || 0;
+      let bonus = db.fetch(`invitesBonus_${member.guild.id}_${inviter}`) || 0;
+
+      invitesChannel.send({ content: `${msgJoin
+        .replace("{userTag}", member.user.tag)
+        .replace("{members}", member.guild.memberCount)
+        .replace("{username}", member.user.username)
+        .replace("{userID}", member.user.id)
+        .replace("{invitedBy}", inviterName)
+        .replace("{totalInvites}", parseInt(regular + bonus))
+        .replace("{leavesInvites}", leaves)
+        .replace("{bonusInvites}", bonus)
+        .replace("{regularInvites}", regular)
+        .replace("{joinsInvites}", joins)
+        .replace("{created}", moment.utc(member.user.createdAt).tz("Europe/Belgrade").format("dddd, MMMM Do YYYY, HH:mm:ss"))}` });
+      }
 	} 
 };

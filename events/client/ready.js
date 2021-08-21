@@ -1,4 +1,6 @@
 const Event = require("../../structures/Events");
+const { generateInvitesCache } = require("../../utils/utils.js");
+
 
 module.exports = class Ready extends Event {
 	constructor(client) {
@@ -26,14 +28,21 @@ module.exports = class Ready extends Event {
           this.client.user.setActivity(activities_list[index], { type: 'WATCHING' });
     }, 210000);
 
+    let invites = {};
+    
+    await this.client.utils.asyncForEach([...this.client.guilds.cache.values()], async (guild) => {
+      let fetchedInvites = null;
+      await guild.invites.fetch().catch(() => {});
+      fetchedInvites = generateInvitesCache(guild.invites.cache);
+      invites[guild.id] = fetchedInvites;
+    });
+    this.client.invites = invites; 
+
     this.client.guilds.cache.forEach(g => {
       setInterval(() => {
         this.client.gw.checkGiveaway(this.client, g);
       }, 30000);
       if(!g.me.permissions.has("MANAGE_GUILD")) return;
-      g.invites.fetch().then(guildInvites => {
-        this.client.invites[g.id] = guildInvites;
-      });
     }); 
 
     // await this.client.guilds.cache.get("825090904359960586").commands.set(this.client.slashArray);

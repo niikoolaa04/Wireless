@@ -216,6 +216,8 @@ const checkGiveaway = async (client, guild) => {
     if(giveaways[i].ended == true) continue;
     
     let channel = client.channels.cache.get(giveaways[i].channelID);
+    if(channel == undefined) return db.delete(`giveaways_${giveaways[i].guildID}`)[i];
+    
     let msg = await channel.messages.fetch(giveaways[i].messageID);
     
     let rUsers = await msg.reactions.cache.get("🎉").users.fetch();

@@ -49,8 +49,6 @@ async function submitGiveaway(client, message, data) {
         data.prize,
       );
       client.gw.startGiveaway(client, message, giveawayObject);
-      
-
 
       message.channel.send({ embeds: [ client.embedInteraction(client, message.member, "Giveaway", `Giveaway has started in ${data.channel}.`, "YELLOW")] });
       collector.stop();

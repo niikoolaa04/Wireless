@@ -19,7 +19,7 @@ module.exports = class TopInvites extends Command {
 
     let embed = new Discord.MessageEmbed()
       .setDescription(content)
-      .setTitle("🎫︲Top Invites")
+      .setTitle("🎫・Top Invites")
       .setDescription(`\`Top 10 Users by Invites.\`
 
 ${content}`)
@@ -32,7 +32,7 @@ ${content}`)
 
     let embed = new Discord.MessageEmbed()
       .setDescription(content)
-      .setTitle("🎫︲Top Invites")
+      .setTitle("🎫・Top Invites")
       .setDescription(`\`Top 10 Users by Invites.\`
 
 ${content}`)

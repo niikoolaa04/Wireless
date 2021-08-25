@@ -17,7 +17,7 @@ async function submitGiveaway(client, message, data) {
         .setStyle('DANGER'));
 
   let gwConfirm = new MessageEmbed()
-    .setTitle(`🎁︲Giveaway Setup`)
+    .setTitle(`🎁・Giveaway Setup`)
     .setDescription(`Are this Giveaway Details Good? Confirm by clicking Button.
 
 **\`⏰\` Giveaway Duration:** ${client.utils.formatVreme(ms(data.duration))}

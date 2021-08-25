@@ -155,7 +155,7 @@ ${reqContent}
   let noWinners = `\`🎊\` Giveaway ended but there is no winner(s).`;
 
   let endEmbed = new Discord.MessageEmbed()
-    .setTitle("🎁︲Giveaway")
+    .setTitle("🎁・Giveaway")
     .setDescription(`${randomWinner ? hasWinners : noWinners}`)
     .setColor("YELLOW");
   
@@ -163,7 +163,7 @@ ${reqContent}
 
   let dmStatus = db.fetch(`server_${message.guild.id}_dmWinners`);
   const dmWin = new Discord.MessageEmbed()
-    .setTitle("🎁︲Giveaway")
+    .setTitle("🎁・Giveaway")
     .setDescription(`\`👑\` Congratulations, you have Won Giveaway in **${message.guild.name}**!
 
 >>> **\`🎊\` Giveaway:** ${gwData.prize}`)
@@ -200,7 +200,7 @@ const rerollGiveaway = async (client, message, messageID) => {
   let winnerString = `\`🎊\` ${gwData.winnerCount > 1 ? "New Winners have been choosen" : "New Winner have been choosen"} ${winners}, congratulations on winning this Giveaway!\nGood Luck to the others next time.`;
       
   let rerollEmbed = new Discord.MessageEmbed()
-    .setTitle("🎁︲Giveaway")
+    .setTitle("🎁・Giveaway")
     .setDescription(`${winnerString}`)
     .setColor("BLURPLE");
   
@@ -293,7 +293,7 @@ ${reqContent}
       db.delete(`server_${giveaways[i].guildID}_roleReq`);
 
       let endEmbed = new Discord.MessageEmbed()
-        .setTitle("🎁︲Giveaway")
+        .setTitle("🎁・Giveaway")
         .setDescription(`${randomWinner ? hasWinners : noWinners}`)
         .setColor("YELLOW");
       
@@ -301,7 +301,7 @@ ${reqContent}
 
       let dmStatus = db.fetch(`server_${guild.id}_dmWinners`);
       const dmWin = new Discord.MessageEmbed()
-        .setTitle("🎁︲Giveaway")
+        .setTitle("🎁・Giveaway")
         .setDescription(`\`👑\` Congratulations, you have Won Giveaway in **${guild.name}**!
   
  >>> **\`🎊\` Giveaway:** ${giveaways[i].prize}`)

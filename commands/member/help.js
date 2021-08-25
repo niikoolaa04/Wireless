@@ -55,21 +55,21 @@ module.exports = class Help extends Command {
       let contentUtility = this.client.utils.commandsList(this.client, message, "utility");
       
       let cmdEmbed = new MessageEmbed()
-        .setTitle(`🚀︲Help Menu`)
+        .setTitle(`🚀・Help Menu`)
         .setDescription(`Use \`${prefix}help [command]\` to view more informations about command.`)
-        .addField(`${this.client.emojisConfig.members} Member Commands`, 
+        .addField(`${this.client.emojisConfig.members}・Member Commands`, 
 `View all available Member Commands`)
-        .addField(`${this.client.emojisConfig.prize} Giveaway`, 
+        .addField(`${this.client.emojisConfig.prize}・Giveaway`, 
 `View all available Giveaway Commands`)
-        .addField(`${this.client.emojisConfig.utility} Utility`,
+        .addField(`${this.client.emojisConfig.utility}・Utility`,
 `View all available Utility Commands`)
-        .addField(`${this.client.emojisConfig.vote} Vote for Bot`,
+        .addField(`${this.client.emojisConfig.vote}・Vote for Bot`,
 `[Help Developers by Voting for Bot](${this.client.config.links.voteURL})`)
-        .addField(`${this.client.emojisConfig.invite} Invite Bot`,
+        .addField(`${this.client.emojisConfig.invite}・Invite Bot`,
 `[Invite Bot to your Server](${this.client.config.links.inviteURL})`)
-        .addField(`${this.client.emojisConfig.website} Website`,
+        .addField(`${this.client.emojisConfig.website}・Website`,
 `[Checkout Offical Bot Website](${this.client.config.links.website})`)
-        .addField(`${this.client.emojisConfig.support} Support`,
+        .addField(`${this.client.emojisConfig.support}・Support`,
 `[To get Help with Bot, join Support Server](${this.client.config.links.supportServer})`)
         .setTimestamp()
         .setColor("BLURPLE")
@@ -84,10 +84,10 @@ module.exports = class Help extends Command {
         if(i.customId == "members") {
           await i.deferUpdate();
           let memberEmbed = new MessageEmbed()
-            .setTitle("👤︲Member Commands")
+            .setTitle("👤・Member Commands")
             .setDescription(`Use \`${prefix}help [command]\` to view more informations about command.`)
-            .addField(`${this.client.emojisConfig.members} Member`, `${contentMember}`)
-            .addField(`${this.client.emojisConfig.gem} Informations`, `[Invite Me](${this.client.config.links.inviteURL}) | [Vote for me](${this.client.config.links.voteURL}) | [Website](${this.client.config.links.website}) | [Support Server](${this.client.config.links.supportServer})`)
+            .addField(`${this.client.emojisConfig.members}・Member`, `${contentMember}`)
+            .addField(`${this.client.emojisConfig.gem}・Informations`, `[Invite Me](${this.client.config.links.inviteURL}) | [Vote for me](${this.client.config.links.voteURL}) | [Website](${this.client.config.links.website}) | [Support Server](${this.client.config.links.supportServer})`)
             .setTimestamp()
             .setColor("BLURPLE")
             .setThumbnail(user.displayAvatarURL({ size: 1024, dynamic: true }))
@@ -96,10 +96,10 @@ module.exports = class Help extends Command {
         } else if(i.customId == "giveaway") {
           await i.deferUpdate();
           let gwEmbed = new MessageEmbed()
-            .setTitle("🎁︲Giveaway Commands")
+            .setTitle("🎁・Giveaway Commands")
             .setDescription(`Use \`${prefix}help [command]\` to view more informations about command.`)
-            .addField(`${this.client.emojisConfig.prize} Giveaway`, `${contentGiveaway}`)
-            .addField(`${this.client.emojisConfig.gem} Informations`, `[Invite Me](${this.client.config.links.inviteURL}) | [Vote for me](${this.client.config.links.voteURL}) | [Website](${this.client.config.links.website}) | [Support Server](${this.client.config.links.supportServer})`)
+            .addField(`${this.client.emojisConfig.prize}・Giveaway`, `${contentGiveaway}`)
+            .addField(`${this.client.emojisConfig.gem}・Informations`, `[Invite Me](${this.client.config.links.inviteURL}) | [Vote for me](${this.client.config.links.voteURL}) | [Website](${this.client.config.links.website}) | [Support Server](${this.client.config.links.supportServer})`)
             .setTimestamp()
             .setColor("BLURPLE")
             .setThumbnail(user.displayAvatarURL({ size: 1024, dynamic: true }))
@@ -108,10 +108,10 @@ module.exports = class Help extends Command {
         } else if(i.customId == "utility") {
           await i.deferUpdate();
           let utilityEmbed = new MessageEmbed()
-            .setTitle("🛠︲Utility Commands")
+            .setTitle("🛠・Utility Commands")
             .setDescription(`Use \`${prefix}help [command]\` to view more informations about command.`)
-            .addField(`${this.client.emojisConfig.utility} Utility`, `${contentUtility}`)
-            .addField(`${this.client.emojisConfig.gem} Informations`, `[Invite Me](${this.client.config.links.inviteURL}) | [Vote for me](${this.client.config.links.voteURL}) | [Website](${this.client.config.links.website}) | [Support Server](${this.client.config.links.supportServer})`)
+            .addField(`${this.client.emojisConfig.utility}・Utility`, `${contentUtility}`)
+            .addField(`${this.client.emojisConfig.gem}・Informations`, `[Invite Me](${this.client.config.links.inviteURL}) | [Vote for me](${this.client.config.links.voteURL}) | [Website](${this.client.config.links.website}) | [Support Server](${this.client.config.links.supportServer})`)
             .setTimestamp()
             .setColor("BLURPLE")
             .setThumbnail(user.displayAvatarURL({ size: 1024, dynamic: true }))
@@ -166,7 +166,7 @@ module.exports = class Help extends Command {
         , `You have entered command/category which doesn't exist.`, "RED") ]});
   
       let embed = new MessageEmbed()
-        .setTitle("🚀 · Informations About Command")
+        .setTitle("🚀・Informations About Command")
         .setDescription(
   `> **Command** · \`${cmd.name}\`
 > **Description** · \`${cmd.description}\`
@@ -217,21 +217,21 @@ module.exports = class Help extends Command {
     let contentUtility = this.client.utils.commandsList(this.client, interaction, "utility");
     
     let cmdEmbed = new MessageEmbed()
-      .setTitle(`🚀︲Help Menu`)
+      .setTitle(`🚀・Help Menu`)
       .setDescription(`Use \`${prefix}help [command]\` to view more informations about command.`)
-      .addField(`👤 Member Commands`, 
+      .addField(`👤・Member Commands`, 
   `View all available Member Commands`)
-      .addField(`🎉 Giveaway`, 
+      .addField(`🎉・Giveaway`, 
   `View all available Giveaway Commands`)
-      .addField(`🔎 Utility`,
+      .addField(`🔎・Utility`,
   `View all available Utility Commands`)
-      .addField(`🆙 Vote for Bot`,
+      .addField(`🆙・Vote for Bot`,
   `[Help Developers by Voting for Bot](${this.client.config.links.voteURL})`)
-      .addField(`💳 Invite Bot`,
+      .addField(`💳・Invite Bot`,
   `[Invite Bot to your Server](${this.client.config.links.inviteURL})`)
-      .addField(`🌐 Website`,
+      .addField(`🌐・Website`,
   `[Checkout Offical Bot Website](${this.client.config.links.website})`)
-      .addField(`🎭 Support`,
+      .addField(`🎭・Support`,
   `[To get Help with Bot, join Support Server](${this.client.config.links.supportServer})`)
       .setTimestamp()
       .setColor("BLURPLE")
@@ -245,10 +245,10 @@ module.exports = class Help extends Command {
     collector.on("collect", async i => {
       if(i.customId == "members") {
         let memberEmbed = new MessageEmbed()
-          .setTitle("👤︲Member Commands")
+          .setTitle("👤・Member Commands")
           .setDescription(`Use \`${prefix}help [command]\` to view more informations about command.`)
-          .addField(`👤 Member`, `${contentMember}`)
-          .addField(`💎 Informations`, `[Invite Me](${this.client.config.links.inviteURL}) | [Vote for me](${this.client.config.links.voteURL}) | [Website](${this.client.config.links.website}) | [Support Server](${this.client.config.links.supportServer})`)
+          .addField(`👤・Member`, `${contentMember}`)
+          .addField(`💎・Informations`, `[Invite Me](${this.client.config.links.inviteURL}) | [Vote for me](${this.client.config.links.voteURL}) | [Website](${this.client.config.links.website}) | [Support Server](${this.client.config.links.supportServer})`)
           .setTimestamp()
           .setColor("BLURPLE")
           .setThumbnail(interaction.user.displayAvatarURL({ size: 1024, dynamic: true }))
@@ -256,10 +256,10 @@ module.exports = class Help extends Command {
         i.update({ embeds: [memberEmbed], components: [helpRow] });
       } else if(i.customId == "giveaway") {
         let gwEmbed = new MessageEmbed()
-          .setTitle("🎁︲Giveaway Commands")
+          .setTitle("🎁・Giveaway Commands")
           .setDescription(`Use \`${prefix}help [command]\` to view more informations about command.`)
-          .addField(`🎉 Giveaway`, `${contentGiveaway}`)
-          .addField(`💎 Informations`, `[Invite Me](${this.client.config.links.inviteURL}) | [Vote for me](${this.client.config.links.voteURL}) | [Website](${this.client.config.links.website}) | [Support Server](${this.client.config.links.supportServer})`)
+          .addField(`🎉・Giveaway`, `${contentGiveaway}`)
+          .addField(`💎・Informations`, `[Invite Me](${this.client.config.links.inviteURL}) | [Vote for me](${this.client.config.links.voteURL}) | [Website](${this.client.config.links.website}) | [Support Server](${this.client.config.links.supportServer})`)
           .setTimestamp()
           .setColor("BLURPLE")
           .setThumbnail(interaction.user.displayAvatarURL({ size: 1024, dynamic: true }))
@@ -267,10 +267,10 @@ module.exports = class Help extends Command {
         i.update({ embeds: [gwEmbed], components: [helpRow] });
       } else if(i.customId == "utility") {
         let utilityEmbed = new MessageEmbed()
-          .setTitle("🔎︲Utility Commands")
+          .setTitle("🔎・Utility Commands")
           .setDescription(`Use \`${prefix}help [command]\` to view more informations about command.`)
-          .addField(`🔎 Utility`, `${contentUtility}`)
-          .addField(`💎 Informations`, `[Invite Me](${this.client.config.links.inviteURL}) | [Vote for me](${this.client.config.links.voteURL}) | [Website](${this.client.config.links.website}) | [Support Server](${this.client.config.links.supportServer})`)
+          .addField(`🔎・Utility`, `${contentUtility}`)
+          .addField(`💎・Informations`, `[Invite Me](${this.client.config.links.inviteURL}) | [Vote for me](${this.client.config.links.voteURL}) | [Website](${this.client.config.links.website}) | [Support Server](${this.client.config.links.supportServer})`)
           .setTimestamp()
           .setColor("BLURPLE")
           .setThumbnail(interaction.user.displayAvatarURL({ size: 1024, dynamic: true }))

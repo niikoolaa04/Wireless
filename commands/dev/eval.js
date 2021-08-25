@@ -46,20 +46,20 @@ module.exports = class Eval extends Command {
       if(!args[0]) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message, 
       `Error`, "You haven't entered Code to run.", "RED")] });
       const evaled = this.client.clean(eval(code));
-      embed.addField('📥︲Input', `\`\`\`xl\n${code}\n\`\`\``);
+      embed.addField('📥・Input', `\`\`\`xl\n${code}\n\`\`\``);
       embed.setColor('YELLOW');
       if (evaled.length < 800) {
-        embed.addField('📤︲Output', `\`\`\`xl\n${evaled}\n\`\`\``);
+        embed.addField('📤・Output', `\`\`\`xl\n${evaled}\n\`\`\``);
       } else {
         await hastebin(evaled, { extension: "js", url: "https://paste.nikolaa.me"}).then(r => {
-            embed.addField('📤︲Output', `\`\`\`xl\n${r}\n\`\`\``)
+            embed.addField('📤・Output', `\`\`\`xl\n${r}\n\`\`\``)
           });
         }
       message.channel.send({ embeds: [embed] });
     } catch (err) {
-        embed.addField('📥︲Input', `\`\`\`\n${code}\n\`\`\``);
+        embed.addField('📥・Input', `\`\`\`\n${code}\n\`\`\``);
         embed.setColor('RED');
-        embed.addField('📤︲Error', `\`\`\`xl\n${err}\n\`\`\``);
+        embed.addField('📤・Error', `\`\`\`xl\n${err}\n\`\`\``);
         message.channel.send({ embeds: [embed] });
     }
   }

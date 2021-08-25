@@ -19,7 +19,7 @@ module.exports = class TopMessages extends Command {
 
     let embed = new Discord.MessageEmbed()
       .setDescription(content)
-      .setTitle("💬︲Top Messages")
+      .setTitle("💬・Top Messages")
       .setDescription(`\`Top 10 Users by sent Messages.\`
 
 ${content}`)
@@ -32,7 +32,7 @@ ${content}`)
 
     let embed = new Discord.MessageEmbed()
       .setDescription(content)
-      .setTitle("💬︲Top Messages")
+      .setTitle("💬・Top Messages")
       .setDescription(`\`Top 10 Users by sent Messages.\`
 
 ${content}`)

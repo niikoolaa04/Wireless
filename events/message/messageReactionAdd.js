@@ -36,11 +36,11 @@ module.exports = class MessageReactionAdd extends Event {
       let blRole = db.fetch(`server_${message.guild.id}_blacklistRole`);
     
       let denyEmbed = new Discord.MessageEmbed()
-        .setTitle("🎁︲Giveaway Entry")
+        .setTitle("🎁・Giveaway Entry")
         .setColor("RED")
         .setThumbnail(this.client.user.displayAvatarURL());
       let approveEmbed = new Discord.MessageEmbed()
-        .setTitle("🎁︲Giveaway Entry")
+        .setTitle("🎁・Giveaway Entry")
         .setColor("YELLOW")
         .setThumbnail(this.client.user.displayAvatarURL())
         .setDescription(`**${this.client.emojisConfig.prize} Giveaway:** ${gwRunning.prize}

@@ -42,11 +42,14 @@ module.exports = class Ready extends Event {
       setInterval(() => {
         this.client.gw.checkGiveaway(this.client, g);
       }, 30000);
-      setInterval(() => {
-        this.client.liveLb(this.client, g);
-      }, 600000);
       if(!g.me.permissions.has("MANAGE_GUILD")) return;
     }); 
+    
+    setInterval(() => {
+      this.client.guilds.cache.forEach(async (g) => {
+        this.client.liveLb.updateLb(this.client, g)
+      })
+    }, 600000);
 
     // await this.client.guilds.cache.get("825090904359960586").commands.set(this.client.slashArray);
     await this.client.application.commands.set(this.client.slashArray);

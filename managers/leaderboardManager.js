@@ -22,6 +22,8 @@ const updateLb = async (client, guild) => {
     content += `> \`#${i + 1}\` ${user} - **${invites[i].data}**\n`;
   }
   
+  if(invites.length == 0) content = `> Leaderboard is Empty`;
+  
   channel.messages.fetch(live.message).then(async (m) => {
     let embed = new MessageEmbed()
       .setTitle("👑・Live Invites")

@@ -40,7 +40,7 @@ module.exports = class Test extends Command {
         content += `> \`#${i + 1}\` ${user} - **${invites[i].data}**\n`;
       }
   
-      let embed = new MessageEmbed()
+      let embed = new Discord.MessageEmbed()
         .setTitle("👑・Live Invites")
         .setDescription(`Live Leaderboard is Updated every 10 minutes.`)
         .addField("🎫・Leaderboard", content)

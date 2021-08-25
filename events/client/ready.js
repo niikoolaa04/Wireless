@@ -42,6 +42,9 @@ module.exports = class Ready extends Event {
       setInterval(() => {
         this.client.gw.checkGiveaway(this.client, g);
       }, 30000);
+      /*setInterval(() => {
+        this.client.liveLb(this.client, g);
+      }, 600000);*/
       if(!g.me.permissions.has("MANAGE_GUILD")) return;
     }); 
 

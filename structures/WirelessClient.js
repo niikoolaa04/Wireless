@@ -46,6 +46,7 @@ module.exports = class WirelessClient extends Client {
     this.setupUtils = require("../utils/setupUtils");
     this.emojisConfig = require("../configs/emojis.js");
     this.gw = require("../managers/giveawaysManager.js");
+    this.liveLb = require("../managers/leaderboardManager.js");
    
     // End Of Files
     // Other //

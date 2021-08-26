@@ -57,7 +57,7 @@ module.exports = class Help extends Command {
       let cmdEmbed = new MessageEmbed()
         .setTitle(`🚀・Help Menu`)
         .setDescription(`Use \`${prefix}help [command]\` to view more informations about command.`)
-        .addField(`${this.client.emojisConfig.members}・Member Commands`, 
+        .addField(`${this.client.emojisConfig.members}・Member`, 
 `View all available Member Commands`)
         .addField(`${this.client.emojisConfig.prize}・Giveaway`, 
 `View all available Giveaway Commands`)
@@ -219,7 +219,7 @@ module.exports = class Help extends Command {
     let cmdEmbed = new MessageEmbed()
       .setTitle(`🚀・Help Menu`)
       .setDescription(`Use \`${prefix}help [command]\` to view more informations about command.`)
-      .addField(`👤・Member Commands`, 
+      .addField(`👤・Member`, 
   `View all available Member Commands`)
       .addField(`🎉・Giveaway`, 
   `View all available Giveaway Commands`)

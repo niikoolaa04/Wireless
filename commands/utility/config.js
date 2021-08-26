@@ -41,7 +41,7 @@ module.exports = class Config extends Command {
         .addField(`💬 - DM Winners (6)`, winners ? `Yes` : 'No')
         .addField(`🔎 - Snipes (7)`, snipes ? `Yes` : 'No')
         .addField(`👋 - Welcome Image (8)`, image ? `Yes` : 'No')
-        .addField(`📞 - Welcome Channel (9)`, wlcmChannel ? `<#${wlcmChannel}>` : 'No Channel')
+        .addField(`📞 - Welcome Channel for Image (9)`, wlcmChannel ? `<#${wlcmChannel}>` : 'No Channel')
         .addField(`🎭 - Role Requirement (10)`, roleReq ? `<@${roleReq}>` : 'No Role')
         .setColor("BLURPLE")
         .setThumbnail(this.client.user.displayAvatarURL())

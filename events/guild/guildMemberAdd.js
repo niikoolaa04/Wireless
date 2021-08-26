@@ -99,8 +99,8 @@ module.exports = class GuildMemberAdd extends Event {
     }
     
     let inviter = null;
-    if (!invite || invite == undefined || invite == null) inviter = "Unknown";
-    else if (vanity == true) inviter = "Vanity URL"
+    if(vanity == false && (!invite || invite == undefined || invite == null)) inviter = "Unknown";
+    else if(vanity == true && (!invite || invite == undefined || invite == null)) inviter = "Vanity URL"
     else inviter = this.client.users.cache.get(invite.inviter.id);
 
     if (inviter != "Unknown" && inviter != "Vanity URL") {
@@ -109,6 +109,7 @@ module.exports = class GuildMemberAdd extends Event {
       if (inviter.id !== member.id) {
         db.add(`invitesRegular_${member.guild.id}_${inviter.id}`, 1);
         db.add(`invitesJoins_${member.guild.id}_${inviter.id}`, 1);
+        this.client.utils.pushHistory(member, inviter, `[ 📥 ] **${member.user.tag}** has **joined** server.`);
       }
     } else {
       db.set(`inviter_${member.guild.id}_${member.id}`, inviter);

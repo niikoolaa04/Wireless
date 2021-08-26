@@ -21,17 +21,15 @@ module.exports = class ResetInvites extends Command {
     else reset = "all";
     
     if(reset == "all") {
-      let leaves = await db.all().filter(data => data.ID.startsWith(`invitesLeaves_${message.guild.id}`));
-      leaves.forEach(d => db.delete(d.ID));
-      let total = await db.all().filter(data => data.ID.startsWith(`invitesTotal_${message.guild.id}`));
-      total.forEach(d => db.delete(d.ID));
-      let regular = await db.all().filter(data => data.ID.startsWith(`invitesRegular_${message.guild.id}`));
-      regular.forEach(d => db.delete(d.ID));
+      let allInv = await db.all().filter(data => data.ID.startsWith(`invitesLeaves_${message.guild.id}`) && data.ID.startsWith(`invitesJoins_${message.guild.id}`) && data.ID.startsWith(`invitesRegular_${message.guild.id}`) && data.ID.startsWith(`invitesBonus_${message.guild.id}`));
+      allInv.forEach(d => db.delete(d.ID));
+      
       message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message, "Invites Reseted", "Invites of all users have been reseted", "YELLOW") ]});
     } else if(reset == "user") {
       db.delete(`invitesLeaves_${message.guild.id}_${user.id}`);
-      db.delete(`invitesTotal_${message.guild.id}_${user.id}`);
+      db.delete(`invitesBonus_${message.guild.id}_${user.id}`);
       db.delete(`invitesRegular_${message.guild.id}_${user.id}`);
+      db.delete(`invitesJoins_${message.guild.id}_${user.id}`);
       message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message, "Invites Reseted", `Invites of user ${user} have been reseted`, "YELLOW") ]});
     }
   }

@@ -32,18 +32,28 @@ module.exports = class Invites extends Command {
     let inviter = this.client.users.cache.get(invitedBy);
     inviter = inviter ? inviter.username : 'Unknown User';
 
-    let every = db.all().filter(i => i.ID.startsWith(`invitesTotal_${message.guild.id}_`)).sort((a, b) => b.data - a.data);
-    let rank = every.map(x => x.ID).indexOf(`invitesTotal_${message.guild.id}_${user.id}`) + 1 || 'N/A';
+    let every = db.all().filter(i => i.ID.startsWith(`invitesRegular_${message.guild.id}_`)).sort((a, b) => b.data - a.data);
+    let rank = every.map(x => x.ID).indexOf(`invitesRegular_${message.guild.id}_${user.id}`) + 1 || 'N/A';
+    
+    let history = db.fetch(`invitesHistory_${message.guild.id}_${user.id}`) || ["No History"];
+    let contentHistory = String();
+    
+    for(const inv of history.slice(0, 5)) {
+      contentHistory += `\n> ${inv}`
+    }
   
     let embed = new Discord.MessageEmbed()
       .setAuthor("Invites Count", this.client.user.displayAvatarURL())
       .setColor("BLURPLE")
-      .setDescription(`> **User** · ${user.username}
+      .setDescription(`> **User:** ${user.username}
 
 > **${regular}** Invites \`(${regular + bonus} total, ${joins} joins, ${left} leaves, ${bonus} bonus)\`
 
 **Leaderboard Rank:** #${rank}
-**Invited by:** ${inviter}`);
+**Invited by:** ${inviter}
+
+🎟️ ・ Invites History
+${contentHistory}`);
   
     message.channel.send({ embeds: [embed] });
   }
@@ -61,14 +71,24 @@ module.exports = class Invites extends Command {
     let every = db.all().filter(i => i.ID.startsWith(`invitesRegular_${interaction.guild.id}_`)).sort((a, b) => b.data - a.data);
     let rank = every.map(x => x.ID).indexOf(`invitesRegular_${interaction.guild.id}_${user.id}`) + 1 || 'N/A';
   
+    let history = db.fetch(`invitesHistory_${message.guild.id}_${user.id}`) || ["No History"];
+    let contentHistory = String();
+    
+    for(const inv of history.slice(0, 5)) {
+      contentHistory += `\n> ${inv}`
+    }
+  
     let embed = new Discord.MessageEmbed()
       .setAuthor("Invites Count", this.client.user.displayAvatarURL())
       .setColor("BLURPLE")
-      .setDescription(`> **User** · ${user.username}
+      .setDescription(`> **User:** ${user.username}
 > **${regular}** Invites \`(${regular + bonus} total, ${joins} joins, ${left} leaves, ${bonus} bonus)\`
 
 **Leaderboard Rank:** #${rank}
-**Invited by:** ${inviter}`);
+**Invited by:** ${inviter}
+
+🎟️ ・ Invites History
+${contentHistory}`);
   
     interaction.followUp({ embeds: [embed] });
   }

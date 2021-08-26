@@ -16,10 +16,9 @@ module.exports = class GuildMemberRemove extends Event {
 
     const inviter = db.fetch(`inviter_${member.guild.id}_${member.id}`);
     if(inviter != member.id && inviter != "Unknown" && inviter != "Vanity URL") {
-      let invUser = member.guild.members.cache.get(inviter);
       db.add(`invitesLeaves_${member.guild.id}_${inviter}`, 1);
       db.subtract(`invitesRegular_${member.guild.id}_${inviter}`, 1);
-      this.client.utils.pushHistory(member, invUser, `[ 📤 ] **${member.user.tag}** has **left** server.`);
+      this.client.utils.pushHistory(member, inviter, `[ 📤 ] **${member.user.tag}** has **left** server.`);
     }
     let invitesChannel = db.fetch(`channel_${member.guild.id}_invites`);
     invitesChannel = this.client.channels.cache.get(invitesChannel);

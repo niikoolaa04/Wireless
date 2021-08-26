@@ -153,10 +153,10 @@ const asyncForEach = async (array, callback) => {
     }
 };
 
-const pushHistory = (message, user, text) => {
-  let history = db.fetch(`transakcije_${message.guild.id}_${user.id}`) || [];
+const pushHistory = (message, userId, text) => {
+  let history = db.fetch(`transakcije_${message.guild.id}_${userId}`) || [];
   history.unshift(text);
-  db.set(`invitesHistory_${message.guild.id}_${user.id}`, history);
+  db.set(`invitesHistory_${message.guild.id}_${userId}`, history);
 }
 
 module.exports = {

@@ -109,7 +109,7 @@ module.exports = class GuildMemberAdd extends Event {
       if (inviter.id !== member.id) {
         db.add(`invitesRegular_${member.guild.id}_${inviter.id}`, 1);
         db.add(`invitesJoins_${member.guild.id}_${inviter.id}`, 1);
-        this.client.utils.pushHistory(member, inviter, `[ 📥 ] **${member.user.tag}** has **joined** server.`);
+        this.client.utils.pushHistory(member, inviter.id, `[ 📥 ] **${member.user.tag}** has **joined** server.`);
       }
     } else {
       db.set(`inviter_${member.guild.id}_${member.id}`, inviter);

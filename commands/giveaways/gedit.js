@@ -23,34 +23,32 @@ module.exports = class GiveawayEdit extends Command {
         name: 'messages',
         type: 'INTEGER',
         description: 'New Number of Messages Required, 0 for none',
-        required: true,
+        required: false,
       },{
         name: 'invites',
         type: 'INTEGER',
         description: 'New Number of Invites Required, 0 for none',
-        required: true,
+        required: false,
       },{
         name: 'winners',
         type: 'INTEGER',
         description: 'New Number of Winners, 0 for none',
-        required: true,
+        required: false,
       },{
         name: 'end',
         type: 'STRING',
         description: "Extra amount of time, 0 for none",
-        required: true,
+        required: false,
       },{
         name: 'prize',
         type: 'STRING',
         description: 'New Prize, 0 for none',
-        required: true,
+        required: false,
       }]
     });
   }
 
   async run(message, args) {
-    if(message.author.id != "823228305167351808") return message.channel.send({ content: "Use slash command" });
-    
     const parsed = this.client.utils.parseArgs(args, ['m:', 'msgs:', 'invs:', 'w:', 'd:', 'p:']);
     
     let messageID = parsed.options.m;
@@ -71,19 +69,24 @@ module.exports = class GiveawayEdit extends Command {
     message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message, "Giveaway", `Giveaway have been edited successfuly.`, "YELLOW")] });
   }
   async slashRun(interaction, args) {
+    if(interaction.user.id != "823228305167351808") return interaction.followUp({ content: "Use regular command" });
+    
     let messageID = parseInt(interaction.options.getString("msgid")) || 0;
     let messagesArg = interaction.options.getInteger("messages");
     let invitesArg = interaction.options.getInteger("invites");
     let winnersArg = interaction.options.getInteger("winners");
     let endArg = interaction.options.getString("end");
     let prizeArg = interaction.options.getString("prize");
+    
+    console.log(invitesArg);
+    console.log(messagesArg);
 
     let giveaways = db.fetch(`giveaways_${interaction.guild.id}`);
     let gwData = giveaways.find(g => g.messageID == messageID && g.ended == false);
     
     if(!gwData) return interaction.followUp({ embeds: [ this.client.embedInteraction(this.client, interaction, "Error", "You have entered invalid Message ID.", "RED")] });
 
-    this.client.gw.editGiveaway(this.client, interaction, messageID, interaction.guild, parseInt(messagesArg), parseInt(invitesArg), parseInt(winnersArg), ms(endArg), prizeArg);
+    this.client.gw.editGiveaway(this.client, interaction, messageID, interaction.guild, parseInt(messagesArg), parseInt(invitesArg), parseInt(winnersArg), endArg, prizeArg);
     interaction.followUp({ embeds: [ this.client.embedInteraction(this.client, interaction, "Giveaway", `Giveaway have been edited successfuly.`, "YELLOW")] });
   }
 };

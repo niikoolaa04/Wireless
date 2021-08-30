@@ -23,27 +23,27 @@ module.exports = class GiveawayEdit extends Command {
         name: 'messages',
         type: 'INTEGER',
         description: 'New Number of Messages Required, 0 for none',
-        required: false,
+        required: true,
       },{
         name: 'invites',
         type: 'INTEGER',
         description: 'New Number of Invites Required, 0 for none',
-        required: false,
+        required: true,
       },{
         name: 'winners',
         type: 'INTEGER',
         description: 'New Number of Winners, 0 for none',
-        required: false,
+        required: true,
       },{
         name: 'end',
         type: 'STRING',
         description: "Extra amount of time, 0 for none",
-        required: false,
+        required: true,
       },{
         name: 'prize',
         type: 'STRING',
         description: 'New Prize, 0 for none',
-        required: false,
+        required: true,
       }]
     });
   }
@@ -69,17 +69,12 @@ module.exports = class GiveawayEdit extends Command {
     message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message, "Giveaway", `Giveaway have been edited successfuly.`, "YELLOW")] });
   }
   async slashRun(interaction, args) {
-    if(interaction.user.id != "823228305167351808") return interaction.followUp({ content: "Use regular command" });
-    
     let messageID = parseInt(interaction.options.getString("msgid")) || 0;
-    let messagesArg = interaction.options.getInteger("messages") || 0;
-    let invitesArg = interaction.options.getInteger("invites") || 0;
-    let winnersArg = interaction.options.getInteger("winners") || 0;
-    let endArg = interaction.options.getString("end") || 0;
-    let prizeArg = interaction.options.getString("prize") || 0;
-    
-    console.log(invitesArg);
-    console.log(messagesArg);
+    let messagesArg = interaction.options.getInteger("messages");
+    let invitesArg = interaction.options.getInteger("invites");
+    let winnersArg = interaction.options.getInteger("winners");
+    let endArg = interaction.options.getString("end");
+    let prizeArg = interaction.options.getString("prize");
 
     let giveaways = db.fetch(`giveaways_${interaction.guild.id}`);
     let gwData = giveaways.find(g => g.messageID == messageID && g.ended == false);

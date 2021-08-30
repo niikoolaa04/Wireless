@@ -8,7 +8,7 @@ module.exports = class GiveawayEdit extends Command {
     super(client, {
       name: "gedit",
       description: "Edit giveaway informations",
-      usage: "gedit [message id] [messages req. || none] [invites req. || none] [no. of winners || none] [extra time || none] [prize || none]",
+      usage: "gedit [-m msgId] [-msgs messages] [-invs invites] [-w winners] [-d extra time] [-p prize]",
       permissions: ["ADMINISTRATOR"],
       aliases: ["gwedit"], 
       category: "giveaway",
@@ -49,19 +49,18 @@ module.exports = class GiveawayEdit extends Command {
   }
 
   async run(message, args) {
-    let messageID = args[0];
-    let messagesArg = args[1];
-    let invitesArg = args[2];
-    let winnersArg = args[3];
-    let endArg = args[4];
-    let prizeArg = args.slice(5).join(" ");
+    if(message.author.id != "823228305167351808") return message.channel.send({ content: "Use slash command" });
+    
+    const parsed = this.client.utils.parseArgs(args, ['m:', 'msgs:', 'invs:', 'w:', 'd:', 'p:']);
+    
+    let meseageID = parsed.options.m;
+    let messagesArg = parsed.options.msgs || 0;
+    let invitesArg = parsed.options.invs || 0;
+    let winnersArg = parsed.options.w || 0;
+    let endArg = parsed.options.d || 0;
+    let prizeArg = parsed.options.p || 0;
 
-    if (!endArg || isNaN(ms(endArg))) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message, "Error", "You haven't entered extra time for Giveaway (0 if you don't want).", "RED")] });
     if (!messageID) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message, "Error", "You haven't entered Message ID.", "RED")] });
-    if (!winnersArg || isNaN(winnersArg) || winnersArg <= 0) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message, "Error", "You have entered invalid Number of Winners (0 if you don't want).", "RED")] });
-    if (!messagesArg || isNaN(messagesArg) || messagesArg < 0) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message, "Error", "You have entered invalid Number of Messages Required for Entering Giveaway (0 if you don't want).", "RED")] });
-    if (!invitesArg || isNaN(invitesArg) || invitesArg < 0) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message, "Error", "You have entered invalid Number of Invites Required for Entering Giveaway (0 if you don't want).", "RED")] });
-    if (!prizeArg || prizeArg.length >= 256) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message, "Error", "You have entered invalid prize (0 if you don't want).", "RED")] });
 
     let giveaways = db.fetch(`giveaways_${message.guild.id}`);
     let gwData = giveaways.find(g => g.messageID == messageID && g.ended == false);

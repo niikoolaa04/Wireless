@@ -159,6 +159,49 @@ const pushHistory = (message, userId, text) => {
   db.set(`invitesHistory_${message.guild.id}_${userId}`, history);
 }
 
+const parseArgs = (args, options) => {
+  if (!options) {
+    return args
+  }
+
+  if (typeof options === 'string') {
+    options = [options]
+  }
+
+  const optionValues = {}
+
+  let i
+  for (i = 0; i < args.length; i++) {
+    const arg = args[i]
+    if (!arg.startsWith('-')) {
+      break
+    }
+
+    const label = arg.substr(1)
+
+    if (options.indexOf(label + ':') > -1) {
+      const leftover = args.slice(i + 1).join(' ')
+      const matches = leftover.match(/^"(.+?)"/)
+      if (matches) {
+        optionValues[label] = matches[1]
+        i += matches[0].split(' ').length
+      } else {
+        i++
+        optionValues[label] = args[i]
+      }
+    } else if (options.indexOf(label) > -1) {
+      optionValues[label] = true
+    } else {
+      break
+    }
+  }
+
+  return {
+    options: optionValues,
+    leftover: args.slice(i)
+  }
+}
+
 module.exports = {
   giveawayObject, 
   commandsList, 
@@ -171,4 +214,5 @@ module.exports = {
   inviteToJson, 
   asyncForEach, 
   pushHistory, 
+  parseArgs, 
 }

@@ -53,7 +53,7 @@ module.exports = class GiveawayEdit extends Command {
     
     const parsed = this.client.utils.parseArgs(args, ['m:', 'msgs:', 'invs:', 'w:', 'd:', 'p:']);
     
-    let meseageID = parsed.options.m;
+    let messageID = parsed.options.m;
     let messagesArg = parsed.options.msgs || 0;
     let invitesArg = parsed.options.invs || 0;
     let winnersArg = parsed.options.w || 0;
@@ -67,7 +67,7 @@ module.exports = class GiveawayEdit extends Command {
     
     if(!gwData) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message, "Error", "You have entered invalid Message ID.", "RED")] });
 
-    this.client.gw.editGiveaway(this.client, message, messageID, message.guild, parseInt(messagesArg), parseInt(invitesArg), parseInt(winnersArg), ms(endArg), prizeArg);
+    this.client.gw.editGiveaway(this.client, message, messageID, message.guild, parseInt(messagesArg), parseInt(invitesArg), parseInt(winnersArg), endArg, prizeArg);
     message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message, "Giveaway", `Giveaway have been edited successfuly.`, "YELLOW")] });
   }
   async slashRun(interaction, args) {

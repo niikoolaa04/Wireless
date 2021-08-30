@@ -72,11 +72,11 @@ module.exports = class GiveawayEdit extends Command {
     if(interaction.user.id != "823228305167351808") return interaction.followUp({ content: "Use regular command" });
     
     let messageID = parseInt(interaction.options.getString("msgid")) || 0;
-    let messagesArg = interaction.options.getInteger("messages");
-    let invitesArg = interaction.options.getInteger("invites");
-    let winnersArg = interaction.options.getInteger("winners");
-    let endArg = interaction.options.getString("end");
-    let prizeArg = interaction.options.getString("prize");
+    let messagesArg = interaction.options.getInteger("messages") || 0;
+    let invitesArg = interaction.options.getInteger("invites") || 0;
+    let winnersArg = interaction.options.getInteger("winners") || 0;
+    let endArg = interaction.options.getString("end") || 0;
+    let prizeArg = interaction.options.getString("prize") || 0;
     
     console.log(invitesArg);
     console.log(messagesArg);

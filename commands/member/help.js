@@ -1,5 +1,5 @@
 const Command = require("../../structures/Command");
-const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
+const { MessageEmbed, MessageActionRow, MessageSelectMenu } = require('discord.js');
 const db = require("quick.db");
 
 module.exports = class Help extends Command {
@@ -19,30 +19,6 @@ module.exports = class Help extends Command {
     if (prefix === null) prefix = this.client.config.prefix;
     let user = message.author;
     let commandArg = args[0];
-
-    /*const helpRow = new MessageActionRow()
-			.addComponents(
-			  new MessageButton()
-          .setCustomId("home")
-          .setEmoji("⭐")
-					.setLabel('Main Menu')
-					.setStyle('PRIMARY'), 
-				new MessageButton()
-          .setCustomId("members")
-          .setEmoji("👤")
-					.setLabel('Members')
-					.setStyle('PRIMARY'),
-        new MessageButton()
-          .setCustomId("giveaway")
-          .setEmoji("🎉")
-					.setLabel('Giveaway')
-					.setStyle('PRIMARY'),
-        new MessageButton()
-          .setCustomId("utility")
-          .setEmoji("🔎")
-					.setLabel('Utility')
-					.setStyle('PRIMARY'),
-			); */
 
     const helpRow = new MessageActionRow()
 	    .addComponents(
@@ -205,31 +181,7 @@ module.exports = class Help extends Command {
   async slashRun(interaction, args) {
     let prefix = await db.fetch(`settings_${interaction.guild.id}_prefix`);
     if (prefix === null) prefix = this.client.config.prefix;
-    
-    /*const helpRow = new MessageActionRow()
-			.addComponents(
-			  new MessageButton()
-			    .setCustomId("home")
-			    .setEmoji("⭐")
-			    .setLabel('Main Menu')
-			    .setStyle('PRIMARY'),
-				new MessageButton()
-          .setCustomId("members")
-          .setEmoji("👤")
-					.setLabel('Members')
-					.setStyle('PRIMARY'),
-        new MessageButton()
-          .setCustomId("giveaway")
-          .setEmoji("🎉")
-					.setLabel('Giveaway')
-					.setStyle('PRIMARY'),
-        new MessageButton()
-          .setCustomId("utility")
-          .setEmoji("🔎")
-					.setLabel('Utility')
-					.setStyle('PRIMARY'),
-			); */
-			
+
 	  const helpRow = new MessageActionRow()
 	    .addComponents(
 	      new MessageSelectMenu()

@@ -22,7 +22,7 @@ module.exports = class Poll extends Command {
 
   async run(message, args) {
     if(!args[0]) return message.channel.send(
-      { embeds: [ this.client.embedBuilder(this.client, message, "Error", "You haven't entered what will poll be about.", "RED" ) ] }
+      { embeds: [ this.client.embedBuilder(this.client, message.author, "Error", "You haven't entered what will poll be about.", "RED" ) ] }
     );
     let poll = args.join(" ");
     let embed = new Discord.MessageEmbed()

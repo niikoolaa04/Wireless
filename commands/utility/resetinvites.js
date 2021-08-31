@@ -24,13 +24,13 @@ module.exports = class ResetInvites extends Command {
       let allInv = await db.all().filter(data => data.ID.startsWith(`invitesLeaves_${message.guild.id}`) && data.ID.startsWith(`invitesJoins_${message.guild.id}`) && data.ID.startsWith(`invitesRegular_${message.guild.id}`) && data.ID.startsWith(`invitesBonus_${message.guild.id}`));
       allInv.forEach(d => db.delete(d.ID));
       
-      message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message, "Invites Reseted", "Invites of all users have been reseted", "YELLOW") ]});
+      message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, "Invites Reseted", "Invites of all users have been reseted", "YELLOW") ]});
     } else if(reset == "user") {
       db.delete(`invitesLeaves_${message.guild.id}_${user.id}`);
       db.delete(`invitesBonus_${message.guild.id}_${user.id}`);
       db.delete(`invitesRegular_${message.guild.id}_${user.id}`);
       db.delete(`invitesJoins_${message.guild.id}_${user.id}`);
-      message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message, "Invites Reseted", `Invites of user ${user} have been reseted`, "YELLOW") ]});
+      message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, "Invites Reseted", `Invites of user ${user} have been reseted`, "YELLOW") ]});
     }
   }
 };

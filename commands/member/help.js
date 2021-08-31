@@ -20,7 +20,7 @@ module.exports = class Help extends Command {
     let user = message.author;
     let commandArg = args[0];
 
-    const helpRow = new MessageActionRow()
+    /*const helpRow = new MessageActionRow()
 			.addComponents(
 			  new MessageButton()
           .setCustomId("home")
@@ -42,7 +42,32 @@ module.exports = class Help extends Command {
           .setEmoji("🔎")
 					.setLabel('Utility')
 					.setStyle('PRIMARY'),
-			); 
+			); */
+
+    const helpRow = new MessageActionRow()
+	    .addComponents(
+	      new MessageSelectMenu()
+	        .setCustomId("help")
+	        .setPlaceholder("Select Category to view it's commands.")
+	        .addOptions([{
+              label: "Main Menu",
+              value: "home_menu", 
+              emoji: "⭐"
+            },{
+              label: 'Member Commands',
+              value: 'member_menu', 
+              emoji: "👤"
+            },{
+              label: 'Giveaway Commands',
+              value: 'gw_menu',
+              emoji: "🎉"
+            },{
+              label: 'Utility Commands',
+              value: 'utility_menu',
+              emoji: "🔎"
+            },
+          ]),
+	    );
 
     if(!commandArg) {
       let commandsArray = this.client.commands.filter(
@@ -77,11 +102,11 @@ module.exports = class Help extends Command {
         .setFooter(`Total Commands ${loadedCommands.length}`, message.author.displayAvatarURL({ size: 1024, dynamic: true }));
       let mainMenu = await message.channel.send({ embeds: [cmdEmbed], components: [helpRow] });
 
-      let filter = m => m.user.id === message.author.id;
-      const collector = message.channel.createMessageComponentCollector({ filter, time: 300000, errors: ["time"] });
+      let filter = (i) => i.customId == "help" && i.user.id == message.author.id;
+      const collector = message.channel.createMessageComponentCollector({ filter, time: 300000 });
 
       collector.on("collect", async i => {
-        if(i.customId == "members") {
+        if(i.values[0] == "member_menu") {
           await i.deferUpdate();
           let memberEmbed = new MessageEmbed()
             .setTitle("👤・Member Commands")
@@ -93,7 +118,7 @@ module.exports = class Help extends Command {
             .setThumbnail(user.displayAvatarURL({ size: 1024, dynamic: true }))
             .setFooter(`Total Commands ${loadedCommands.length}`, message.author.displayAvatarURL({ size: 1024, dynamic: true }));
           mainMenu.edit({ embeds: [memberEmbed], components: [helpRow] });
-        } else if(i.customId == "giveaway") {
+        } else if(i.values[0] == "gw_menu") {
           await i.deferUpdate();
           let gwEmbed = new MessageEmbed()
             .setTitle("🎁・Giveaway Commands")
@@ -105,7 +130,7 @@ module.exports = class Help extends Command {
             .setThumbnail(user.displayAvatarURL({ size: 1024, dynamic: true }))
             .setFooter(`Total Commands ${loadedCommands.length}`, message.author.displayAvatarURL({ size: 1024, dynamic: true }));
           mainMenu.edit({ embeds: [gwEmbed], components: [helpRow] });
-        } else if(i.customId == "utility") {
+        } else if(i.values[0] == "utility_menu") {
           await i.deferUpdate();
           let utilityEmbed = new MessageEmbed()
             .setTitle("🛠・Utility Commands")
@@ -117,7 +142,7 @@ module.exports = class Help extends Command {
             .setThumbnail(user.displayAvatarURL({ size: 1024, dynamic: true }))
             .setFooter(`Total Commands ${loadedCommands.length}`, message.author.displayAvatarURL({ size: 1024, dynamic: true }));
           mainMenu.edit({ embeds: [utilityEmbed], components: [helpRow] });
-        } else if(i.customId == "home") {
+        } else if(i.values[0] == "home_menu") {
             await i.deferUpdate();
             mainMenu.edit({ embeds: [cmdEmbed], components: [helpRow] })
         }
@@ -126,43 +151,40 @@ module.exports = class Help extends Command {
       collector.on("end", async (m, reason) => {
         if(reason != "time") return;
         const disabledRow = new MessageActionRow()
-          .addComponents(
-            new MessageButton()
-              .setCustomId("home")
-              .setEmoji("⭐")
-              .setLabel('Main Menu')
-              .setDisabled(true)
-              .setStyle('SECONDARY'),
-            new MessageButton()
-              .setCustomId("members")
-              .setEmoji("👤")
-              .setLabel('Members')
-              .setDisabled(true)
-              .setStyle('SECONDARY'),
-            new MessageButton()
-              .setCustomId("giveaway")
-              .setEmoji("🎉")
-              .setLabel('Giveaway')
-              .setDisabled(true)
-              .setStyle('SECONDARY'),
-            new MessageButton()
-              .setCustomId("utility")
-              .setEmoji("🔎")
-              .setLabel('Utility')
-              .setDisabled(true)
-              .setStyle('SECONDARY'),
-          ); 
+    	    .addComponents(
+    	      new MessageSelectMenu()
+    	        .setCustomId("help")
+    	        .setPlaceholder("Select Category to view it's commands.")
+    	        .addOptions([{
+                  label: "Main Menu",
+                  value: "home_menu", 
+                  emoji: "⭐"
+                },{
+                  label: 'Member',
+                  value: 'member_menu', 
+                  emoji: "👤"
+                },{
+                  label: 'Giveaway',
+                  value: 'gw_menu',
+                  emoji: "🎉"
+                },{
+                  label: 'Utility',
+                  value: 'utility_menu',
+                  emoji: "🔎"
+                },
+              ]),
+    	    );
         
         mainMenu.edit({ embeds: [cmdEmbed], components: [disabledRow]});
       });
     } else {
       let cmd = this.client.commands.get(commandArg);
-      if (!cmd) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message, `Error`
+      if (!cmd) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, `Error`
         , `You have entered invalid command/category.`, "RED") ]});
       if (
         cmd.category === "dev" &&
         message.author.id !== this.client.config.developer.id
-      ) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message, `Error`
+      ) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, `Error`
         , `You have entered command/category which doesn't exist.`, "RED") ]});
   
       let embed = new MessageEmbed()
@@ -183,7 +205,7 @@ module.exports = class Help extends Command {
     let prefix = await db.fetch(`settings_${interaction.guild.id}_prefix`);
     if (prefix === null) prefix = this.client.config.prefix;
     
-    const helpRow = new MessageActionRow()
+    /*const helpRow = new MessageActionRow()
 			.addComponents(
 			  new MessageButton()
 			    .setCustomId("home")
@@ -205,7 +227,32 @@ module.exports = class Help extends Command {
           .setEmoji("🔎")
 					.setLabel('Utility')
 					.setStyle('PRIMARY'),
-			); 
+			); */
+			
+	  const helpRow = new MessageActionRow()
+	    .addComponents(
+	      new MessageSelectMenu()
+	        .setCustomId("help")
+	        .setPlaceholder("Select Category to view it's commands.")
+	        .addOptions([{
+              label: "Main Menu",
+              value: "home_menu", 
+              emoji: "⭐"
+            },{
+              label: 'Member Commands',
+              value: 'member_menu', 
+              emoji: "👤"
+            },{
+              label: 'Giveaway Commands',
+              value: 'gw_menu',
+              emoji: "🎉"
+            },{
+              label: 'Utility Commands',
+              value: 'utility_menu',
+              emoji: "🔎"
+            },
+          ]),
+	    );
 
     let commandsArray = this.client.commands.filter(
       c => c.listed === true
@@ -239,11 +286,11 @@ module.exports = class Help extends Command {
       .setFooter(`Total Commands ${loadedCommands.length}`, interaction.user.displayAvatarURL({ size: 1024, dynamic: true }));
     interaction.followUp({ embeds: [cmdEmbed], components: [helpRow] });
 
-    let filter = m => m.user.id === interaction.user.id;
+    let filter = i => i.customId == "help" && i.user.id === interaction.user.id;
     const collector = interaction.channel.createMessageComponentCollector({ filter, componentType: 'BUTTON', time: 300000, errors: ["time"] });
 
     collector.on("collect", async i => {
-      if(i.customId == "members") {
+      if(i.values[0] == "member_menu") {
         let memberEmbed = new MessageEmbed()
           .setTitle("👤・Member Commands")
           .setDescription(`Use \`${prefix}help [command]\` to view more informations about command.`)
@@ -254,7 +301,7 @@ module.exports = class Help extends Command {
           .setThumbnail(interaction.user.displayAvatarURL({ size: 1024, dynamic: true }))
           .setFooter(`Total Commands ${loadedCommands.length}`, interaction.user.displayAvatarURL({ size: 1024, dynamic: true }));
         i.update({ embeds: [memberEmbed], components: [helpRow] });
-      } else if(i.customId == "giveaway") {
+      } else if(i.values[0] == "gw_menu") {
         let gwEmbed = new MessageEmbed()
           .setTitle("🎁・Giveaway Commands")
           .setDescription(`Use \`${prefix}help [command]\` to view more informations about command.`)
@@ -265,7 +312,7 @@ module.exports = class Help extends Command {
           .setThumbnail(interaction.user.displayAvatarURL({ size: 1024, dynamic: true }))
           .setFooter(`Total Commands ${loadedCommands.length}`, interaction.user.displayAvatarURL({ size: 1024, dynamic: true }));
         i.update({ embeds: [gwEmbed], components: [helpRow] });
-      } else if(i.customId == "utility") {
+      } else if(i.values[0] == "utility_menu") {
         let utilityEmbed = new MessageEmbed()
           .setTitle("🔎・Utility Commands")
           .setDescription(`Use \`${prefix}help [command]\` to view more informations about command.`)
@@ -276,7 +323,7 @@ module.exports = class Help extends Command {
           .setThumbnail(interaction.user.displayAvatarURL({ size: 1024, dynamic: true }))
           .setFooter(`Total Commands ${loadedCommands.length}`, interaction.user.displayAvatarURL({ size: 1024, dynamic: true }));
         i.update({ embeds: [utilityEmbed], components: [helpRow] });
-      } else if(i.customId == "home") {
+      } else if(i.values[0] == "home_menu") {
         i.update({ embeds: [cmdEmbed], components: [helpRow] })
       }
     });
@@ -284,32 +331,29 @@ module.exports = class Help extends Command {
     collector.on("end", async (m, reason) => {
       if(reason != "time") return;
       const disabledRow = new MessageActionRow()
-        .addComponents(
-          new MessageButton()
-            .setCustomId("home")
-            .setEmoji("⭐")
-            .setLabel('Main Menu')
-            .setDisabled(true)
-            .setStyle('SECONDARY'),
-          new MessageButton()
-            .setCustomId("members")
-            .setEmoji("👤")
-            .setLabel('Members')
-            .setDisabled(true)
-            .setStyle('SECONDARY'),
-          new MessageButton()
-            .setCustomId("giveaway")
-            .setEmoji("🎉")
-            .setLabel('Giveaway')
-            .setDisabled(true)
-            .setStyle('SECONDARY'),
-          new MessageButton()
-            .setCustomId("utility")
-            .setEmoji("🔎")
-            .setLabel('Utility')
-            .setDisabled(true)
-            .setStyle('SECONDARY'),
-        ); 
+  	    .addComponents(
+  	      new MessageSelectMenu()
+  	        .setCustomId("help")
+  	        .setPlaceholder("Select Category to view it's commands.")
+  	        .addOptions([{
+                label: "Main Menu",
+                value: "home_menu", 
+                emoji: "⭐"
+              },{
+                label: 'Member',
+                value: 'member_menu', 
+                emoji: "👤"
+              },{
+                label: 'Giveaway',
+                value: 'gw_menu',
+                emoji: "🎉"
+              },{
+                label: 'Utility',
+                value: 'utility_menu',
+                emoji: "🔎"
+              },
+            ]),
+  	    );
       
       interaction.editReply({ embeds: [cmdEmbed], components: [disabledRow]});
     });

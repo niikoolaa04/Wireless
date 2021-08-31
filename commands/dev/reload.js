@@ -21,7 +21,7 @@ module.exports = class Reload extends Command {
     if(!allowedToUse) return;
     let category = args[0];
     let cmd = args[1]
-    if(!category || !cmd || !this.client.commands.has(cmd)) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message, 
+    if(!category || !cmd || !this.client.commands.has(cmd)) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, 
         `Error`, "You haven't entered Category/Command.", "RED")] });
         
     delete require.cache[require.resolve(`../${category}/${cmd}.js`)];
@@ -31,6 +31,6 @@ module.exports = class Reload extends Command {
     
     this.client.commands.set(command.name.toLowerCase(), command);
 
-    message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message, `Reload`, "Command have been reloaded successfully.", "YELLOW")] });
+    message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, `Reload`, "Command have been reloaded successfully.", "YELLOW")] });
   }
 };

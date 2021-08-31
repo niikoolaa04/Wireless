@@ -24,9 +24,9 @@ module.exports = class Prefix extends Command {
   async run(message, args) {
     let prefix = args[0];
     let real = db.fetch(`settings_${message.guild.id}_prefix`);
-    if (!prefix) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message, 
+    if (!prefix) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, 
       `Error`, "You haven't entered prefix.", "RED") ]});
-    if (prefix === real) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message, 
+    if (prefix === real) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, 
         `Error`, "New Prefix cannot be same as old one.", "RED") ]});
     db.set(`settings_${message.guild.id}_prefix`, prefix);
   
@@ -40,7 +40,7 @@ module.exports = class Prefix extends Command {
   async slashRun(interaction, args) {
     let prefix = interaction.options.getString("prefix");
     let real = db.fetch(`settings_${interaction.guild.id}_prefix`);
-    if (prefix === real) return interaction.followUp({ embeds: [ this.client.embedInteraction(this.client, interaction, 
+    if (prefix === real) return interaction.followUp({ embeds: [ this.client.embedBuilder(this.client, interaction.user, 
         `Error`, "New Prefix cannot be same as old one.", "RED") ]});
     db.set(`settings_${interaction.guild.id}_prefix`, prefix);
   

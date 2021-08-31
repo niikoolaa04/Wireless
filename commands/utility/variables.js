@@ -16,7 +16,7 @@ module.exports = class Variables extends Command {
   }
 
   async run(message, args) {
-    message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message, "Variables", `You can use this Variables in Join \`(joinmessage)\` & Leave \`(leavemessage)\` Messages.
+    message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, "Variables", `You can use this Variables in Join \`(joinmessage)\` & Leave \`(leavemessage)\` Messages.
     
 **VARIABLES**
 
@@ -33,7 +33,7 @@ module.exports = class Variables extends Command {
 \`{totalInvites}\` - Regular + Bonus Invites`, "BLURPLE") ]});
   }
   async slashRun(interaction, args) {
-    interaction.followUp({ embeds: [ this.client.embedInteraction(this.client, interaction, "Variables", `You can use this Variables in Join \`(joinmessage)\` & Leave \`(leavemessage)\` Messages.
+    interaction.followUp({ embeds: [ this.client.embedBuilder(this.client, interaction.user, "Variables", `You can use this Variables in Join \`(joinmessage)\` & Leave \`(leavemessage)\` Messages.
     
 **VARIABLES**
 

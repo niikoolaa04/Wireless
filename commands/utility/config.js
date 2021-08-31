@@ -144,15 +144,15 @@ module.exports = class Config extends Command {
       let gwRole = db.fetch(`server_${message.guild.id}_bypassRole`);
        
       if(!gwRole) {
-        if (!role) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message,
+        if (!role) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author,
           `Error`, "You haven't mentioned role.", "RED") ]});
         
         db.set(`server_${message.guild.id}_bypassRole`, role.id);
-        message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message,
+        message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author,
           `Config`, `Giveaway Requirements Bypass Role have been successfully changed to \`${role}\`.`, "YELLOW") ]});
       } else {
         db.delete(`server_${message.guild.id}_bypassRole`);
-        message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message,
+        message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author,
         `Config`, "You have successfully reseted Bypass Role.", "RED") ]});
       }
     }
@@ -161,15 +161,15 @@ module.exports = class Config extends Command {
       let gwRole = db.fetch(`server_${message.guild.id}_blacklistRole`);
 
       if(!gwRole) {
-        if (!role) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message,
+        if (!role) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author,
           `Error`, "You haven't mentioned role.", "RED") ]});
     
         db.set(`server_${message.guild.id}_blacklistRole`, role.id);
-        message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message,
+        message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author,
           `Config`, `Giveaway Requirements Blacklist Role have been successfully changed to \`${role}\`.`, "YELLOW") ]});
       } else {
         db.delete(`server_${message.guild.id}_blacklistRole`);
-        message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message,
+        message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author,
           `Config`, "You have successfully reseted Blacklist Role.", "RED") ]});
       }
     }
@@ -177,29 +177,29 @@ module.exports = class Config extends Command {
       let channel = message.mentions.channels.first();
       if (!channel) {
         db.delete(`channel_${message.guild.id}_invites`);
-        message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message,
+        message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author,
           `Config`, `Invites Channel have been rested.`, "RED") ]});
       }
       if (channel) {
         db.set(`channel_${message.guild.id}_invites`, channel.id);
-        message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message,
+        message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author,
           `Config`, `Invites Channel has been set to ${channel}.
 To reset it just use command without arguments.`, "YELLOW") ]});
       }
     }
     if(option == 4) {
       if(!args[1]) return message.channel.send(
-        { embeds: [this.client.embedBuilder(this.client, message, "Error", "You need to enter join message or in order to clear it just type 'none'", "RED") ]}
+        { embeds: [this.client.embedBuilder(this.client, message.author, "Error", "You need to enter join message or in order to clear it just type 'none'", "RED") ]}
       );
       if (args[1].toLowerCase() == "none") {
         db.delete(`server_${message.guild.id}_joinMessage`);
-        message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message,
+        message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author,
           `Config`, "Join Message have been reseted.", "RED") ]});
       }
       if (args[1] && args[1].toLowerCase() != "none") {
         let content = args.slice(1).join(" ");
         db.set(`server_${message.guild.id}_joinMessage`, content);
-        message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message,
+        message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author,
           `Config`, `You have Changed Message which is sent to invites logging channel when member joins server.
 To clear Message just use "none".
 Use \`variables\` Command to view all available Variables.`, "YELLOW") ]});
@@ -207,17 +207,17 @@ Use \`variables\` Command to view all available Variables.`, "YELLOW") ]});
     }
     if(option == 5) {
       if(!args[1]) return message.channel.send(
-        { embeds: [this.client.embedBuilder(this.client, message, "Error", "You need to enter leave message or in order to clear it just type 'none'", "RED")] }
+        { embeds: [this.client.embedBuilder(this.client, message.author, "Error", "You need to enter leave message or in order to clear it just type 'none'", "RED")] }
       );
       if (args[1].toLowerCase() == "none") {
         db.delete(`server_${message.guild.id}_leaveMessage`);
-        message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message,
+        message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author,
           `Config`, "Leave Message have been reseted.", "RED") ]});
       }
       if (args[1] && args[1].toLowerCase() != "none") {
         let content = args.slice(1).join(" ");
         db.set(`server_${message.guild.id}_leaveMessage`, content);
-        message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message,
+        message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author,
           `Config`, `You have Changed Message which is sent to invites logging channel when member leave server.
 To clear Message just use "none".
 Use \`variables\` Command to view all available Variables.`, "YELLOW") ]});
@@ -227,11 +227,11 @@ Use \`variables\` Command to view all available Variables.`, "YELLOW") ]});
       let dm = db.fetch(`server_${message.guild.id}_dmWinners`);
       if(dm == null) {
         db.set(`server_${message.guild.id}_dmWinners`, true);
-        message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message,
+        message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author,
           `Config`, "You have Enabled DM Winners Option.", "YELLOW") ]});
       } else {
         db.delete(`server_${message.guild.id}_dmWinners`);
-        message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message,
+        message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author,
           `Config`, "You have Disabled DM Winners Option.", "RED") ]});
       }
     }
@@ -239,12 +239,12 @@ Use \`variables\` Command to view all available Variables.`, "YELLOW") ]});
       let snStatus = db.fetch(`server_${message.guild.id}_snipes`);
       if(snStatus == null) {
         db.set(`server_${message.guild.id}_snipes`, true);
-        message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message,
+        message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author,
           `Config`, "You have Enabled Snipes Option.", "YELLOW") ]});
       } else {
         db.delete(`server_${message.guild.id}_snipes`);
         db.delete(`snipes_${message.guild.id}`);
-        message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message,
+        message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author,
           `Config`, "You have Disabled Snipes Option.", "RED") ]});
       }
     }
@@ -252,11 +252,11 @@ Use \`variables\` Command to view all available Variables.`, "YELLOW") ]});
       let img = db.fetch(`server_${message.guild.id}_welcomeImg`);
       if(img == null) {
         db.set(`server_${message.guild.id}_welcomeImg`, true);
-        message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message,
+        message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author,
           `Config`, "You have Enabled Welcome Image Option.", "YELLOW") ]});
       } else {
         db.delete(`server_${message.guild.id}_welcomeImg`);
-        message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message,
+        message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author,
           `Config`, "You have Disabled Welcome Image Option.", "RED") ]});
       }
     }
@@ -264,12 +264,12 @@ Use \`variables\` Command to view all available Variables.`, "YELLOW") ]});
       let channel = message.mentions.channels.first();
       if (!channel) {
         db.delete(`channel_${message.guild.id}_welcome`);
-        message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message,
+        message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author,
           `Config`, `Welcome Channel have been rested.`, "RED") ]});
       }
       if (channel) {
         db.set(`channel_${message.guild.id}_welcome`, channel.id);
-        message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message,
+        message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author,
           `Config`, `Welcome Channel has been set to ${channel}.
 To reset it just use command without arguments.`, "YELLOW") ]});
       }
@@ -278,12 +278,12 @@ To reset it just use command without arguments.`, "YELLOW") ]});
       let role = message.mentions.roles.first();
       if (!role) {
         db.delete(`server_${message.guild.id}_roleReq`);
-        message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message,
+        message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author,
           `Config`, `Role Requirement have been rested.`, "RED") ]});
       }
       if (role) {
         db.set(`server_${message.guild.id}_roleReq`, role.id);
-        message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message,
+        message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author,
           `Config`, `Role Requirement has been set to ${role}.
 To reset it just use command without arguments.`, "YELLOW") ]});
       }
@@ -332,15 +332,15 @@ To reset it just use command without arguments.`, "YELLOW") ]});
       let role = interaction.guild.roles.cache.get(value); 
        
       if(!gwRole) {
-        if (!value) return interaction.followUp({ embeds: [ this.client.embedInteraction(this.client, interaction,
+        if (!value) return interaction.followUp({ embeds: [ this.client.embedBuilder(this.client, interaction.user,
           `Error`, "You haven't mentioned role.", "RED") ]});
           
         db.set(`server_${interaction.guild.id}_bypassRole`, role.id);
-        interaction.followUp({ embeds: [ this.client.embedInteraction(this.client, interaction,
+        interaction.followUp({ embeds: [ this.client.embedBuilder(this.client, interaction.user,
           `Config`, `Giveaway Requirements Bypass Role have been successfully changed to \`${role}\`.`, "YELLOW") ]});
       } else {
         db.delete(`server_${interaction.guild.id}_bypassRole`);
-        interaction.followUp({ embeds: [ this.client.embedInteraction(this.client, interaction,
+        interaction.followUp({ embeds: [ this.client.embedBuilder(this.client, interaction.user,
         `Config`, "You have successfully reseted Bypass Role.", "RED") ]});
       }
     }
@@ -349,15 +349,15 @@ To reset it just use command without arguments.`, "YELLOW") ]});
       let gwRole = db.fetch(`server_${interaction.guild.id}_blacklistRole`);
 
       if(!gwRole) {
-        if (!value) return interaction.followUp({ embeds: [ this.client.embedInteraction(this.client, interaction,
+        if (!value) return interaction.followUp({ embeds: [ this.client.embedBuilder(this.client, interaction.user,
           `Error`, "You haven't mentioned role.", "RED") ]});
     
         db.set(`server_${interaction.guild.id}_blacklistRole`, role.id);
-        interaction.followUp({ embeds: [ this.client.embedInteraction(this.client, interaction,
+        interaction.followUp({ embeds: [ this.client.embedBuilder(this.client, interaction.user,
           `Config`, `Giveaway Requirements Blacklist Role have been successfully changed to \`${role}\`.`, "YELLOW") ]});
       } else {
         db.delete(`server_${interaction.guild.id}_blacklistRole`);
-        interaction.followUp({ embeds: [ this.client.embedInteraction(this.client, interaction,
+        interaction.followUp({ embeds: [ this.client.embedBuilder(this.client, interaction.user,
           `Config`, "You have successfully reseted Blacklist Role.", "RED") ]});
       }
     }
@@ -365,28 +365,28 @@ To reset it just use command without arguments.`, "YELLOW") ]});
       let channel = interaction.guild.channels.cache.get(value);
       if (!value) {
         db.delete(`channel_${interaction.guild.id}_invites`);
-        interaction.followUp({ embeds: [ this.client.embedInteraction(this.client, interaction,
+        interaction.followUp({ embeds: [ this.client.embedBuilder(this.client, interaction.user,
           `Config`, `Invites Channel have been rested.`, "RED") ]});
       }
       if (value) {
         db.set(`channel_${interaction.guild.id}_invites`, channel.id);
-        interaction.followUp({ embeds: [ this.client.embedInteraction(this.client, interaction,
+        interaction.followUp({ embeds: [ this.client.embedBuilder(this.client, interaction.user,
           `Config`, `Invites Channel has been set to ${channel}.
 To reset it just use command without arguments.`, "YELLOW") ]});
       }
     }
     if(option == "joinmessage") {
       if(!args[1]) return interaction.followUp(
-        { embeds: [this.client.embedInteraction(this.client, interaction, "Error", "You need to enter join message or in order to clear it just type 'none'", "RED") ]}
+        { embeds: [this.client.embedBuilder(this.client, interaction.user, "Error", "You need to enter join message or in order to clear it just type 'none'", "RED") ]}
       );
       if (args[1].toLowerCase() == "none") {
         db.delete(`server_${interaction.guild.id}_joinMessage`);
-        interaction.followUp({ embeds: [ this.client.embedInteraction(this.client, interaction,
+        interaction.followUp({ embeds: [ this.client.embedBuilder(this.client, interaction.user,
           `Config`, "Join Message have been reseted.", "RED") ]});
       }
       if (args[1] && args[1].toLowerCase() != "none") {
         db.set(`server_${interaction.guild.id}_joinMessage`, value);
-        interaction.followUp({ embeds: [ this.client.embedInteraction(this.client, interaction,
+        interaction.followUp({ embeds: [ this.client.embedBuilder(this.client, interaction.user,
           `Config`, `You have Changed Message which is sent to invites logging channel when member joins server.
 To clear Message just use "none".
 Use \`variables\` Command to view all available Variables.`, "YELLOW") ]});
@@ -394,16 +394,16 @@ Use \`variables\` Command to view all available Variables.`, "YELLOW") ]});
     }
     if(option == "leavemessage") {
       if(!args[1]) return interaction.followUp(
-        { embeds: [this.client.embedInteraction(this.client, interaction, "Error", "You need to enter leave message or in order to clear it just type 'none'", "RED")] }
+        { embeds: [this.client.embedBuilder(this.client, interaction.user, "Error", "You need to enter leave message or in order to clear it just type 'none'", "RED")] }
       );
       if (args[1].toLowerCase() == "none") {
         db.delete(`server_${interaction.guild.id}_leaveMessage`);
-        interaction.followUp({ embeds: [ this.client.embedInteraction(this.client, interaction,
+        interaction.followUp({ embeds: [ this.client.embedBuilder(this.client, interaction.user,
           `Config`, "Leave Message have been reseted.", "RED") ]});
       }
       if (args[1] && args[1].toLowerCase() != "none") {
         db.set(`server_${interaction.guild.id}_leaveMessage`, value);
-        interaction.followUp({ embeds: [ this.client.embedInteraction(this.client, interaction,
+        interaction.followUp({ embeds: [ this.client.embedBuilder(this.client, interaction.user,
           `Config`, `You have Changed Message which is sent to invites logging channel when member leave server.
 To clear Message just use "none".
 Use \`variables\` Command to view all available Variables.`, "YELLOW") ]});
@@ -413,11 +413,11 @@ Use \`variables\` Command to view all available Variables.`, "YELLOW") ]});
       let dm = db.fetch(`server_${interaction.guild.id}_dmWinners`);
       if(dm == null) {
         db.set(`server_${interaction.guild.id}_dmWinners`, true);
-        interaction.followUp({ embeds: [ this.client.embedInteraction(this.client, interaction,
+        interaction.followUp({ embeds: [ this.client.embedBuilder(this.client, interaction.user,
           `Config`, "You have Enabled DM Winners Option.", "YELLOW") ]});
       } else {
         db.delete(`server_${interaction.guild.id}_dmWinners`);
-        interaction.followUp({ embeds: [ this.client.embedInteraction(this.client, interaction,
+        interaction.followUp({ embeds: [ this.client.embedBuilder(this.client, interaction.user,
           `Config`, "You have Disabled DM Winners Option.", "RED") ]});
       }
     }
@@ -425,12 +425,12 @@ Use \`variables\` Command to view all available Variables.`, "YELLOW") ]});
       let snStatus = db.fetch(`server_${interaction.guild.id}_snipes`);
       if(snStatus == null) {
         db.set(`server_${interaction.guild.id}_snipes`, true);
-        interaction.followUp({ embeds: [ this.client.embedInteraction(this.client, interaction,
+        interaction.followUp({ embeds: [ this.client.embedBuilder(this.client, interaction.user,
           `Config`, "You have Enabled Snipes Option.", "YELLOW") ]});
       } else {
         db.delete(`server_${interaction.guild.id}_snipes`);
         db.delete(`snipes_${interaction.guild.id}`);
-        interaction.followUp({ embeds: [ this.client.embedInteraction(this.client, interaction,
+        interaction.followUp({ embeds: [ this.client.embedBuilder(this.client, interaction.user,
           `Config`, "You have Disabled Snipes Option.", "RED") ]});
       }
     }
@@ -438,11 +438,11 @@ Use \`variables\` Command to view all available Variables.`, "YELLOW") ]});
       let img = db.fetch(`server_${interaction.guild.id}_welcomeImg`);
       if(img == null) {
         db.set(`server_${interaction.guild.id}_welcomeImg`, true);
-        interaction.followUp({ embeds: [ this.client.embedInteraction(this.client, interaction,
+        interaction.followUp({ embeds: [ this.client.embedBuilder(this.client, interaction.user,
           `Config`, "You have Enabled Welcome Image Option.", "YELLOW") ]});
       } else {
         db.delete(`server_${interaction.guild.id}_welcomeImg`);
-        interaction.followUp({ embeds: [ this.client.embedInteraction(this.client, interaction,
+        interaction.followUp({ embeds: [ this.client.embedBuilder(this.client, interaction.user,
           `Config`, "You have Disabled Welcome Image Option.", "RED") ]});
       }
     }
@@ -450,12 +450,12 @@ Use \`variables\` Command to view all available Variables.`, "YELLOW") ]});
       let channel = interaction.guild.channels.cache.get(value);
       if (!value) {
         db.delete(`channel_${interaction.guild.id}_welcome`);
-        interaction.followUp({ embeds: [ this.client.embedInteraction(this.client, interaction,
+        interaction.followUp({ embeds: [ this.client.embedBuilder(this.client, interaction.user,
           `Config`, `Welcome Channel have been rested.`, "RED") ]});
       }
       if (value) {
         db.set(`channel_${interaction.guild.id}_welcome`, channel.id);
-        interaction.followUp({ embeds: [ this.client.embedInteraction(this.client, interaction,
+        interaction.followUp({ embeds: [ this.client.embedBuilder(this.client, interaction.user,
           `Config`, `Welcome Channel has been set to ${channel}.
 To reset it just use command without arguments.`, "YELLOW") ]});
       }
@@ -465,15 +465,15 @@ To reset it just use command without arguments.`, "YELLOW") ]});
       let role = interaction.guild.roles.cache.get(value); 
        
       if(!reqRole) {
-        if (!value) return interaction.followUp({ embeds: [ this.client.embedInteraction(this.client, interaction,
+        if (!value) return interaction.followUp({ embeds: [ this.client.embedBuilder(this.client, interaction.user,
           `Error`, "You haven't mentioned role.", "RED") ]});
           
         db.set(`server_${interaction.guild.id}_roleReq`, role.id);
-        interaction.followUp({ embeds: [ this.client.embedInteraction(this.client, interaction,
+        interaction.followUp({ embeds: [ this.client.embedBuilder(this.client, interaction.user,
           `Config`, `Giveaway Requirement Role have been successfully changed to \`${role}\`.`, "YELLOW") ]});
       } else {
         db.delete(`server_${interaction.guild.id}_roleReq`);
-        interaction.followUp({ embeds: [ this.client.embedInteraction(this.client, interaction,
+        interaction.followUp({ embeds: [ this.client.embedBuilder(this.client, interaction.user,
         `Config`, "You have successfully reseted Giveaway Requirement Role.", "RED") ]});
       }
     }

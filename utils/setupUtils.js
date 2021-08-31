@@ -50,12 +50,12 @@ async function submitGiveaway(client, message, data) {
       );
       client.gw.startGiveaway(client, message, giveawayObject);
 
-      message.channel.send({ embeds: [ client.embedInteraction(client, message.member, "Giveaway", `Giveaway has started in ${data.channel}.`, "YELLOW")] });
+      message.channel.send({ embeds: [ client.embedBuilder(client, message.member.user, "Giveaway", `Giveaway has started in ${data.channel}.`, "YELLOW")] });
       collector.stop();
     } else if(i.customId == "cancelGw") {
       await i.deferUpdate();
       client.gwCreation.set(message.member.id, false);
-      message.channel.send({ embeds: [ client.embedInteraction(client, message.member, "Giveaway Setup", `Giveaway creation have been stopped.`, "RED")] });
+      message.channel.send({ embeds: [ client.embedBuilder(client, message.member.user, "Giveaway Setup", `Giveaway creation have been stopped.`, "RED")] });
       collector.stop();
     }
   });
@@ -92,7 +92,7 @@ Example: \`Nitro Classic\``);
 
     let prizeArg = msg.content;
 
-    if(!prizeArg || prizeArg.length < 3 || prizeArg.length > 256) return message.channel.send({ embeds: [ client.embedBuilder(client, message, "Giveaway Setup", `You have entered Invalid Prize.`, "RED")] });
+    if(!prizeArg || prizeArg.length < 3 || prizeArg.length > 256) return message.channel.send({ embeds: [ client.embedBuilder(client, message.author, "Giveaway Setup", `You have entered Invalid Prize.`, "RED")] });
     data.prize = msg.content;
     await submitGiveaway(client, message, data);
     prizeCollector.stop();
@@ -128,7 +128,7 @@ Example: \`500\``);
       return;
     }
 
-    if(isNaN(msg.content)) return message.channel.send({ embeds: [ client.embedBuilder(client, message, "Giveaway Setup", `You have entered Invalid Number of Invites.`, "RED")] });
+    if(isNaN(msg.content)) return message.channel.send({ embeds: [ client.embedBuilder(client, message.author, "Giveaway Setup", `You have entered Invalid Number of Invites.`, "RED")] });
     data.invites = msg.content;
     await prizeSetup(client, message, embed, filter, data);
     invCollector.stop();
@@ -164,7 +164,7 @@ Example: \`500\``);
       return;
     }
 
-    if(isNaN(msg.content)) return message.channel.send({ embeds: [ client.embedBuilder(client, message, "Giveaway Setup", `You have entered Invalid Number of Messages.`, "RED")] });
+    if(isNaN(msg.content)) return message.channel.send({ embeds: [ client.embedBuilder(client, message.author, "Giveaway Setup", `You have entered Invalid Number of Messages.`, "RED")] });
     data.messages = msg.content;
     await invitesSetup(client, message, embed, filter, data);
     msgCollector.stop();
@@ -200,7 +200,7 @@ Example: \`2\``);
       return;
     }
 
-    if(isNaN(msg.content)) return message.channel.send({ embeds: [ client.embedBuilder(client, message, "Giveaway Setup", `You have entered Invalid Number of Winners.`, "RED")] });
+    if(isNaN(msg.content)) return message.channel.send({ embeds: [ client.embedBuilder(client, message.author, "Giveaway Setup", `You have entered Invalid Number of Winners.`, "RED")] });
     data.winners = msg.content;
     await messagesSetup(client, message, embed, filter, data);
     winnerCollector.stop();
@@ -236,7 +236,7 @@ async function channelSetup(client, message, embed, filter, data) {
       return;
     }
 
-    if(!msg.mentions.channels.first()) return message.channel.send({ embeds: [ client.embedBuilder(client, message, "Giveaway Setup", `You have entered Invalid Channel.`, "RED")] });
+    if(!msg.mentions.channels.first()) return message.channel.send({ embeds: [ client.embedBuilder(client, message.author, "Giveaway Setup", `You have entered Invalid Channel.`, "RED")] });
     data.channel = msg.mentions.channels.first();
     await winnersSetup(client, message, embed, filter, data);
     channelCollector.stop();

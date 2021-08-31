@@ -23,7 +23,7 @@ module.exports = class InteractionCreate extends Event {
           userPerms.push(perm);
         }
       });
-      if(userPerms.length > 0) return interaction.followUp({ embeds: [ this.client.embedInteraction(this.client, interaction, "Error", "You don't have permission to run this command.", "RED")] });
+      if(userPerms.length > 0) return interaction.followUp({ embeds: [ this.client.embedBuilder(this.client, interaction.user, "Error", "You don't have permission to run this command.", "RED")] });
 
       const args = [];
       for (let option of interaction.options.data) {

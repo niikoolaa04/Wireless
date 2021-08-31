@@ -43,7 +43,7 @@ module.exports = class Eval extends Command {
       return text;
   };
     try {
-      if(!args[0]) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message, 
+      if(!args[0]) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, 
       `Error`, "You haven't entered Code to run.", "RED")] });
       const evaled = this.client.clean(eval(code));
       embed.addField('📥・Input', `\`\`\`xl\n${code}\n\`\`\``);

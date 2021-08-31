@@ -54,7 +54,7 @@ To view all commands do \`${mPrefix}help\`
               userPerms.push(perm);
           }
         });
-        if(userPerms.length > 0) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message, "Error", "You don't have permission to run this command.", "RED")] });
+        if(userPerms.length > 0) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, "Error", "You don't have permission to run this command.", "RED")] });
       }
     }
     if(cmd) cmd.run(message, args);

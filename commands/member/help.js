@@ -103,7 +103,7 @@ module.exports = class Help extends Command {
       let mainMenu = await message.channel.send({ embeds: [cmdEmbed], components: [helpRow] });
 
       let filter = (i) => i.customId == "help" && i.user.id == message.author.id;
-      const collector = message.channel.createMessageComponentCollector({ filter, time: 300000 });
+      const collector = message.channel.createMessageComponentCollector({ filter, componentType: "SELECT_MENU", time: 300000 });
 
       collector.on("collect", async i => {
         if(i.values[0] == "member_menu") {
@@ -154,6 +154,7 @@ module.exports = class Help extends Command {
     	    .addComponents(
     	      new MessageSelectMenu()
     	        .setCustomId("help")
+    	        .setDisabled(true)
     	        .setPlaceholder("Select Category to view it's commands.")
     	        .addOptions([{
                   label: "Main Menu",
@@ -287,7 +288,7 @@ module.exports = class Help extends Command {
     interaction.followUp({ embeds: [cmdEmbed], components: [helpRow] });
 
     let filter = i => i.customId == "help" && i.user.id === interaction.user.id;
-    const collector = interaction.channel.createMessageComponentCollector({ filter, componentType: 'BUTTON', time: 300000, errors: ["time"] });
+    const collector = interaction.channel.createMessageComponentCollector({ filter, componentType: "SELECT_MENU", time: 300000, errors: ["time"] });
 
     collector.on("collect", async i => {
       if(i.values[0] == "member_menu") {
@@ -334,6 +335,7 @@ module.exports = class Help extends Command {
   	    .addComponents(
   	      new MessageSelectMenu()
   	        .setCustomId("help")
+  	        .setDisabled(true)
   	        .setPlaceholder("Select Category to view it's commands.")
   	        .addOptions([{
                 label: "Main Menu",

@@ -60,7 +60,6 @@ module.exports = class LiveLb extends Command {
     let live = db.fetch(`server_${interaction.guild.id}_liveLb`);
 
     if (live != null) {
-      interaction.reply({ content: "> Live Invites Leaderboard have been created.", ephemeral: true });
       db.delete(`server_${interaction.guild.id}_liveLb`);
       interaction.channel.send({ embeds: [this.client.embedBuilder(this.client, interaction.user, "Live Leaderboard", "Live Leaderboard have been removed from Database, you can delete Embed now.", "YELLOW")] })
     } else {
@@ -87,8 +86,6 @@ module.exports = class LiveLb extends Command {
         .setThumbnail(interaction.guild.iconURL())
         .setColor("BLURPLE")
         .setTimestamp();
-
-      interaction.reply({ content: "> Live Invites Leaderboard have been removed.", ephemeral: true });
 
       interaction.channel.send({ embeds: [embed] }).then(async (m) => {
         let channelData = {

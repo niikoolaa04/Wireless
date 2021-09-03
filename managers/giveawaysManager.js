@@ -221,18 +221,21 @@ const checkGiveaway = async (client, guild) => {
   for(let i = 0; i < giveaways.length; i++) {
     if(giveaways[i].ended == true) continue;
     
+    let removed = false;
     let channel = client.channels.cache.get(giveaways[i].channelID);
     if(channel == undefined) {
       const cData = giveaways.filter((giveaway) => giveaway.messageID != giveaways[i].messageID);
       db.set(`giveaways_${giveaways[i].guildID}`, cData);
-      return;
+      removed = true;
     }
     
     let msg = await channel.messages.fetch(giveaways[i].messageID).catch(async (err) => {
       const mData = giveaways.filter((giveaway) => giveaway.messageID != giveaways[i].messageID);
       db.set(`giveaways_${giveaways[i].guildID}`, mData);
-      return;
-    })
+      removed = true;
+    });
+    
+    if(removed == true) continue;
     
     let rUsers = await msg.reactions.cache.get("🎉").users.fetch();
     let rFilter = rUsers.filter(r => !r.bot);

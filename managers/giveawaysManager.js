@@ -225,13 +225,13 @@ const checkGiveaway = async (client, guild) => {
     if(channel == undefined) {
       const cData = giveaways.filter((giveaway) => giveaway.messageID != giveaways[i].messageID);
       db.set(`giveaways_${giveaways[i].guildID}`, cData);
-      continue;
+      return;
     }
     
     let msg = await channel.messages.fetch(giveaways[i].messageID).catch(async (err) => {
       const mData = giveaways.filter((giveaway) => giveaway.messageID != giveaways[i].messageID);
       db.set(`giveaways_${giveaways[i].guildID}`, mData);
-      continue;
+      return;
     })
     
     let rUsers = await msg.reactions.cache.get("🎉").users.fetch();

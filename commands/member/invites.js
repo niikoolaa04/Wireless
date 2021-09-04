@@ -71,7 +71,7 @@ ${contentHistory}`);
     let every = db.all().filter(i => i.ID.startsWith(`invitesRegular_${interaction.guild.id}_`)).sort((a, b) => b.data - a.data);
     let rank = every.map(x => x.ID).indexOf(`invitesRegular_${interaction.guild.id}_${user.id}`) + 1 || 'N/A';
   
-    let history = db.fetch(`invitesHistory_${message.guild.id}_${user.id}`) || ["No History"];
+    let history = db.fetch(`invitesHistory_${interaction.guild.id}_${user.id}`) || ["No History"];
     let contentHistory = String();
     
     for(const inv of history.slice(0, 5)) {

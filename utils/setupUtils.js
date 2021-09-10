@@ -92,7 +92,7 @@ Example: \`Nitro Classic\``);
 
     let prizeArg = msg.content;
 
-    if(!prizeArg || prizeArg.length < 3 || prizeArg.length > 256) return message.channel.send({ embeds: [ client.embedBuilder(client, message.author, "Giveaway Setup", `You have entered Invalid Prize.`, "RED")] });
+    if(!prizeArg || prizeArg.length < 3 || prizeArg.length > 32) return message.channel.send({ embeds: [ client.embedBuilder(client, message.author, "Giveaway Setup", `You have entered Invalid Prize.`, "RED")] });
     data.prize = msg.content;
     await submitGiveaway(client, message, data);
     prizeCollector.stop();

@@ -61,7 +61,7 @@ module.exports = class GiveawayStart extends Command {
     if(!winnersArg || isNaN(winnersArg) || winnersArg <= 0) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, "Error", "You haven't entered number of winners.", "RED")] });
     if(!messagesArg || isNaN(messagesArg) || messagesArg < 0) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, "Error", "You have entered invalid Number of Messages Required for Entering Giveaway.", "RED")] });
     if(!invitesArg || isNaN(invitesArg) || invitesArg < 0) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, "Error", "You have entered invalid Number of Invites Required for Entering Giveaway.", "RED")] });
-    if(!prizeArg || prizeArg.length >= 256) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, "Error", "You have entered invalid Prize.", "RED")] });
+    if(!prizeArg || prizeArg.length >= 32) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, "Error", "You have entered invalid Prize.", "RED")] });
 
     let giveawayObject = this.client.utils.giveawayObject(
       message.guild.id, 

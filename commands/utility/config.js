@@ -1,6 +1,7 @@
 const Command = require("../../structures/Command");
 const Discord = require("discord.js");
 const db = require("quick.db");
+const { parse } = require("twemoji-parser");
 
 module.exports = class Config extends Command {
 	constructor(client) {
@@ -98,14 +99,25 @@ module.exports = class Config extends Command {
           description: "Giveaway Role Requirement",
           required: false
         }]
+      },{
+        name: 'reaction',
+        type: 'SUB_COMMAND',
+        description: "Custom GW Reaction Emoji",
+        options: [{
+          name: 'customemoji',
+          type: 'STRING',
+          description: "Custom GW Reaction Emoji",
+          required: true
+        }]
       }]
 		});
 	}
   
   async run(message, args) {
     let option = args[0];
+    let premiumGuild = db.fetch(`server_${message.guild.id}_premium`);
     
-    if(!option || option > 10 || option < 1) {
+    if(!option || option > 11 || option < 1) {
       let prefix = db.fetch(`settings_${message.guild.id}_prefix`) || this.client.config.prefix;
       let bypass = db.fetch(`server_${message.guild.id}_bypassRole`);
       let blacklist = db.fetch(`server_${message.guild.id}_blacklistRole`);
@@ -117,6 +129,7 @@ module.exports = class Config extends Command {
       let image = db.fetch(`server_${message.guild.id}_welcomeImg`);
       let roleReq = db.fetch(`server_${message.guild.id}_roleReq`);
       let wlcmChannel = db.fetch(`channel_${message.guild.id}_welcome`);
+      let customReaction = db.fetch(`server_${message.guild.id}_customReaction`);
 
       let noOption = new Discord.MessageEmbed()
         .setAuthor("Configuration", this.client.user.displayAvatarURL())
@@ -131,6 +144,7 @@ module.exports = class Config extends Command {
         .addField(`👋 - Welcome Image (8)`, image ? `Yes` : 'No')
         .addField(`📞 - Welcome Channel for Image (9)`, wlcmChannel ? `<#${wlcmChannel}>` : 'No Channel')
         .addField(`🎭 - Role Requirement (10)`, roleReq ? `<@${roleReq}>` : 'No Role')
+        .addField(`💥 - Custom GW Reaction (11)`, customReaction ? `${customReaction}` : '🎉')
         .setColor("BLURPLE")
         .setThumbnail(this.client.user.displayAvatarURL())
         .setTimestamp()
@@ -288,10 +302,28 @@ To reset it just use command without arguments.`, "YELLOW") ]});
 To reset it just use command without arguments.`, "YELLOW") ]});
       }
     }
+    if(option == 11) {
+      if(premiumGuild != true) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author,
+        `Error`, `This option is only available for Premium Guilds, use command \`premium\` to get more informations.`, "YELLOW") ]});
+      if(!args[1]) return message.channel.send(
+        { embeds: [this.client.embedBuilder(this.client, message.author, "Error", "You need to enter emoji.", "RED")] }
+      );
+      if (!parse(args[1])[0]) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author,
+          `Error`, "You have entered invalid emoji (Custom Emojis are not supported).", "RED") ]});
+      if (parse(args[1])[0]) {
+        db.set(`server_${message.guild.id}_customReaction`, parse(args[1])[0].text);
+        message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author,
+          `Config`, `You have Changed Giveaway Reaction Emoji to ${parse(args[1])[0].text}.
+
+❗ **If you have any running giveaways, users will no longer be able to enter them because of new Reaction Emoji
+but users who are already participating won't be affected** ❗`, "YELLOW") ]});
+      }
+    }
   }
   async slashRun(interaction, args) {
     let option = args[0];
     let value = args[1];
+    let premiumGuild = db.fetch(`server_${interaction.guild.id}_premium`);
     
     if(option == "list") {
       let prefix = db.fetch(`settings_${interaction.guild.id}_prefix`) || this.client.config.prefix;
@@ -305,6 +337,7 @@ To reset it just use command without arguments.`, "YELLOW") ]});
       let image = db.fetch(`server_${interaction.guild.id}_welcomeImg`);
       let roleReq = db.fetch(`server_${interaction.guild.id}_roleReq`);
       let wlcmChannel = db.fetch(`channel_${interaction.guild.id}_welcome`);
+      let customReaction = db.fetch(`server_${interaction.guild.id}_customReaction`);
 
       let noOption = new Discord.MessageEmbed()
         .setAuthor("Configuration", this.client.user.displayAvatarURL())
@@ -319,6 +352,7 @@ To reset it just use command without arguments.`, "YELLOW") ]});
         .addField(`👋 - Welcome Image (8)`, image ? `Yes` : 'No')
         .addField(`📞 - Welcome Channel for Image (9)`, wlcmChannel ? `<#${wlcmChannel}>` : 'No Channel')
         .addField(`🎭 - Role Requirement (10)`, roleReq ? `<@${roleReq}>` : 'No Role')
+        .addField(`💥 - Custom GW Reaction (11)`, customReaction ? `${customReaction}` : '🎉')
         .setColor("BLURPLE")
         .setThumbnail(this.client.user.displayAvatarURL())
         .setTimestamp()
@@ -475,6 +509,20 @@ To reset it just use command without arguments.`, "YELLOW") ]});
         db.delete(`server_${interaction.guild.id}_roleReq`);
         interaction.followUp({ embeds: [ this.client.embedBuilder(this.client, interaction.user,
         `Config`, "You have successfully reseted Giveaway Requirement Role.", "RED") ]});
+      }
+    }
+    if(option == "reaction") {
+      if(premiumGuild != true) return interaction.followUp({ embeds: [ this.client.embedBuilder(this.client, interaction.user,
+        `Error`, `This option is only available for Premium Guilds, use command \`premium\` to get more informations.`, "YELLOW") ]});
+      if (!parse(value)[0]) return interaction.followUp({ embeds: [ this.client.embedBuilder(this.client, interaction.user,
+          `Error`, "You have entered invalid emoji (Custom Emojis are not supported).", "RED") ]});
+      if (parse(value)[0]) {
+        db.set(`server_${message.guild.id}_customReaction`, parse(value)[0].text);
+        interaction.followUp({ embeds: [ this.client.embedBuilder(this.client, interaction.user,
+          `Config`, `You have Changed Giveaway Reaction Emoji to ${parse(args[1])[0].text}.
+
+❗ **If you have any running giveaways, users will no longer be able to enter them because of new Reaction Emoji
+but users who are already participating won't be affected** ❗`, "YELLOW") ]});
       }
     }
   }

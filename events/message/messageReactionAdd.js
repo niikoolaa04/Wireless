@@ -17,8 +17,9 @@ module.exports = class MessageReactionAdd extends Event {
     const message = reaction.message;
     if(message.channel.type === "DM") return;
     let member = message.guild.members.cache.get(user.id);
+    let customEmoji = db.fetch(`server_${message.guild.id}_customReaction`) || "🎉";
     
-    if(reaction.emoji.name == "🎉") {
+    if(reaction.emoji.name == customEmoji) {
       let giveaways = db.fetch(`giveaways_${message.guild.id}`);
       if(giveaways == null || giveaways.length < 1) return;
     

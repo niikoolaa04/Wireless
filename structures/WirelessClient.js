@@ -52,7 +52,6 @@ module.exports = class WirelessClient extends Client {
     
     this.db = require("quick.db");
     
-    // Filip, Nikola Novi Acc, LA HAINE
     this.dev_ids = [
       "823228305167351808", 
     ];
@@ -67,8 +66,6 @@ module.exports = class WirelessClient extends Client {
     this.commands = new Collection();
     this.slashCommands = new Collection();
     this.slashArray = [];
-    // SNIPES
-    // WELCOMER IMG, SLOWMODE
   }
   async login(token = this.token) {
     super.login(token);

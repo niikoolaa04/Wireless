@@ -1,6 +1,6 @@
 {
   "name": "wireless",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "description": "Wireless is Giveaway Bot rich with features.",
   "main": "index.js",
   "scripts": {
@@ -23,6 +23,7 @@
     "random": "^2.1.0",
     "smart-timeout": "^2.5.0",
     "topgg-autoposter": "latest",
+    "twemoji-parser": "latest",
     "util": "^0.12.3"
   },
   "engines": {

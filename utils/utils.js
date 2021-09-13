@@ -78,13 +78,13 @@ function lbContent(client, message, lbType) {
 
 function configStrings() {
   const opcije = [
-      "`1.` **-** Requirements Bypass Role",
-      "`2.` **-** Giveaway Blacklist Role",
-      "`3.` **-** Invites Messages Channel",
-      "`4.` **-** Join Messages",
-      "`5.` **-** Leave Messages",
-      "`6.` **-** DM Winners"
-    ];
+    "`1.` **-** Requirements Bypass Role",
+    "`2.` **-** Giveaway Blacklist Role",
+    "`3.` **-** Invites Messages Channel",
+    "`4.` **-** Join Messages",
+    "`5.` **-** Leave Messages",
+    "`6.` **-** DM Winners"
+  ];
   let text = "";
   for(const opcija of opcije) {
     text += `\n> ${opcija}`
@@ -93,64 +93,63 @@ function configStrings() {
 }
 
 const inviteToJson = (invite) => {
-    return {
-        code: invite.code,
-        uses: invite.uses,
-        maxUses: invite.maxUses,
-        inviter: invite.inviter,
-        channel: invite.channel,
-        url: invite.url
-    };
+  return {
+    code: invite.code,
+    uses: invite.uses,
+    maxUses: invite.maxUses,
+    inviter: invite.inviter,
+    channel: invite.channel,
+    url: invite.url
+  };
 };
 
 
 const generateInvitesCache = (invitesCache) => {
-    const cacheCollection = new Discord.Collection();
-    invitesCache.forEach((invite) => {
-        cacheCollection.set(invite.code, inviteToJson(invite));
-    });
-    return cacheCollection;
+  const cacheCollection = new Discord.Collection();
+  invitesCache.forEach((invite) => {
+    cacheCollection.set(invite.code, inviteToJson(invite));
+  });
+  return cacheCollection;
 };
 
 const isEqual = (value, other) => {
-    const type = Object.prototype.toString.call(value);
-    if (type !== Object.prototype.toString.call(other)) return false;
-    if (["[object Array]", "[object Object]"].indexOf(type) < 0) return false;
-    const valueLen = type === "[object Array]" ? value.length : Object.keys(value).length;
-    const otherLen = type === "[object Array]" ? other.length : Object.keys(other).length;
-    if (valueLen !== otherLen) return false;
-    const compare = (item1, item2) => {
-        const itemType = Object.prototype.toString.call(item1);
-        if (["[object Array]", "[object Object]"].indexOf(itemType) >= 0) {
-            if (!isEqual(item1, item2)) return false;
-        }
-        else {
-            if (itemType !== Object.prototype.toString.call(item2)) return false;
-            if (itemType === "[object Function]") {
-                if (item1.toString() !== item2.toString()) return false;
-            } else {
-                if (item1 !== item2) return false;
-            }
-        }
-    };
-    if (type === "[object Array]") {
-        for (var i = 0; i < valueLen; i++) {
-            if (compare(value[i], other[i]) === false) return false;
-        }
+  const type = Object.prototype.toString.call(value);
+  if (type !== Object.prototype.toString.call(other)) return false;
+  if (["[object Array]", "[object Object]"].indexOf(type) < 0) return false;
+  const valueLen = type === "[object Array]" ? value.length : Object.keys(value).length;
+  const otherLen = type === "[object Array]" ? other.length : Object.keys(other).length;
+  if (valueLen !== otherLen) return false;
+  const compare = (item1, item2) => {
+    const itemType = Object.prototype.toString.call(item1);
+    if (["[object Array]", "[object Object]"].indexOf(itemType) >= 0) {
+        if (!isEqual(item1, item2)) return false;
     } else {
-        for (var key in value) {
-            if (Object.prototype.hasOwnProperty.call(value, key)) {
-                if (compare(value[key], other[key]) === false) return false;
-            }
-        }
+      if (itemType !== Object.prototype.toString.call(item2)) return false;
+      if (itemType === "[object Function]") {
+        if (item1.toString() !== item2.toString()) return false;
+      } else {
+        if (item1 !== item2) return false;
+      }
     }
-    return true;
+  };
+  if (type === "[object Array]") {
+    for (var i = 0; i < valueLen; i++) {
+      if (compare(value[i], other[i]) === false) return false;
+    }
+  } else {
+    for (var key in value) {
+      if (Object.prototype.hasOwnProperty.call(value, key)) {
+        if (compare(value[key], other[key]) === false) return false;
+      }
+    }
+  }
+  return true;
 };
 
 const asyncForEach = async (array, callback) => {
-    for (let index = 0; index < array.length; index++) {
-        await callback(array[index], index, array);
-    }
+  for (let index = 0; index < array.length; index++) {
+    await callback(array[index], index, array);
+  }
 };
 
 const pushHistory = (message, userId, text) => {
@@ -202,6 +201,22 @@ const parseArgs = (args, options) => {
   }
 }
 
+function premiumKey() {
+  const tokens = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789';
+  let key = '';
+
+  for (let i = 0; i < 5; i += 1) {
+    for (let y = 0; y < 4; y += 1) {
+      const random = Math.floor((Math.random() * 35) + 1);
+      const char = tokens.charAt(random);
+      key += char;
+    }
+    if (i !== 4) key += '-';
+  }
+
+  return key;
+}
+
 module.exports = {
   giveawayObject, 
   commandsList, 
@@ -215,4 +230,5 @@ module.exports = {
   asyncForEach, 
   pushHistory, 
   parseArgs, 
+  premiumKey,
 }

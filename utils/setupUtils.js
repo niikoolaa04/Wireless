@@ -92,7 +92,7 @@ Example: \`Nitro Classic\``);
 
     let prizeArg = msg.content;
 
-    if(!prizeArg || prizeArg.length < 3 || prizeArg.length > 32) return message.channel.send({ embeds: [ client.embedBuilder(client, message.author, "Giveaway Setup", `You have entered Invalid Prize.`, "RED")] });
+    if(!prizeArg || prizeArg.length < 3 || prizeArg.length > 32) return message.channel.send({ embeds: [ client.embedBuilder(client, message.member.user, "Giveaway Setup", `You have entered Invalid Prize.`, "RED")] });
     data.prize = msg.content;
     await submitGiveaway(client, message, data);
     prizeCollector.stop();
@@ -128,7 +128,7 @@ Example: \`500\``);
       return;
     }
 
-    if(isNaN(msg.content)) return message.channel.send({ embeds: [ client.embedBuilder(client, message.author, "Giveaway Setup", `You have entered Invalid Number of Invites.`, "RED")] });
+    if(isNaN(msg.content)) return message.channel.send({ embeds: [ client.embedBuilder(client, message.member.user, "Giveaway Setup", `You have entered Invalid Number of Invites.`, "RED")] });
     data.invites = msg.content;
     await prizeSetup(client, message, embed, filter, data);
     invCollector.stop();
@@ -164,7 +164,7 @@ Example: \`500\``);
       return;
     }
 
-    if(isNaN(msg.content)) return message.channel.send({ embeds: [ client.embedBuilder(client, message.author, "Giveaway Setup", `You have entered Invalid Number of Messages.`, "RED")] });
+    if(isNaN(msg.content)) return message.channel.send({ embeds: [ client.embedBuilder(client, message.member.user, "Giveaway Setup", `You have entered Invalid Number of Messages.`, "RED")] });
     data.messages = msg.content;
     await invitesSetup(client, message, embed, filter, data);
     msgCollector.stop();
@@ -182,6 +182,7 @@ Example: \`500\``);
 }
 
 async function winnersSetup(client, message, embed, filter, data) {
+  let premiumGuild = db.fetch(`server_${message.guild.id}_premium`);
   embed.setDescription(`Enter Number of how much Winners you want.
 Example: \`2\``);
   message.channel.send({ embeds: [embed] });
@@ -200,7 +201,9 @@ Example: \`2\``);
       return;
     }
 
-    if(isNaN(msg.content)) return message.channel.send({ embeds: [ client.embedBuilder(client, message.author, "Giveaway Setup", `You have entered Invalid Number of Winners.`, "RED")] });
+    
+    if(isNaN(msg.content)) return message.channel.send({ embeds: [ client.embedBuilder(client, message.member.user, "Giveaway Setup", `You have entered Invalid Number of Winners.`, "RED")] });
+    if(msg.content > 20 && premiumGuild != true) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.member, "Error", "To Create Giveaway with 20+ Winners you need Premium, get more informations using command `premium`.", "RED")] });
     data.winners = msg.content;
     await messagesSetup(client, message, embed, filter, data);
     winnerCollector.stop();
@@ -236,7 +239,7 @@ async function channelSetup(client, message, embed, filter, data) {
       return;
     }
 
-    if(!msg.mentions.channels.first()) return message.channel.send({ embeds: [ client.embedBuilder(client, message.author, "Giveaway Setup", `You have entered Invalid Channel.`, "RED")] });
+    if(!msg.mentions.channels.first()) return message.channel.send({ embeds: [ client.embedBuilder(client, message.member.user, "Giveaway Setup", `You have entered Invalid Channel.`, "RED")] });
     data.channel = msg.mentions.channels.first();
     await winnersSetup(client, message, embed, filter, data);
     channelCollector.stop();
@@ -265,7 +268,7 @@ async function durationSetup(client, message, embed, filter, inter) {
   };
 
   embed.setDescription(`Enter Duration for Giveaway.
-    Example: \`2m\``)
+Example: \`2m\``)
   message.channel.send({ embeds: [embed] }); 
 
   let durationCollector = message.channel.createMessageCollector({ filter, time: 60000, errors: ["time"] });

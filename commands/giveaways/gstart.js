@@ -55,10 +55,12 @@ module.exports = class GiveawayStart extends Command {
     let messagesArg = args[3];
     let invitesArg = args[4];
     let prizeArg = args.slice(5).join(" ");
+    let premiumGuild = db.fetch(`server_${message.guild.id}_premium`);
     
     if(!durationArg || isNaN(ms(durationArg))) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, "Error", "You have entered invalid Giveaway Duration.", "RED")] });
     if(!channelArg) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, "Error", "You have mentioned invalid Channel.", "RED")] });
     if(!winnersArg || isNaN(winnersArg) || winnersArg <= 0) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, "Error", "You haven't entered number of winners.", "RED")] });
+    if(winnersArg > 20 && premiumGuild != true) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, "Error", "To Create Giveaway with 20+ Winners you need Premium, get more informations using command `premium`.", "RED")] });
     if(!messagesArg || isNaN(messagesArg) || messagesArg < 0) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, "Error", "You have entered invalid Number of Messages Required for Entering Giveaway.", "RED")] });
     if(!invitesArg || isNaN(invitesArg) || invitesArg < 0) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, "Error", "You have entered invalid Number of Invites Required for Entering Giveaway.", "RED")] });
     if(!prizeArg || prizeArg.length >= 32) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, "Error", "You have entered invalid Prize.", "RED")] });
@@ -86,6 +88,9 @@ module.exports = class GiveawayStart extends Command {
     let messagesArg = interaction.options.getInteger("messages");
     let invitesArg = interaction.options.getInteger("invites");
     let prizeArg = interaction.options.getString("prize");
+    let premiumGuild = db.fetch(`server_${interaction.guild.id}_premium`);
+
+    if(winnersArg > 20 && premiumGuild != true) return interaction.followUp({ embeds: [ this.client.embedBuilder(this.client, interaction.user, "Error", "To Create Giveaway with 20+ Winners you need Premium, get more informations using command `premium`.", "RED")] });
 
     let giveawayObject = this.client.utils.giveawayObject(
       interaction.guild.id, 

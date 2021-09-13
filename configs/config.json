@@ -1,11 +1,13 @@
 {
   "name": "Wireless",
   "prefix": "+",
-  "version": "1.0.5",
+  "version": "1.2.0",
   "footer": "Wireless",
   "developer": {
     "id": "823228305167351808",
-    "server": "823820599528390657"
+    "supportGuild": "859349126529417246",
+    "testGuild": "823820599528390657",
+    "patreon": "886975951110553600"
   },
   "logs": "873256539199242280",
   "links": {
@@ -13,6 +15,7 @@
     "supportServer": "https://discord.gg/VE6J5uSC5q", 
     "website": "https://wireless-bot.tech",
     "inviteSite": "https://invite.wireless-bot.tech",
-    "voteURL": "https://top.gg/bot/855321650706513940/vote"
+    "voteURL": "https://top.gg/bot/855321650706513940/vote",
+    "patreon": "https://www.patreon.com/nidzoo"
   }
 }

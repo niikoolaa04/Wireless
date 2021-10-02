@@ -34,7 +34,7 @@ module.exports = class Snipe extends Command {
   }
 
   async slashRun(interaction, args) {
-    let snipe = this.client.snipes.get(message.guild.id);
+    let snipe = this.client.snipes.get(interaction.guild.id);
     if(!snipe) return interaction.followUp({ embeds: [ this.client.embedBuilder(this.client, interaction.user, "Error", "There are no Snipes", "RED") ] })
     
     let user = this.client.users.cache.get(snipe.author.id);

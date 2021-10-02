@@ -1,4 +1,5 @@
 const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
+const db = require("quick.db");
 const ms = require('ms');
 
 async function submitGiveaway(client, message, data) {

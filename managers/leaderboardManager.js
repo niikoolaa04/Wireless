@@ -29,7 +29,7 @@ const updateLb = async (client, guild) => {
       .setTitle("👑・Live Invites")
       .setDescription(`Live Leaderboard is Updated every 10 minutes.`)
       .addField("🎫・Leaderboard", content)
-      .setFooter("Updated at", client.user.displayAvatarURL())
+      .setFooter({ text: "Updated at", iconURL: client.user.displayAvatarURL() })
       .setThumbnail(guild.iconURL())
       .setColor("BLURPLE")
       .setTimestamp();

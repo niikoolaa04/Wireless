@@ -90,7 +90,7 @@ module.exports = class GiveawayStart extends Command {
     let prizeArg = interaction.options.getString("prize");
     let premiumGuild = db.fetch(`server_${interaction.guild.id}_premium`);
 
-    if(winnersArg > 20 && premiumGuild != true) return interaction.followUp({ embeds: [ this.client.embedBuilder(this.client, interaction.user, "Error", "To Create Giveaway with 20+ Winners you need Premium, get more informations using command `premium`.", "RED")] });
+    if(winnersArg > 20 && premiumGuild != true) return interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user, "Error", "To Create Giveaway with 20+ Winners you need Premium, get more informations using command `premium`.", "RED")], ephemeral: true });
 
     let giveawayObject = this.client.utils.giveawayObject(
       interaction.guild.id, 
@@ -106,6 +106,6 @@ module.exports = class GiveawayStart extends Command {
     );
     this.client.gw.startGiveaway(this.client, interaction, giveawayObject);
     
-    interaction.followUp({ embeds: [ this.client.embedBuilder(this.client, interaction.user, "Giveaway", `Giveaway has started in Channel ${channelArg}.`, "YELLOW")] });
+    interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user, "Giveaway", `Giveaway has started in Channel ${channelArg}.`, "YELLOW")], ephemeral: true });
   }
 };

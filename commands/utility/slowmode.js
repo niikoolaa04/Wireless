@@ -34,8 +34,6 @@ module.exports = class Slowmode extends Command {
   async slashRun(interaction, args) {
     let seconds = interaction.options.getInteger("seconds");
     interaction.channel.setRateLimitPerUser(seconds);
-    interaction.followUp(
-      { embeds: [ this.client.embedBuilder(this.client, interaction.user, "Slowmode", `Slowmode for ${interaction.channel} have been changed to **${seconds} seconds**`, "YELLOW" ) ] }
-    ); 
+    interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user, "Slowmode", `Slowmode for ${interaction.channel} have been changed to **${seconds} seconds**`, "YELLOW" )], ephemeral: true }); 
   }
 };

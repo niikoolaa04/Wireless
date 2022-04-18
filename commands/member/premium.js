@@ -53,6 +53,6 @@ If you aren't in our Support Server your cannot receive **Premium Key**, if you 
       .setDescription(`To purchase **Premium** you need to be in our Support Server and then purchase Tier from Patreon.
 If you aren't in our Support Server your cannot receive **Premium Key**, if you leave Server all Guilds which recieved **Premium** from you will lose it.`)
       .setColor("BLURPLE");
-    interaction.followUp({ embeds: [embed], components: [row] });
+    interaction.reply({ embeds: [embed], components: [row] });
   }
 };

@@ -20,7 +20,7 @@ module.exports = class GiveawayCreate extends Command {
   async run(message, args) {
     let embed = new Discord.MessageEmbed()
       .setColor("BLURPLE")
-      .setAuthor("Giveaway Setup", this.client.user.displayAvatarURL());
+      .setAuthor({ name: "Giveaway Setup", iconURL: this.client.user.displayAvatarURL() });
 
     let filter = m => m.author.id === message.author.id;
     this.client.setupUtils.durationSetup(this.client, message, embed, filter);
@@ -29,9 +29,9 @@ module.exports = class GiveawayCreate extends Command {
   async slashRun(interaction, args) {
     let embed = new Discord.MessageEmbed()
       .setColor("BLURPLE")
-      .setAuthor("Giveaway Setup", this.client.user.displayAvatarURL());
+      .setAuthor({ name: "Giveaway Setup", iconURL: this.client.user.displayAvatarURL() });
 
-    if(this.client.gwCreation.get(interaction.user.id) == true) return interaction.followUp({ embeds: [ this.client.embedBuilder(this.client, interaction.user, "Error", `You have already started Giveaway Creation, type cancel to stop it.`, "RED")] });
+    if(this.client.gwCreation.get(interaction.user.id) == true) return interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user, "Error", `You have already started Giveaway Creation, type cancel to stop it.`, "RED")], ephemeral: true });
 
     let filter = m => m.author.id === interaction.user.id;
     await interaction.deferReply();

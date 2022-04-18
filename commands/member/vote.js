@@ -42,6 +42,6 @@ module.exports = class Vote extends Command {
     let embed = new MessageEmbed()
       .setDescription(`Vote for me by clicking on Button.`)
       .setColor("BLURPLE");
-    interaction.followUp({ embeds: [embed], components: [row] });
+    interaction.reply({ embeds: [embed], components: [row] });
   }
 };

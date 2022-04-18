@@ -53,12 +53,12 @@ module.exports = class ActivateKey extends Command {
       );
 
     let embed = new MessageEmbed()
-      .setAuthor("Activate Server Key", this.client.user.displayAvatarURL())
+      .setAuthor({ name: "Activate Server Key", iconURL: this.client.user.displayAvatarURL() })
       .setDescription(`>>> Are you sure you want to activate Premium Subscription for Guild **${message.guild.name}**?
 Use Buttons to Confirm your decision, you have **1 minute**.
       
 ❗ **This Action cannot be undone.** ❗`)
-      .setFooter(message.author.username, message.author.displayAvatarURL({ size: 1024, dynamic: true }))
+      .setFooter({ text: message.author.username, iconURL: message.author.displayAvatarURL({ size: 1024, dynamic: true }) })
       .setColor("YELLOW")
       .setTimestamp();
 
@@ -108,15 +108,15 @@ Use Buttons to Confirm your decision, you have **1 minute**.
   async slashRun(interaction, args) {
     let sGuild = this.client.guilds.cache.get(this.client.config.developer.supportGuild);
     let member = sGuild.members.cache.get(interaction.user.id);
-    if(!member.roles.cache.some(r => r == this.client.config.developer.patreon)) return interaction.followUp({ embeds: [ this.client.embedBuilder(this.client, interaction.user, `Error`, `You aren't our Patreon or have left Support Server.`, "RED")] });
+    if(!member.roles.cache.some(r => r == this.client.config.developer.patreon)) return interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user, `Error`, `You aren't our Patreon or have left Support Server.`, "RED")], ephemeral: true });
     let key = interaction.options.getString("key");
     let keyList = db.fetch(`premiumKeys`) || [];
     let invalidList = db.fetch(`invalidKeys`) || [];
     let premium = db.fetch(`server_${interaction.guild.id}_premium`);
     if(!keyList.includes(key) || invalidList.includes(key)) 
-      return interaction.followUp({ embeds: [ this.client.embedBuilder(this.client, interaction.user, `Error`, `You have entered an Invalid/Already Used Key.`, "RED")] });
+      return interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user, `Error`, `You have entered an Invalid/Already Used Key.`, "RED")], ephemeral: true });
     if(premium == true) 
-      return interaction.followUp({ embeds: [ this.client.embedBuilder(this.client, interaction.user, `Error`, `This Server already have an Premium Subscription.`, "RED")] });
+      return interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user, `Error`, `This Server already have an Premium Subscription.`, "RED")], ephemeral: true });
   
     const row = new MessageActionRow()
       .addComponents(
@@ -135,16 +135,16 @@ Use Buttons to Confirm your decision, you have **1 minute**.
       );
   
     let embed = new MessageEmbed()
-      .setAuthor("Activate Server Key", this.client.user.displayAvatarURL())
+      .setAuthor({ name: "Activate Server Key", iconURL: this.client.user.displayAvatarURL() })
       .setDescription(`>>> Are you sure you want to activate Premium Subscription for Guild **${interaction.guild.name}**?
   Use Buttons to Confirm your decision, you have **1 minute**.
       
   ❗ **This Action cannot be undone.** ❗`)
-      .setFooter(interaction.user.username, interaction.user.displayAvatarURL({ size: 1024, dynamic: true }))
+      .setFooter({ text: interaction.user.username, iconURL: interaction.user.displayAvatarURL({ size: 1024, dynamic: true }) })
       .setColor("YELLOW")
       .setTimestamp();
   
-    let msg = await interaction.followUp({ embeds: [embed], components: [row] });
+    let msg = await interaction.reply({ embeds: [embed], components: [row] });
     let collFilter = (i) => i.user.id == interaction.user.id;
     let collector = msg.createMessageComponentCollector({ collFilter, componentType: "BUTTON", time: 60000 });
   
@@ -157,11 +157,11 @@ Use Buttons to Confirm your decision, you have **1 minute**.
         db.push(`userPremium_${interaction.guild.id}`, interaction.guild.id);
         db.push(`invalidKeys`, key);
     
-        interaction.followUp({ embeds: [ this.client.embedBuilder(this.client, interaction.user, `Premium Activation`, `Premium Subscription have been successfully activated for Guild **${interaction.guild.name}** using Premium Key \`${key}\`.`, "YELLOW")] });
+        interaction.followUp({ embeds: [ this.client.embedBuilder(this.client, interaction.user, `Premium Activation`, `Premium Subscription have been successfully activated for Guild **${interaction.guild.name}** using Premium Key \`${key}\`.`, "YELLOW")], ephemeral: true });
         console.log(`[Premium Activated - ${key}] User ${interaction.user.username} (${interaction.user.id}) on ${interaction.guild.name} (${interaction.guild.id})`);
         collector.stop("collected");
       } else if(i.customId == "cancel_key") {
-        interaction.followUp({ embeds: [ this.client.embedBuilder(this.client, interaction.user, `Premium Activation`, `You have successfully canceled activation of Premium Subscription for **${interaction.guild.name}**.`, "RED")] });
+        interaction.followUp({ embeds: [ this.client.embedBuilder(this.client, interaction.user, `Premium Activation`, `You have successfully canceled activation of Premium Subscription for **${interaction.guild.name}**.`, "RED")], ephemeral: true });
         collector.stop("collected");
       }
     });
@@ -184,7 +184,7 @@ Use Buttons to Confirm your decision, you have **1 minute**.
             .setDisabled(true)
             .setStyle('SECONDARY'),
         );
-      await msg.edit({ embeds: [embed], components: [disabledRow] });
+      await msg.editReply({ embeds: [embed], components: [disabledRow] });
     })
   }
 };

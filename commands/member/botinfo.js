@@ -21,7 +21,7 @@ module.exports = class Botinfo extends Command {
     let votes = await api.getVotes();
 
     let embed = new Discord.MessageEmbed()
-      .setAuthor("Bot Informations", this.client.user.displayAvatarURL())
+      .setAuthor({ name: "Bot Informations", iconURL: this.client.user.displayAvatarURL() })
       .setDescription(`Wireless is Advanced Giveaways Bot featuring Giveaway Requirements, Interactive Giveaway Creation, Messages & Invites Counter and more.`)
       .addField(`Developer`, `<@${this.client.config.developer.id}>`, true)
       .addField(`Version`, `${this.client.config.version}`, true)
@@ -42,7 +42,7 @@ module.exports = class Botinfo extends Command {
     const api = new Topgg.Api(process.env.TOP_GG_TOKEN);
     let votes = await api.getVotes();
     let embed = new Discord.MessageEmbed()
-      .setAuthor("Bot Informations", this.client.user.displayAvatarURL())
+      .setAuthor({ name: "Bot Informations", iconURL: this.client.user.displayAvatarURL() })
       .setDescription(`Wireless is Advanced Giveaways Bot featuring Giveaway Requirements, Invites Tracking, Messages & Invites Counter and more.`)
       .addField(`Developer`, `<@${this.client.config.developer.id}>`, true)
       .addField(`Version`, `${this.client.config.version}`, true)
@@ -56,6 +56,6 @@ module.exports = class Botinfo extends Command {
       .addField(`Website Link`, `[Click Here to Get Website Link](${this.client.config.links.website})`, true)
       .setColor("BLURPLE");
   
-    interaction.followUp({ embeds: [embed] });
+    interaction.reply({ embeds: [embed] });
   }
 };

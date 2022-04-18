@@ -30,7 +30,7 @@ module.exports = class Poll extends Command {
       .setDescription(`>>> ${poll}`)
       .setColor("BLURPLE")
       .setTimestamp()
-      .setFooter(message.author.username, message.author.displayAvatarURL({ dynamic: true }));
+      .setFooter({ text: message.author.username, iconURL: message.author.displayAvatarURL({ dynamic: true }) });
 
     message.channel.send({ embeds: [embed] }).then((msg) => {
       msg.react("1️⃣");
@@ -44,8 +44,9 @@ module.exports = class Poll extends Command {
       .setDescription(`>>> ${poll}`)
       .setColor("BLURPLE")
       .setTimestamp()
-      .setFooter(interaction.user.username, interaction.user.displayAvatarURL({ dynamic: true }));
-
+      .setFooter({ text: interaction.user.username, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
+    
+    interaction.reply({ content: "> Poll have been created successfully. ", ephemeral: true })
     interaction.channel.send({ embeds: [embed] }).then((msg) => {
       msg.react("1️⃣");
       msg.react("2️⃣");

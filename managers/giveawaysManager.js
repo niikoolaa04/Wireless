@@ -12,19 +12,19 @@ const startGiveaway = async (client, message, gwObject) => {
   if(roleReq) reqContent += `\n> **›** You need **<@&${roleReq}>** Role to Enter Giveaway.`;
   
   let startEmbed = new Discord.MessageEmbed()
-    .setAuthor("New Giveaway", client.user.displayAvatarURL())
+    .setAuthor({ name: "New Giveaway", iconURL: client.user.displayAvatarURL() })
     .setDescription(`
 **${client.emojisConfig.prize} About Giveaway**
 > **${client.emojisConfig.reward} Reward:** ${gwObject.prize}
 > **${client.emojisConfig.hoster} Hosted by:** <@${gwObject.hostedBy}>
-> **${client.emojisConfig.timer} Time Remaining:** ${client.utils.formatVreme(gwObject.duration)}
+> **${client.emojisConfig.timer} Time Remaining:** ${client.utils.formatTime(gwObject.duration)}
 > **${client.emojisConfig.members} Number of Winners:** ${gwObject.winnerCount}
 ${reqContent}
 
 [Invite Me](${client.config.links.inviteURL}) | [Vote for me](${client.config.links.voteURL}) | [Website](${client.config.links.website}) | [Support Server](${client.config.links.supportServer})`)
     .setColor("BLURPLE")
     .setThumbnail(message.guild.iconURL())
-    .setFooter("Ends at", client.user.displayAvatarURL())
+    .setFooter({ text: "Ends at", iconURL: client.user.displayAvatarURL() })
     .setTimestamp(gwObject.endsAt);
   
   let channel = client.channels.cache.get(gwObject.channelID);
@@ -78,7 +78,7 @@ const editGiveaway = async (client, message, messageID, guild, msgReq, invReq, w
   db.set(`giveaways_${guild.id}`, newData);
   
   delay(1000);
-  client.gw.checkGiveaway(client, message.guild);
+  await client.gw.checkGiveaway(client, message.guild);
 }
 
 const endGiveaway = async (client, message, messageID, guild) => {
@@ -139,7 +139,7 @@ const endGiveaway = async (client, message, messageID, guild) => {
   if (roleReq) reqContent += `\n> **›** You need **<@&${roleReq}>** Role to Enter Giveaway.`;
 
   let editEmbed = new Discord.MessageEmbed()
-    .setAuthor("Giveaway Ended", client.user.displayAvatarURL())
+    .setAuthor({ name: "Giveaway Ended", iconURL: client.user.displayAvatarURL() })
     .setDescription(`
 **${client.emojisConfig.prize} About Giveaway**
 > **${client.emojisConfig.reward} Reward:** ${gwData.prize}
@@ -152,7 +152,7 @@ ${reqContent}
 [Invite Me](${client.config.links.inviteURL}) | [Vote for me](${client.config.links.voteURL}) | [Website](${client.config.links.website}) | [Support Server](${client.config.links.supportServer})`)
     .setColor("RED")
     .setThumbnail(message.guild.iconURL())
-    .setFooter("Ended", client.user.displayAvatarURL())
+    .setFooter({ text: "Ended", iconURL: client.user.displayAvatarURL() })
     .setTimestamp();
 
   msg.edit({ embeds: [editEmbed] });
@@ -290,7 +290,7 @@ const checkGiveaway = async (client, guild) => {
       if(roleReq) reqContent += `\n> **›** You need **<@&${roleReq}>** Role to Enter Giveaway.`;
 
       let editEmbed = new Discord.MessageEmbed()
-        .setAuthor("Giveaway Ended", client.user.displayAvatarURL())
+        .setAuthor({ name: "Giveaway Ended", iconURL: client.user.displayAvatarURL() })
         .setDescription(`
 **${client.emojisConfig.prize} About Giveaway**
 > **${client.emojisConfig.reward} Reward:** ${giveaways[i].prize}
@@ -303,7 +303,7 @@ ${reqContent}
 [Invite Me](${client.config.links.inviteURL}) | [Vote for me](${client.config.links.voteURL}) | [Website](${client.config.links.website}) | [Support Server](${client.config.links.supportServer})`)
         .setColor("RED")
         .setThumbnail(guild.iconURL())
-        .setFooter("Ended", client.user.displayAvatarURL())
+        .setFooter({ text: "Ended", iconURL: client.user.displayAvatarURL() })
         .setTimestamp();
       
       msg.edit({ embeds: [editEmbed] });
@@ -338,19 +338,19 @@ ${reqContent}
       if(roleReq) reqContent += `\n> **›** You need **<@&${roleReq}>** Role to Enter Giveaway.`;
 
       let embedChange = new Discord.MessageEmbed()
-        .setAuthor("New Giveaway", client.user.displayAvatarURL())
+        .setAuthor({ name: "New Giveaway", iconURL: client.user.displayAvatarURL() })
         .setDescription(`
 **${client.emojisConfig.prize} About Giveaway**
 > **${client.emojisConfig.reward} Reward:** ${giveaways[i].prize}
 > **${client.emojisConfig.hoster} Hosted by:** <@${giveaways[i].hostedBy}>
-> **${client.emojisConfig.timer} Time Remaining:** ${client.utils.formatVreme(giveaways[i].endsAt - Date.now())}
+> **${client.emojisConfig.timer} Time Remaining:** ${client.utils.formatTime(giveaways[i].endsAt - Date.now())}
 > **${client.emojisConfig.members} Number of Winners:** ${giveaways[i].winnerCount}
 ${reqContent}
 
 [Invite Me](${client.config.links.inviteURL}) | [Vote for me](${client.config.links.voteURL}) | [Website](${client.config.links.website}) | [Support Server](${client.config.links.supportServer})`)
         .setColor("BLURPLE")
         .setThumbnail(guild.iconURL())
-        .setFooter("Ends at", client.user.displayAvatarURL())
+        .setFooter({ text: "Ends at", iconURL: client.user.displayAvatarURL() })
         .setTimestamp(giveaways[i].endsAt);
 
       msg.edit({ embeds: [embedChange] });

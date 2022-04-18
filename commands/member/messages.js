@@ -30,7 +30,7 @@ module.exports = class Messages extends Command {
     let rank = every.map(x => x.ID).indexOf(`messages_${message.guild.id}_${user.id}`) + 1 || 'N/A';
   
     let embed = new Discord.MessageEmbed()
-      .setAuthor("Messages Count", this.client.user.displayAvatarURL())
+      .setAuthor({ name: "Messages Count", iconURL: this.client.user.displayAvatarURL() })
       .setColor("BLURPLE")
       .setDescription(`> ${user.id == message.author.id ? "You" : user} sent **${messages}** Messages in Total.
 > 
@@ -47,12 +47,12 @@ module.exports = class Messages extends Command {
     let rank = every.map(x => x.ID).indexOf(`messages_${interaction.guild.id}_${user.id}`) + 1 || 'N/A';
   
     let embed = new Discord.MessageEmbed()
-      .setAuthor("Messages Count", this.client.user.displayAvatarURL())
+      .setAuthor({ name: "Messages Count", iconURL: this.client.user.displayAvatarURL() })
       .setColor("BLURPLE")
       .setDescription(`> ${user.id == interaction.user.id ? "You" : user} sent **${messages}** Messages in Total.
 > 
 > **Leaderboard Rank:** #${rank}`);
   
-  interaction.followUp({ embeds: [embed] });
+    interaction.reply({ embeds: [embed] });
   }
 };

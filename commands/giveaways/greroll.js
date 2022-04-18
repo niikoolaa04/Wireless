@@ -40,8 +40,9 @@ module.exports = class GiveawayReroll extends Command {
     let giveaways = db.fetch(`giveaways_${interaction.guild.id}`);
     let gwData = giveaways.find(g => g.messageID == messageID && g.ended == true);
 
-    if (!gwData) return interaction.followUp({ embeds: [ this.client.embedBuilder(this.client, interaction.user, "Error", "You have entered invalid Message ID or that Giveaway haven't ended.", "RED")] });
+    if (!gwData) return interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user, "Error", "You have entered invalid Message ID or that Giveaway haven't ended.", "RED")], ephemeral: true });
 
     this.client.gw.rerollGiveaway(this.client, interaction, messageID);
+    interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user, "Giveaway", `Giveaway have been rerolled successfuly.`, "YELLOW")] });
   }
 };

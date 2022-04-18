@@ -23,8 +23,8 @@ module.exports = class Eval extends Command {
     if (allowedToUse == false) return;
     const hastebin = require('hastebin-gen');
     const embed = new Discord.MessageEmbed()
-      .setAuthor("Eval", this.client.user.displayAvatarURL())
-      .setFooter(message.author.username, message.author.displayAvatarURL({ dynamic: true }))
+      .setAuthor({ name: "Eval", iconURL: this.client.user.displayAvatarURL() })
+      .setFooter({ text: message.author.username, iconURL: message.author.displayAvatarURL({ dynamic: true }) })
       .setTimestamp();
     const code = args.join(' ');
 

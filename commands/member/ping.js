@@ -17,14 +17,14 @@ module.exports = class Ping extends Command {
 
   async run(message, args) {
     let embed = new Discord.MessageEmbed()
-      .setAuthor("Ping", this.client.user.displayAvatarURL())
+      .setAuthor({ name: "Ping", iconURL: this.client.user.displayAvatarURL() })
       .setDescription("Ping?")
       .setColor("YELLOW");
 
     const m = await message.channel.send({ embeds: [embed] });
 
     let embedEdit = new Discord.MessageEmbed()
-      .setAuthor("Ping", this.client.user.displayAvatarURL())
+      .setAuthor({ name: "Ping", iconURL: this.client.user.displayAvatarURL() })
       .setDescription(`Pong!
 **Bot Uptime ·** ${this.client.utils.formatVreme(this.client.uptime)}
 **Latency ·** ${m.createdTimestamp - message.createdTimestamp}ms
@@ -34,15 +34,16 @@ module.exports = class Ping extends Command {
     m.edit({ embeds: [embedEdit] });
   }
   async slashRun(interaction, args) {
+    await interaction.deferReply().catch(() => {});
     let embed = new Discord.MessageEmbed()
-      .setAuthor("Ping", this.client.user.displayAvatarURL())
+      .setAuthor({ name: "Ping", iconURL: this.client.user.displayAvatarURL() })
       .setDescription("Ping?")
       .setColor("YELLOW");
 
     const m = await interaction.followUp({ embeds: [embed] });
 
     let embedEdit = new Discord.MessageEmbed()
-      .setAuthor("Ping", this.client.user.displayAvatarURL())
+      .setAuthor({ name: "Ping", iconURL: this.client.user.displayAvatarURL() })
       .setDescription(`Pong!
 **Bot Uptime ·** ${this.client.utils.formatVreme(this.client.uptime)}
 **Latency ·** ${m.createdTimestamp - interaction.createdTimestamp}ms

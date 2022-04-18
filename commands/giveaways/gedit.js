@@ -186,7 +186,7 @@ Example: \`Nitro Classic\``);
     let giveaways = db.fetch(`giveaways_${interaction.guild.id}`);
     let gwData = giveaways.find(g => g.messageID == messageID && g.ended == false);
     
-    if(!gwData) return interaction.followUp({ embeds: [ this.client.embedBuilder(this.client, interaction.user, "Error", "You have entered invalid Message ID.", "RED")] });
+    if(!gwData) return interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user, "Error", "You have entered invalid Message ID.", "RED")], ephemeral: true });
   
     const editRow = new MessageActionRow()
       .addComponents(
@@ -226,7 +226,7 @@ Example: \`Nitro Classic\``);
       .setDescription(`Choose Option to edit from Select Menu.`)
       .setColor("BLURPLE");
   
-    let msg = await interaction.followUp({ embeds: [mainEmbed], components: [editRow] });
+    let msg = await interaction.reply({ embeds: [mainEmbed], components: [editRow] });
   
     let filter = (i) => i.customId == "edit_select" && i.user.id == interaction.user.id;
     const collector = interaction.channel.createMessageComponentCollector({ filter, componentType: "SELECT_MENU", time: 180000 });
@@ -237,7 +237,7 @@ Example: \`Nitro Classic\``);
         await i.deferUpdate();
         mainEmbed.setDescription(`Enter Number of Messages Required in order to Enter Giveaway - 0 for none.
 Example: \`500\``);
-        await msg.edit({ embeds: [mainEmbed], components: [editRow] });
+        await msg.editReply({ embeds: [mainEmbed], components: [editRow] });
         let eFilter = m => m.author.id == interaction.user.id;
         interaction.channel.awaitMessages({ eFilter, max: 1, time: 30000, errors: ["time"]}).then(async (c) => {
           let m = c.first();
@@ -250,7 +250,7 @@ Example: \`500\``);
         await i.deferUpdate();
         mainEmbed.setDescription(`Enter Number of Invites Required in order to Enter Giveaway - 0 for none.
 Example: \`500\``);
-        await msg.edit({ embeds: [mainEmbed], components: [editRow] });
+        await msg.editReply({ embeds: [mainEmbed], components: [editRow] });
         let eFilter = m => m.author.id == interaction.user.id;
         interaction.channel.awaitMessages({ eFilter, max: 1, time: 30000, errors: ["time"]}).then(async (c) => {
           let m = c.first();
@@ -263,7 +263,7 @@ Example: \`500\``);
         await i.deferUpdate();
         mainEmbed.setDescription(`Enter Number of how much Winners you want.
 Example: \`2\``);
-        await msg.edit({ embeds: [mainEmbed], components: [editRow] });
+        await msg.editReply({ embeds: [mainEmbed], components: [editRow] });
         let eFilter = m => m.author.id == interaction.user.id;
         interaction.channel.awaitMessages({ eFilter, max: 1, time: 30000, errors: ["time"]}).then(async (c) => {
           let m = c.first();
@@ -276,7 +276,7 @@ Example: \`2\``);
         await i.deferUpdate();
         mainEmbed.setDescription(`Enter Extra Time for Giveaway.
 Example: \`2m\``);
-        await msg.edit({ embeds: [mainEmbed], components: [editRow] });
+        await msg.editReply({ embeds: [mainEmbed], components: [editRow] });
         let eFilter = m => m.author.id == interaction.user.id;
         interaction.channel.awaitMessages({ eFilter, max: 1, time: 30000, errors: ["time"]}).then(async (c) => {
           let m = c.first();
@@ -288,7 +288,7 @@ Example: \`2m\``);
         await i.deferUpdate();
         mainEmbed.setDescription(`Enter Prize for Giveaway.
 Example: \`Nitro Classic\``);
-        await msg.edit({ embeds: [mainEmbed], components: [editRow] });
+        await msg.editReply({ embeds: [mainEmbed], components: [editRow] });
         let eFilter = m => m.author.id == interaction.user.id;
         interaction.channel.awaitMessages({ eFilter, max: 1, time: 30000, errors: ["time"]}).then(async (c) => {
           let m = c.first();
@@ -303,6 +303,7 @@ Example: \`Nitro Classic\``);
       }
     });
     collector.on("end", async (collected, reason) => {
+      // ovde
       const disabledRow = new MessageActionRow()
         .addComponents(
           new MessageSelectMenu()
@@ -332,7 +333,7 @@ Example: \`Nitro Classic\``);
               }
             ]),
         );
-      await msg.edit({ embeds: [mainEmbed], components: [disabledRow] });
+      await msg.editReply({ embeds: [mainEmbed], components: [disabledRow] });
     });
   }
 };

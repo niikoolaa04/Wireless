@@ -42,6 +42,6 @@ module.exports = class Invite extends Command {
     let embed = new MessageEmbed()
       .setDescription(`Invite Me to your Server by clicking on Button.`)
       .setColor("BLURPLE");
-    interaction.followUp({ embeds: [embed], components: [row] });
+    interaction.reply({ embeds: [embed], components: [row] });
   }
 };

@@ -10,24 +10,18 @@
     "@top-gg/sdk": "^3.1.2",
     "delay": "^4.3.0",
     "canvas": "latest",
-    "discord.js": "^13.0.0",
+    "discord.js": "^13.6.0",
     "dotenv": "latest",
-    "enmap": "^5.3.1",
     "express": "latest",
     "hastebin-gen": "^2.0.5",
     "moment-timezone": "latest",
     "ms": "^2.1.2",
-    "parse-ms": "^2.0.0",
-    "pretty-ms": "latest",
     "quick.db": "latest",
-    "random": "^2.1.0",
-    "smart-timeout": "^2.5.0",
     "topgg-autoposter": "latest",
-    "twemoji-parser": "latest",
-    "util": "^0.12.3"
+    "twemoji-parser": "latest"
   },
   "engines": {
-    "node": "16.x"
+    "node": ">=16.6.0"
   },
   "license": "MIT",
   "keywords": [

@@ -41,7 +41,7 @@ module.exports = class LiveLb extends Command {
         .setTitle("👑・Live Invites")
         .setDescription(`Live Leaderboard is Updated every 10 minutes.`)
         .addField("🎫・Leaderboard", content)
-        .setFooter("Updated at", this.client.user.displayAvatarURL())
+        .setFooter({ text: "Updated at", iconURL: this.client.user.displayAvatarURL() })
         .setThumbnail(message.guild.iconURL())
         .setColor("BLURPLE")
         .setTimestamp();
@@ -61,7 +61,7 @@ module.exports = class LiveLb extends Command {
 
     if (live != null) {
       db.delete(`server_${interaction.guild.id}_liveLb`);
-      interaction.channel.send({ embeds: [this.client.embedBuilder(this.client, interaction.user, "Live Leaderboard", "Live Leaderboard have been removed from Database, you can delete Embed now.", "YELLOW")] })
+      interaction.reply({ embeds: [this.client.embedBuilder(this.client, interaction.user, "Live Leaderboard", "Live Leaderboard have been removed from Database, you can delete Embed now.", "YELLOW")] })
     } else {
       let invites = db.all().filter(i => i.ID.startsWith(`invitesRegular_${interaction.guild.id}_`)).sort((a, b) => b.data - a.data);
 
@@ -82,11 +82,12 @@ module.exports = class LiveLb extends Command {
         .setTitle("👑・Live Invites")
         .setDescription(`Live Leaderboard is Updated every 10 minutes.`)
         .addField("🎫・Leaderboard", content)
-        .setFooter("Updated at", this.client.user.displayAvatarURL())
+        .setFooter({ text: "Updated at", iconURL: this.client.user.displayAvatarURL() })
         .setThumbnail(interaction.guild.iconURL())
         .setColor("BLURPLE")
         .setTimestamp();
 
+      interaction.reply({ content: "> Live Leaderboard have been created successfully.", ephemeral: true  });
       interaction.channel.send({ embeds: [embed] }).then(async (m) => {
         let channelData = {
           channel: m.channelId,

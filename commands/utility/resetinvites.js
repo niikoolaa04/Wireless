@@ -11,6 +11,7 @@ module.exports = class ResetInvites extends Command {
 			permissions: ["ADMINISTRATOR"],
 			category: "utility",
 			listed: true,
+			// ovde
 		});
 	}
   

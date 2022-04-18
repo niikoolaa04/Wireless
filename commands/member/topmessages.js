@@ -38,6 +38,6 @@ ${content}`)
 ${content}`)
       .setColor("BLURPLE");
 
-    interaction.followUp({ embeds: [embed] });
+    interaction.reply({ embeds: [embed] });
   }
 };

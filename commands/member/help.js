@@ -75,7 +75,7 @@ module.exports = class Help extends Command {
         .setTimestamp()
         .setColor("BLURPLE")
         .setThumbnail(user.displayAvatarURL({ size: 1024, dynamic: true }))
-        .setFooter(`Total Commands ${loadedCommands.length}`, message.author.displayAvatarURL({ size: 1024, dynamic: true }));
+        .setFooter({ text: `Total Commands ${loadedCommands.length}`, iconURL: message.author.displayAvatarURL({ size: 1024, dynamic: true }) });
       let mainMenu = await message.channel.send({ embeds: [cmdEmbed], components: [helpRow] });
 
       let filter = (i) => i.customId == "help" && i.user.id == message.author.id;
@@ -92,7 +92,7 @@ module.exports = class Help extends Command {
             .setTimestamp()
             .setColor("BLURPLE")
             .setThumbnail(user.displayAvatarURL({ size: 1024, dynamic: true }))
-            .setFooter(`Total Commands ${loadedCommands.length}`, message.author.displayAvatarURL({ size: 1024, dynamic: true }));
+            .setFooter({ text: `Total Commands ${loadedCommands.length}`, iconURL: message.author.displayAvatarURL({ size: 1024, dynamic: true }) });
           mainMenu.edit({ embeds: [memberEmbed], components: [helpRow] });
         } else if(i.values[0] == "gw_menu") {
           await i.deferUpdate();
@@ -104,7 +104,7 @@ module.exports = class Help extends Command {
             .setTimestamp()
             .setColor("BLURPLE")
             .setThumbnail(user.displayAvatarURL({ size: 1024, dynamic: true }))
-            .setFooter(`Total Commands ${loadedCommands.length}`, message.author.displayAvatarURL({ size: 1024, dynamic: true }));
+            .setFooter({ text: `Total Commands ${loadedCommands.length}`, iconURL: message.author.displayAvatarURL({ size: 1024, dynamic: true }) });
           mainMenu.edit({ embeds: [gwEmbed], components: [helpRow] });
         } else if(i.values[0] == "utility_menu") {
           await i.deferUpdate();
@@ -116,7 +116,7 @@ module.exports = class Help extends Command {
             .setTimestamp()
             .setColor("BLURPLE")
             .setThumbnail(user.displayAvatarURL({ size: 1024, dynamic: true }))
-            .setFooter(`Total Commands ${loadedCommands.length}`, message.author.displayAvatarURL({ size: 1024, dynamic: true }));
+            .setFooter({ text: `Total Commands ${loadedCommands.length}`, iconURL: message.author.displayAvatarURL({ size: 1024, dynamic: true }) });
           mainMenu.edit({ embeds: [utilityEmbed], components: [helpRow] });
         } else if(i.values[0] == "home_menu") {
             await i.deferUpdate();
@@ -172,7 +172,7 @@ module.exports = class Help extends Command {
 > **Usage** · \`${prefix}${cmd.usage}\`
 > **Category** · \`${this.client.utils.capitalizeFirstLetter(cmd.category)}\``)
         .setColor("BLURPLE")
-        .setFooter(this.client.config.footer, this.client.user.displayAvatarURL({ size: 1024, dynamic: true }))
+        .setFooter({ text: this.client.config.footer, iconURL: this.client.user.displayAvatarURL({ size: 1024, dynamic: true }) })
         .setTimestamp();
   
       message.channel.send({ embeds: [embed] });
@@ -236,13 +236,14 @@ module.exports = class Help extends Command {
       .setTimestamp()
       .setColor("BLURPLE")
       .setThumbnail(interaction.user.displayAvatarURL({ size: 1024, dynamic: true }))
-      .setFooter(`Total Commands ${loadedCommands.length}`, interaction.user.displayAvatarURL({ size: 1024, dynamic: true }));
-    interaction.followUp({ embeds: [cmdEmbed], components: [helpRow] });
+      .setFooter({ text: `Total Commands ${loadedCommands.length}`, iconURL: interaction.user.displayAvatarURL({ size: 1024, dynamic: true }) });
+    interaction.reply({ embeds: [cmdEmbed], components: [helpRow] });
 
     let filter = i => i.customId == "help" && i.user.id === interaction.user.id;
     const collector = interaction.channel.createMessageComponentCollector({ filter, componentType: "SELECT_MENU", time: 300000, errors: ["time"] });
 
     collector.on("collect", async i => {
+      await i.deferUpdate();
       if(i.values[0] == "member_menu") {
         let memberEmbed = new MessageEmbed()
           .setTitle("👤・Member Commands")
@@ -252,8 +253,8 @@ module.exports = class Help extends Command {
           .setTimestamp()
           .setColor("BLURPLE")
           .setThumbnail(interaction.user.displayAvatarURL({ size: 1024, dynamic: true }))
-          .setFooter(`Total Commands ${loadedCommands.length}`, interaction.user.displayAvatarURL({ size: 1024, dynamic: true }));
-        i.update({ embeds: [memberEmbed], components: [helpRow] });
+          .setFooter({ text: `Total Commands ${loadedCommands.length}`, iconURL: interaction.user.displayAvatarURL({ size: 1024, dynamic: true }) });
+        interaction.updateReply({ embeds: [memberEmbed], components: [helpRow] });
       } else if(i.values[0] == "gw_menu") {
         let gwEmbed = new MessageEmbed()
           .setTitle("🎁・Giveaway Commands")
@@ -263,8 +264,8 @@ module.exports = class Help extends Command {
           .setTimestamp()
           .setColor("BLURPLE")
           .setThumbnail(interaction.user.displayAvatarURL({ size: 1024, dynamic: true }))
-          .setFooter(`Total Commands ${loadedCommands.length}`, interaction.user.displayAvatarURL({ size: 1024, dynamic: true }));
-        i.update({ embeds: [gwEmbed], components: [helpRow] });
+          .setFooter({ text: `Total Commands ${loadedCommands.length}`, iconURL: interaction.user.displayAvatarURL({ size: 1024, dynamic: true }) });
+        interaction.editReply({ embeds: [gwEmbed], components: [helpRow] });
       } else if(i.values[0] == "utility_menu") {
         let utilityEmbed = new MessageEmbed()
           .setTitle("🔎・Utility Commands")
@@ -274,10 +275,10 @@ module.exports = class Help extends Command {
           .setTimestamp()
           .setColor("BLURPLE")
           .setThumbnail(interaction.user.displayAvatarURL({ size: 1024, dynamic: true }))
-          .setFooter(`Total Commands ${loadedCommands.length}`, interaction.user.displayAvatarURL({ size: 1024, dynamic: true }));
-        i.update({ embeds: [utilityEmbed], components: [helpRow] });
+          .setFooter({ text: `Total Commands ${loadedCommands.length}`, iconURL: interaction.user.displayAvatarURL({ size: 1024, dynamic: true }) });
+        interaction.editReply({ embeds: [utilityEmbed], components: [helpRow] });
       } else if(i.values[0] == "home_menu") {
-        i.update({ embeds: [cmdEmbed], components: [helpRow] })
+        interaction.editReply({ embeds: [cmdEmbed], components: [helpRow] })
       }
     });
 

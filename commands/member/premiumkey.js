@@ -41,17 +41,17 @@ module.exports = class PremiumKey extends Command {
     let sGuild = this.client.guilds.cache.get(this.client.config.developer.supportGuild);
     let member = sGuild.members.cache.get(interaction.user.id);
     let generated = db.fetch(`generated_${interaction.user.id}`);
-    if(!member.roles.cache.some(r => r == this.client.config.developer.patreon)) return interaction.followUp({ embeds: [ this.client.embedBuilder(this.client, interaction.user, `Error`, `You aren't our Patreon or have left Support Server.`, "RED")] });
-    if(generated == true) return interaction.followUp({ embeds: [ this.client.embedBuilder(this.client, interaction.user, `Error`, `You have already generated key.`, "RED")] });
+    if(!member.roles.cache.some(r => r == this.client.config.developer.patreon)) return interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user, `Error`, `You aren't our Patreon or have left Support Server.`, "RED")], ephemeral: true });
+    if(generated == true) return interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user, `Error`, `You have already generated key.`, "RED")], ephemeral: true });
     let keyList = db.fetch(`premiumKeys`) || [];
     let usedList = db.fetch(`invalidKeys`) || [];
     let key = this.client.utils.premiumKey();
     if(keyList.includes(key) || usedList.includes(key)) 
-      return interaction.followUp({ embeds: [ this.client.embedBuilder(this.client, interaction.user, `Error`, "Generated Key Already exist in Database, please run command again.", "RED")] });
+      return interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user, `Error`, "Generated Key Already exist in Database, please run command again.", "RED")], ephemeral: true });
   
     db.push(`premiumKeys`, key);
     let closed = false;
-    interaction.followUp({ embeds: [ this.client.embedBuilder(this.client, interaction.user, `Premium Key`, `Premium Key have been sent to your DM.`, "YELLOW")] });
+    interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user, `Premium Key`, `Premium Key have been sent to your DM.`, "YELLOW")], ephemeral: true });
     interaction.user.send({ embeds: [ this.client.embedBuilder(this.client, interaction.user, `Premium Key`, `Premium Key \`${key}\` have been generated successfully. To redeem it use \`activatekey\` command on Server you want to Upgrade.`, "YELLOW")] }).catch((err) => {
       closed = true;
       interaction.followUp({ embeds: [ this.client.embedBuilder(this.client, interaction.user, `Error`, `Your DM is closed, please open it.`, "RED")] });

@@ -38,13 +38,14 @@ module.exports = class Ready extends Event {
     });
     this.client.invites = invites; 
 
-    this.client.guilds.cache.forEach(g => {
-      setInterval(() => {
-        this.client.gw.checkGiveaway(this.client, g);
-      }, 30000);
-      if(!g.me.permissions.has("MANAGE_GUILD")) return;
-    }); 
-    
+    setInterval(() => {
+      this.client.guilds.cache.forEach(async(g) => {
+        if(g.me.permissions.has("MANAGE_GUILD")) {
+          await this.client.gw.checkGiveaway(this.client, g);
+        }
+      })
+    }, 30000);
+
     setInterval(() => {
       this.client.guilds.cache.forEach(async (g) => {
         this.client.liveLb.updateLb(this.client, g)

@@ -30,10 +30,10 @@ module.exports = class Minecraft extends Command {
       text.toLowerCase().includes("đ")) return message.channel.send({ content: "> Instead of **'Š, Đ, Č, Ć, Ž'** use **'S, Dj, C, C, Z'**" });
 
     let embedError = new Discord.MessageEmbed()
-      .setAuthor("Error", this.client.user.displayAvatarURL())
+      .setAuthor({ name: "Error", iconURL: this.client.user.displayAvatarURL() })
       .setDescription(`You need to enter text.`)
       .setTimestamp()
-      .setFooter(message.author.username, message.author.displayAvatarURL({ size: 1024, dynamic: true }))
+      .setFooter({ text: message.author.username, iconURL: message.author.displayAvatarURL({ size: 1024, dynamic: true }) })
       .setColor("RANDOM");
 
     var url = "https://minecraftskinstealer.com/achievement/" + (Math.floor(Math.random() * 30) + 1) + "/Achievement+Get%21/" + text;
@@ -51,16 +51,16 @@ module.exports = class Minecraft extends Command {
       text.toLowerCase().includes("đ")) return interaction.followUp({ content: "> Instead of **'Š, Đ, Č, Ć, Ž'** use **'S, Dj, C, C, Z'**" });
 
     let embedError = new Discord.MessageEmbed()
-      .setAuthor("Error", this.client.user.displayAvatarURL())
+      .setAuthor({ name: "Error", iconURL: this.client.user.displayAvatarURL() })
       .setDescription(`You need to enter text.`)
       .setTimestamp()
-      .setFooter(interaction.user.username, interaction.user.displayAvatarURL({ size: 1024, dynamic: true }))
+      .setFooter({ text: interaction.user.username, iconURL: interaction.user.displayAvatarURL({ size: 1024, dynamic: true }) })
       .setColor("RANDOM");
 
     var url = "https://minecraftskinstealer.com/achievement/" + (Math.floor(Math.random() * 30) + 1) + "/Achievement+Get%21/" + text;
     let file = new Discord.MessageAttachment(await url, "MinecraftAchievement.png");
 
-    if (!text) return interaction.followUp({ embeds: [embedError] });
-    interaction.followUp({ files: [file] });
+    if (!text) return interaction.reply({ embeds: [embedError] });
+    interaction.reply({ files: [file] });
   }
 };

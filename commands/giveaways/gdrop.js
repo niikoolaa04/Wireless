@@ -62,9 +62,9 @@ module.exports = class GiveawayDrop extends Command {
     let winnersArg = interaction.options.getInteger("winners");
     let prizeArg = interaction.options.getString("prize");
 
-    if(isNaN(ms(durationArg))) return interaction.followUp({ embeds: [ this.client.embedBuilder(this.client, interaction.user, "Error", "You have entered invalid Giveaway Duration.", "RED")] });
-    if(isNaN(winnersArg) || winnersArg <= 0) return interaction.followUp({ embeds: [ this.client.embedBuilder(this.client, interaction.user, "Error", "You haven't entered number of winners.", "RED")] });
-    if(prizeArg.length >= 256) return interaction.followUp({ embeds: [ this.client.embedBuilder(this.client, interaction.user, "Error", "You have entered invalid Prize.", "RED")] });
+    if(isNaN(ms(durationArg))) return interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user, "Error", "You have entered invalid Giveaway Duration.", "RED")], ephemeral: true });
+    if(isNaN(winnersArg) || winnersArg <= 0) return interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user, "Error", "You haven't entered number of winners.", "RED")], ephemeral: true });
+    if(prizeArg.length >= 256) return interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user, "Error", "You have entered invalid Prize.", "RED")], ephemeral: true });
 
     let giveawayObject = this.client.utils.giveawayObject(
       interaction.guild.id, 
@@ -78,8 +78,9 @@ module.exports = class GiveawayDrop extends Command {
       interaction.user.id,
       prizeArg,
     );
+    // ovde
     this.client.gw.startGiveaway(this.client, interaction, giveawayObject);
     
-    interaction.followUp({ embeds: [ this.client.embedBuilder(this.client, interaction.user, "Giveaway", `Giveaway has started in Channel ${interaction.channel}.`, "YELLOW")] });
+    interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user, "Giveaway", `Giveaway has started in Channel ${interaction.channel}.`, "YELLOW")] });
   }
 };

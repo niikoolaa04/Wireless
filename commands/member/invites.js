@@ -43,7 +43,7 @@ module.exports = class Invites extends Command {
     }
   
     let embed = new Discord.MessageEmbed()
-      .setAuthor("Invites Count", this.client.user.displayAvatarURL())
+      .setAuthor({ name: "Invites Count", iconURL: this.client.user.displayAvatarURL() })
       .setColor("BLURPLE")
       .setDescription(`> **User:** ${user.username}
 
@@ -79,7 +79,7 @@ ${contentHistory}`);
     }
   
     let embed = new Discord.MessageEmbed()
-      .setAuthor("Invites Count", this.client.user.displayAvatarURL())
+      .setAuthor({ name: "Invites Count", iconURL: this.client.user.displayAvatarURL() })
       .setColor("BLURPLE")
       .setDescription(`> **User:** ${user.username}
 > **${regular}** Invites \`(${regular + bonus} total, ${joins} joins, ${left} leaves, ${bonus} bonus)\`
@@ -90,6 +90,6 @@ ${contentHistory}`);
 🎟️ ・ Invites History
 ${contentHistory}`);
   
-    interaction.followUp({ embeds: [embed] });
+    interaction.reply({ embeds: [embed] });
   }
 };

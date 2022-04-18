@@ -30,7 +30,7 @@ module.exports = class GuildCreate extends Event {
     );
 
     let ownerDM = new Discord.MessageEmbed()
-      .setAuthor(owner.user.username, this.client.user.displayAvatarURL())
+      .setAuthor({ text: owner.user.username, iconURL: this.client.user.displayAvatarURL() })
       .setDescription(`Hey ${owner.user}, thank you for adding me to **${guild.name}**.
 To start with bot do \`${this.client.config.prefix}help\` to view all available commands.
 

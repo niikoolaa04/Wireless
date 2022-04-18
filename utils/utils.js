@@ -44,7 +44,7 @@ function commandsList(client, message, category) {
   return content;
 }
 
-function formatVreme(ms) {
+function formatTime(ms) {
   let roundNumber = ms > 0 ? Math.floor : Math.ceil;
   let days = roundNumber(ms / 86400000),
   hours = roundNumber(ms / 3600000) % 24,
@@ -221,7 +221,7 @@ module.exports = {
   giveawayObject, 
   commandsList, 
   capitalizeFirstLetter, 
-  formatVreme, 
+  formatTime, 
   lbContent, 
   configStrings,
   isEqual, 

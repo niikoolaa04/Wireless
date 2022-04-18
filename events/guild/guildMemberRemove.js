@@ -1,5 +1,4 @@
 const db = require("quick.db");
-const Timeout = require("smart-timeout");
 const delay = require("delay");
 const moment = require('moment-timezone');
 moment.locale('sr-latn');

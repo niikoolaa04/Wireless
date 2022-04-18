@@ -31,7 +31,7 @@ module.exports = class Prefix extends Command {
     db.set(`settings_${message.guild.id}_prefix`, prefix);
   
     let embed = new Discord.MessageEmbed()
-    .setAuthor("Prefix", this.client.user.displayAvatarURL())
+    .setAuthor({ name: "Prefix", iconURL: this.client.user.displayAvatarURL() })
     .setDescription(`Guild prefix have been successfully changed to \`${prefix}\``)
     .setColor("BLURPLE");
   
@@ -40,15 +40,15 @@ module.exports = class Prefix extends Command {
   async slashRun(interaction, args) {
     let prefix = interaction.options.getString("prefix");
     let real = db.fetch(`settings_${interaction.guild.id}_prefix`);
-    if (prefix === real) return interaction.followUp({ embeds: [ this.client.embedBuilder(this.client, interaction.user, 
-        `Error`, "New Prefix cannot be same as old one.", "RED") ]});
+    if (prefix === real) return interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user, 
+        `Error`, "New Prefix cannot be same as old one.", "RED")], ephemeral: true });
     db.set(`settings_${interaction.guild.id}_prefix`, prefix);
   
     let embed = new Discord.MessageEmbed()
-      .setAuthor("Prefix", this.client.user.displayAvatarURL())
+      .setAuthor({ name: "Prefix", iconURL: this.client.user.displayAvatarURL() })
       .setDescription(`Guild prefix have been successfully changed to \`${prefix}\``)
       .setColor("BLURPLE");
   
-    interaction.followUp({ embeds: [embed] });
+    interaction.reply({ embeds: [embed] });
   }
 };

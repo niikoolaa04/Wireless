@@ -10,8 +10,6 @@ module.exports = class InteractionCreate extends Event {
 	async run(interaction) {
     if(this.client.disabledGuilds.includes(interaction.guild.id)) return;
     if (interaction.isCommand()) {
-      await interaction.deferReply().catch(() => {});
-
       const cmd = this.client.slashCommands.get(interaction.commandName);
       if (!cmd) return interaction.followUp({ content: "> Error occured, please contact Bot Developer." });
 

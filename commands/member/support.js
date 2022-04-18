@@ -42,6 +42,6 @@ module.exports = class Support extends Command {
     let embed = new MessageEmbed()
       .setDescription(`Join Support Server by clicking on Button.`)
       .setColor("BLURPLE");
-    interaction.followUp({ embeds: [embed], components: [row] });
+    interaction.reply({ embeds: [embed], components: [row] });
   }
 };

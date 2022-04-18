@@ -8,7 +8,7 @@ module.exports = class GiveawayStart extends Command {
 		super(client, {
 			name: "gstart",
 			description: "Start new giveaway",
-			usage: "gstart [duration] [#channel] [no. of winners] [messages req. || 0] [invites req. || 0] [prize]",
+			usage: "gstart [duration] [#channel] [no. of winners] [@Role req. || 'none'] [messages req. || 0] [invites req. || 0] [prize]",
 			permissions: ["ADMINISTRATOR"],
 			aliases: ["gwstart"],
 			category: "giveaway",
@@ -28,6 +28,11 @@ module.exports = class GiveawayStart extends Command {
         name: 'winners',
         type: 'INTEGER',
         description: 'Number of Winners',
+        required: true,
+      }, {
+        name: 'role',
+        type: 'ROLE',
+        description: 'Role Required to enter Giveaway - Mention Bot Role for none',
         required: true,
       },{
         name: 'messages',
@@ -52,15 +57,17 @@ module.exports = class GiveawayStart extends Command {
     let durationArg = args[0];
     let channelArg = message.mentions.channels.first();
     let winnersArg = parseInt(args[2]);
-    let messagesArg = args[3];
-    let invitesArg = args[4];
-    let prizeArg = args.slice(5).join(" ");
+    let roleArg = message.mentions.roles.first() || args[3];
+    let messagesArg = args[4];
+    let invitesArg = args[5];
+    let prizeArg = args.slice(6).join(" ");
     let premiumGuild = db.fetch(`server_${message.guild.id}_premium`);
     
     if(!durationArg || isNaN(ms(durationArg))) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, "Error", "You have entered invalid Giveaway Duration.", "RED")] });
     if(!channelArg) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, "Error", "You have mentioned invalid Channel.", "RED")] });
     if(!winnersArg || isNaN(winnersArg) || winnersArg <= 0) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, "Error", "You haven't entered number of winners.", "RED")] });
     if(winnersArg > 20 && premiumGuild != true) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, "Error", "To Create Giveaway with 20+ Winners you need Premium, get more informations using command `premium`.", "RED")] });
+    if(!roleArg) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, "Error", "You have entered invalid Role Required for Entering Giveaway.", "RED")] });
     if(!messagesArg || isNaN(messagesArg) || messagesArg < 0) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, "Error", "You have entered invalid Number of Messages Required for Entering Giveaway.", "RED")] });
     if(!invitesArg || isNaN(invitesArg) || invitesArg < 0) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, "Error", "You have entered invalid Number of Invites Required for Entering Giveaway.", "RED")] });
     if(!prizeArg || prizeArg.length >= 32) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, "Error", "You have entered invalid Prize.", "RED")] });
@@ -69,6 +76,7 @@ module.exports = class GiveawayStart extends Command {
       message.guild.id, 
       0, 
       ms(durationArg), 
+      typeof(roleArg) == "object" ? `${roleArg.id}` : null,
       channelArg.id, 
       winnersArg, 
       parseInt(messagesArg), 
@@ -85,6 +93,7 @@ module.exports = class GiveawayStart extends Command {
     let durationArg = interaction.options.getString("duration");
     let channelArg = interaction.options.getChannel("channel");
     let winnersArg = interaction.options.getInteger("winners");
+    let roleArg = interaction.options.getRole("role");
     let messagesArg = interaction.options.getInteger("messages");
     let invitesArg = interaction.options.getInteger("invites");
     let prizeArg = interaction.options.getString("prize");
@@ -95,7 +104,8 @@ module.exports = class GiveawayStart extends Command {
     let giveawayObject = this.client.utils.giveawayObject(
       interaction.guild.id, 
       0, 
-      ms(durationArg), 
+      ms(durationArg),
+      roleArg.tags.botId ? null : `${roleArg.id}`,
       channelArg.id, 
       winnersArg, 
       parseInt(messagesArg), 

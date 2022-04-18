@@ -25,7 +25,8 @@ async function submitGiveaway(client, message, data) {
 **\`👑\` Number of Winners:** ${data.winners}
 **\`💬\` Messages Required:** ${data.messages}
 **\`🎫\` Invites Required:** ${data.invites}
-**\`🎁\` Prize:** ${data.invites}`)
+**\`🪨\` Role Required:** ${data.role || 'N/A'}
+**\`🎁\` Prize:** ${data.prize}`)
     .setColor("BLURPLE")
 
   messageReply(message, gwConfirm, row);
@@ -41,6 +42,7 @@ async function submitGiveaway(client, message, data) {
         message.guild.id, 
         0, 
         ms(data.duration), 
+        data.role,
         data.channel.id, 
         parseInt(data.winners), 
         parseInt(data.messages), 
@@ -192,6 +194,46 @@ Example: \`500\``);
   });
 }
 
+// OVDEEEE
+
+async function roleSetup(client, message, embed, filter, data) {
+  embed.setDescription(`Mention Role which will be required to Enter Giveaway - 'none' for none.
+Example: \`@Member\``);
+  messageReply(message, embed);
+  // message.channel.send({ embeds: [embed] });
+
+  let roleCollector = message.channel.createMessageCollector({ filter, time: 60000, errors: ["time"] });
+
+  roleCollector.on("collect", async (msg) => {
+    let cancelEmbed = new MessageEmbed()
+      .setColor("BLURPLE")
+      .setDescription('You have canceled Giveaway Creation')
+      .setAuthor({ name: "Giveaway Setup", iconURL: client.user.displayAvatarURL() });
+    if (msg.content.toLowerCase() == "cancel") {
+      client.gwCreation.set(message.member.id, false);
+      messageReply(message, cancelEmbed);
+      // message.channel.send({ embeds: [cancelEmbed] });
+      roleCollector.stop()
+      return;
+    }
+
+    data.role = msg.mentions.roles.first() ? msg.mentions.roles.first().id : null;
+    await messagesSetup(client, message, embed, filter, data);
+    roleCollector.stop();
+  });
+
+  roleCollector.on("end", (collected, reason) => {
+    if (reason != "time") return;
+    client.gwCreation.set(message.member.id, false);
+    let endEmbed = new MessageEmbed()
+      .setColor("RED")
+      .setDescription('Time has passed without response, giveaway creation stopped')
+      .setAuthor({ name: "Giveaway Setup", iconURL: client.user.displayAvatarURL() });
+    messageReply(message, endEmbed);
+    // message.channel.send({ embeds: [endEmbed] });
+  });
+}
+
 async function winnersSetup(client, message, embed, filter, data) {
   let premiumGuild = db.fetch(`server_${message.guild.id}_premium`);
   embed.setDescription(`Enter Number of how much Winners you want.
@@ -217,7 +259,7 @@ Example: \`2\``);
     if(isNaN(msg.content)) return messageReply(message, client.embedBuilder(client, message.member.user, "Giveaway Setup", `You have entered Invalid Number of Winners.`, "RED"));
     if(msg.content > 20 && premiumGuild != true) return messageReply(message, client.embedBuilder(client, message.member, "Error", "To Create Giveaway with 20+ Winners you need Premium, get more informations using command `premium`.", "RED"));
     data.winners = msg.content;
-    await messagesSetup(client, message, embed, filter, data);
+    await roleSetup(client, message, embed, filter, data);
     winnerCollector.stop();
   });
 

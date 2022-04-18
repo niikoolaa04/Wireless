@@ -5,11 +5,10 @@ const delay = require("delay");
 
 const startGiveaway = async (client, message, gwObject) => {
   let reqContent = "";
-  let roleReq = db.fetch(`server_${message.guild.id}_roleReq`);
-  if(gwObject.requirements.messagesReq > 0 || gwObject.requirements.invitesReq > 0 || roleReq != null) reqContent += `\n**${client.emojisConfig.tasks} Requirements**`;
+  if(gwObject.requirements.messagesReq > 0 || gwObject.requirements.invitesReq > 0 || gwObject.requirements.roleReq != null) reqContent += `\n**${client.emojisConfig.tasks} Requirements**`;
   if(gwObject.requirements.messagesReq > 0) reqContent += `\n> **›** You need **${gwObject.requirements.messagesReq}** Message(s) to Enter Giveaway.`;
   if(gwObject.requirements.invitesReq > 0) reqContent += `\n> **›** You need **${gwObject.requirements.invitesReq}** Invite(s) to Enter Giveaway.`;
-  if(roleReq) reqContent += `\n> **›** You need **<@&${roleReq}>** Role to Enter Giveaway.`;
+  if(gwObject.requirements.roleReq) reqContent += `\n> **›** You need **<@&${gwObject.requirements.roleReq}>** Role to Enter Giveaway.`;
   
   let startEmbed = new Discord.MessageEmbed()
     .setAuthor({ name: "New Giveaway", iconURL: client.user.displayAvatarURL() })
@@ -114,6 +113,7 @@ const endGiveaway = async (client, message, messageID, guild) => {
     gwData.guildID,
     gwData.messageID,
     "Ended",
+    gwData.requirements.roleReq,
     gwData.channelID,
     gwData.winnerCount,
     gwData.requirements.messagesReq,
@@ -132,11 +132,10 @@ const endGiveaway = async (client, message, messageID, guild) => {
   db.set(`giveaways_${guild.id}`, newData);
 
   let reqContent = "";
-  let roleReq = db.fetch(`server_${message.guild.id}_roleReq`);
-  if (gwData.requirements.messagesReq > 0 || gwData.requirements.invitesReq > 0 || roleReq != null) reqContent += `\n**${client.emojisConfig.tasks} Requirements**`;
+  if (gwData.requirements.messagesReq > 0 || gwData.requirements.invitesReq > 0 || gwData.requirements.roleReq != null) reqContent += `\n**${client.emojisConfig.tasks} Requirements**`;
   if (gwData.requirements.messagesReq > 0) reqContent += `\n> **›** You need **${gwData.requirements.messagesReq}** Message(s) to Enter Giveaway.`;
   if (gwData.requirements.invitesReq > 0) reqContent += `\n> **›** You need **${gwData.requirements.invitesReq}** Invite(s) to Enter Giveaway.`;
-  if (roleReq) reqContent += `\n> **›** You need **<@&${roleReq}>** Role to Enter Giveaway.`;
+  if (gwData.requirements.roleReq) reqContent += `\n> **›** You need **<@&${gwData.requirements.roleReq}>** Role to Enter Giveaway.`;
 
   let editEmbed = new Discord.MessageEmbed()
     .setAuthor({ name: "Giveaway Ended", iconURL: client.user.displayAvatarURL() })
@@ -156,8 +155,6 @@ ${reqContent}
     .setTimestamp();
 
   msg.edit({ embeds: [editEmbed] });
-  
-  db.delete(`server_${message.guild.id}_roleReq`);
 
   let hasWinners = `\`🎊\` Congratulations to ${gwData.winnerCount > 1 ? "winners" : "winner"} ${winners} on winning this Giveaway!\nGood Luck to the others next time.`;
   let noWinners = `\`🎊\` Giveaway ended but there is no winner(s).`;
@@ -265,6 +262,7 @@ const checkGiveaway = async (client, guild) => {
         giveaways[i].guildID,
         giveaways[i].messageID, 
         "Ended", 
+        giveaways[i].requirements.roleReq,
         giveaways[i].channelID, 
         giveaways[i].winnerCount, 
         giveaways[i].requirements.messagesReq, 
@@ -283,11 +281,10 @@ const checkGiveaway = async (client, guild) => {
       db.set(`giveaways_${guild.id}`, newData);
       
       let reqContent = "";
-      let roleReq = db.fetch(`server_${guild.id}_roleReq`);
-      if(giveaways[i].requirements.messagesReq > 0 || giveaways[i].requirements.invitesReq > 0 || roleReq != null) reqContent += `\n**${client.emojisConfig.tasks} Requirements**`;
+      if(giveaways[i].requirements.messagesReq > 0 || giveaways[i].requirements.invitesReq > 0 || giveaways[i].requirements.roleReq != null) reqContent += `\n**${client.emojisConfig.tasks} Requirements**`;
       if(giveaways[i].requirements.messagesReq > 0) reqContent += `\n> **›** You need **${giveaways[i].requirements.messagesReq}** Message(s) to Enter Giveaway.`;
       if(giveaways[i].requirements.invitesReq > 0) reqContent += `\n> **›** You need **${giveaways[i].requirements.invitesReq}** Invite(s) to Enter Giveaway.`;
-      if(roleReq) reqContent += `\n> **›** You need **<@&${roleReq}>** Role to Enter Giveaway.`;
+      if(giveaways[i].requirements.roleReq) reqContent += `\n> **›** You need **<@&${giveaways[i].requirements.roleReq}>** Role to Enter Giveaway.`;
 
       let editEmbed = new Discord.MessageEmbed()
         .setAuthor({ name: "Giveaway Ended", iconURL: client.user.displayAvatarURL() })
@@ -310,8 +307,6 @@ ${reqContent}
       
       let hasWinners = `\`🎊\` Congratulations to ${giveaways[i].winnerCount > 1 ? "winners" : "winner"} ${winners} on winning this Giveaway!\nGood Luck to the others next time.`;
       let noWinners = `\`🎊\` Giveaway ended but there is no winner(s).`;
-      
-      db.delete(`server_${giveaways[i].guildID}_roleReq`);
 
       let endEmbed = new Discord.MessageEmbed()
         .setTitle("🎁・Giveaway")
@@ -331,11 +326,10 @@ ${reqContent}
 
     } else {
       let reqContent = "";
-      let roleReq = db.fetch(`server_${guild.id}_roleReq`);
-      if(giveaways[i].requirements.messagesReq > 0 || giveaways[i].requirements.invitesReq > 0 || roleReq != null) reqContent += `\n**${client.emojisConfig.tasks} Requirements**`;
+      if(giveaways[i].requirements.messagesReq > 0 || giveaways[i].requirements.invitesReq > 0 || giveaways[i].requirements.roleReq != null) reqContent += `\n**${client.emojisConfig.tasks} Requirements**`;
       if(giveaways[i].requirements.messagesReq > 0) reqContent += `\n> **›** You need **${giveaways[i].requirements.messagesReq}** Message(s) to Enter Giveaway.`;
       if(giveaways[i].requirements.invitesReq > 0) reqContent += `\n> **›** You need **${giveaways[i].requirements.invitesReq}** Invite(s) to Enter Giveaway.`;
-      if(roleReq) reqContent += `\n> **›** You need **<@&${roleReq}>** Role to Enter Giveaway.`;
+      if(giveaways[i].requirements.roleReq) reqContent += `\n> **›** You need **<@&${giveaways[i].requirements.roleReq}>** Role to Enter Giveaway.`;
 
       let embedChange = new Discord.MessageEmbed()
         .setAuthor({ name: "New Giveaway", iconURL: client.user.displayAvatarURL() })

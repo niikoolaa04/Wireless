@@ -90,16 +90,6 @@ module.exports = class Config extends Command {
           required: true, 
         }]
       },{
-        name: 'reqrole',
-        type: 'SUB_COMMAND',
-        description: "Giveaway Role Requirement",
-        options: [{
-          name: 'rolereq',
-          type: 'ROLE',
-          description: "Giveaway Role Requirement",
-          required: false
-        }]
-      },{
         name: 'reaction',
         type: 'SUB_COMMAND',
         description: "Custom GW Reaction Emoji",
@@ -127,7 +117,6 @@ module.exports = class Config extends Command {
       let winners = db.fetch(`server_${message.guild.id}_dmWinners`);
       let snipes = db.fetch(`server_${message.guild.id}_snipes`);
       let image = db.fetch(`server_${message.guild.id}_welcomeImg`);
-      let roleReq = db.fetch(`server_${message.guild.id}_roleReq`);
       let wlcmChannel = db.fetch(`channel_${message.guild.id}_welcome`);
       let customReaction = db.fetch(`server_${message.guild.id}_customReaction`);
 
@@ -143,8 +132,7 @@ module.exports = class Config extends Command {
         .addField(`🔎 - Snipes (7)`, snipes ? `Yes` : 'No')
         .addField(`👋 - Welcome Image (8)`, image ? `Yes` : 'No')
         .addField(`📞 - Welcome Channel for Image (9)`, wlcmChannel ? `<#${wlcmChannel}>` : 'No Channel')
-        .addField(`🎭 - Role Requirement (10)`, roleReq ? `<@${roleReq}>` : 'No Role')
-        .addField(`💥 - Custom GW Reaction (11)`, customReaction ? `${customReaction}` : '🎉')
+        .addField(`💥 - Custom GW Reaction (10)`, customReaction ? `${customReaction}` : '🎉')
         .setColor("BLURPLE")
         .setThumbnail(this.client.user.displayAvatarURL())
         .setTimestamp()
@@ -289,20 +277,6 @@ To reset it just use command without arguments.`, "YELLOW") ]});
       }
     }
     if(option == 10) {
-      let role = message.mentions.roles.first();
-      if (!role) {
-        db.delete(`server_${message.guild.id}_roleReq`);
-        message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author,
-          `Config`, `Role Requirement have been rested.`, "RED") ]});
-      }
-      if (role) {
-        db.set(`server_${message.guild.id}_roleReq`, role.id);
-        message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author,
-          `Config`, `Role Requirement has been set to ${role}.
-To reset it just use command without arguments.`, "YELLOW") ]});
-      }
-    }
-    if(option == 11) {
       if(premiumGuild != true) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author,
         `Error`, `This option is only available for Premium Guilds, use command \`premium\` to get more informations.`, "YELLOW") ]});
       if(!args[1]) return message.channel.send(
@@ -335,7 +309,6 @@ but users who are already participating won't be affected** ❗`, "YELLOW") ]});
       let winners = db.fetch(`server_${interaction.guild.id}_dmWinners`);
       let snipes = db.fetch(`server_${interaction.guild.id}_snipes`);
       let image = db.fetch(`server_${interaction.guild.id}_welcomeImg`);
-      let roleReq = db.fetch(`server_${interaction.guild.id}_roleReq`);
       let wlcmChannel = db.fetch(`channel_${interaction.guild.id}_welcome`);
       let customReaction = db.fetch(`server_${interaction.guild.id}_customReaction`);
 
@@ -351,8 +324,7 @@ but users who are already participating won't be affected** ❗`, "YELLOW") ]});
         .addField(`🔎 - Snipes (7)`, snipes ? `Yes` : 'No')
         .addField(`👋 - Welcome Image (8)`, image ? `Yes` : 'No')
         .addField(`📞 - Welcome Channel for Image (9)`, wlcmChannel ? `<#${wlcmChannel}>` : 'No Channel')
-        .addField(`🎭 - Role Requirement (10)`, roleReq ? `<@${roleReq}>` : 'No Role')
-        .addField(`💥 - Custom GW Reaction (11)`, customReaction ? `${customReaction}` : '🎉')
+        .addField(`💥 - Custom GW Reaction (10)`, customReaction ? `${customReaction}` : '🎉')
         .setColor("BLURPLE")
         .setThumbnail(this.client.user.displayAvatarURL())
         .setTimestamp()
@@ -492,23 +464,6 @@ Use \`variables\` Command to view all available Variables.`, "YELLOW") ]});
         interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user,
           `Config`, `Welcome Channel has been set to ${channel}.
 To reset it just use command without arguments.`, "YELLOW") ]});
-      }
-    }
-    if(option == "reqrole") {
-      let reqRole = db.fetch(`server_${interaction.guild.id}_roleReq`);
-      let role = interaction.guild.roles.cache.get(value); 
-       
-      if(!reqRole) {
-        if (!value) return interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user,
-          `Error`, "You haven't mentioned role.", "RED")], ephemeral: true });
-          
-        db.set(`server_${interaction.guild.id}_roleReq`, role.id);
-        interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user,
-          `Config`, `Giveaway Requirement Role have been successfully changed to \`${role}\`.`, "YELLOW") ]});
-      } else {
-        db.delete(`server_${interaction.guild.id}_roleReq`);
-        interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user,
-        `Config`, "You have successfully reseted Giveaway Requirement Role.", "RED") ]});
       }
     }
     if(option == "reaction") {

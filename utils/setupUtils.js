@@ -56,7 +56,7 @@ async function submitGiveaway(client, message, data) {
     } else if(i.customId == "cancelGw") {
       await i.deferUpdate();
       client.gwCreation.set(message.member.id, false);
-      messageReply(client.embedBuilder(message, client, message.member.user, "Giveaway Setup", `Giveaway creation have been stopped.`, "RED"));
+      messageReply(message, client.embedBuilder(client, message.member.user, "Giveaway Setup", `Giveaway creation have been stopped.`, "RED"));
       collector.stop();
     }
   });

@@ -147,35 +147,7 @@ Example: \`Nitro Classic\``);
     });
 
     collector.on("end", async (collected, reason) => {
-      const disabledRow = new MessageActionRow()
-        .addComponents(
-          new MessageSelectMenu()
-            .setCustomId("edit_select")
-            .setPlaceholder("Select Option you want to Edit.")
-            .setDisabled(true)
-            .addOptions([{
-                label: "Messages Requirement",
-                value: "msg_req", 
-                emoji: "💬"
-              },{
-                label: "Invites Requirement",
-                value: "inv_req", 
-                emoji: "🎫"
-              },{
-                label: "Number of Winners",
-                value: "winners",
-                emoji: "👑"
-              },{
-                label: "Extra Time",
-                value: "extra_time",
-                emoji: "⌚"
-              },{
-                label: "Prize",
-                value: "prize",
-                emoji: "🎁"
-              }
-            ]),
-        );
+      editRow.components[0].setDisabled(true);
       await msg.edit({ embeds: [mainEmbed], components: [disabledRow] });
     });
   }
@@ -303,37 +275,8 @@ Example: \`Nitro Classic\``);
       }
     });
     collector.on("end", async (collected, reason) => {
-      // ovde
-      const disabledRow = new MessageActionRow()
-        .addComponents(
-          new MessageSelectMenu()
-            .setCustomId("edit_select")
-            .setPlaceholder("Select Option you want to Edit.")
-            .setDisabled(true)
-            .addOptions([{
-                label: "Messages Requirement",
-                value: "msg_req", 
-                emoji: "💬"
-              },{
-                label: "Invites Requirement",
-                value: "inv_req", 
-                emoji: "🎫"
-              },{
-                label: "Number of Winners",
-                value: "winners",
-                emoji: "👑"
-              },{
-                label: "Extra Time",
-                value: "extra_time",
-                emoji: "⌚"
-              },{
-                label: "Prize",
-                value: "prize",
-                emoji: "🎁"
-              }
-            ]),
-        );
-      await msg.editReply({ embeds: [mainEmbed], components: [disabledRow] });
+      editRow.components[0].setDisabled(true);
+      await msg.editReply({ embeds: [mainEmbed], components: [editRow] });
     });
   }
 };

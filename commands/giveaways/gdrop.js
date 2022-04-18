@@ -78,7 +78,6 @@ module.exports = class GiveawayDrop extends Command {
       interaction.user.id,
       prizeArg,
     );
-    // ovde
     this.client.gw.startGiveaway(this.client, interaction, giveawayObject);
     
     interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user, "Giveaway", `Giveaway has started in Channel ${interaction.channel}.`, "YELLOW")] });

@@ -126,32 +126,7 @@ module.exports = class Help extends Command {
 
       collector.on("end", async (m, reason) => {
         if(reason != "time") return;
-        const disabledRow = new MessageActionRow()
-    	    .addComponents(
-    	      new MessageSelectMenu()
-    	        .setCustomId("help")
-    	        .setDisabled(true)
-    	        .setPlaceholder("Select Category to view it's commands.")
-    	        .addOptions([{
-                  label: "Main Menu",
-                  value: "home_menu", 
-                  emoji: "⭐"
-                },{
-                  label: 'Member',
-                  value: 'member_menu', 
-                  emoji: "👤"
-                },{
-                  label: 'Giveaway',
-                  value: 'gw_menu',
-                  emoji: "🎉"
-                },{
-                  label: 'Utility',
-                  value: 'utility_menu',
-                  emoji: "🔎"
-                },
-              ]),
-    	    );
-        
+        helpRow.components[0].setDisabled(true);
         mainMenu.edit({ embeds: [cmdEmbed], components: [disabledRow]});
       });
     } else {
@@ -284,33 +259,8 @@ module.exports = class Help extends Command {
 
     collector.on("end", async (m, reason) => {
       if(reason != "time") return;
-      const disabledRow = new MessageActionRow()
-  	    .addComponents(
-  	      new MessageSelectMenu()
-  	        .setCustomId("help")
-  	        .setDisabled(true)
-  	        .setPlaceholder("Select Category to view it's commands.")
-  	        .addOptions([{
-                label: "Main Menu",
-                value: "home_menu", 
-                emoji: "⭐"
-              },{
-                label: 'Member',
-                value: 'member_menu', 
-                emoji: "👤"
-              },{
-                label: 'Giveaway',
-                value: 'gw_menu',
-                emoji: "🎉"
-              },{
-                label: 'Utility',
-                value: 'utility_menu',
-                emoji: "🔎"
-              },
-            ]),
-  	    );
-      
-      interaction.editReply({ embeds: [cmdEmbed], components: [disabledRow]});
+      helpRow.components[0].setDisabled(true);
+      interaction.editReply({ embeds: [cmdEmbed], components: [helpRow]});
     });
   }
 };

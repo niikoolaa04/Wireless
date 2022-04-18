@@ -1,11 +1,11 @@
 const fs = require('fs');
 const categories = fs.readdirSync('./commands/');
 
-module.exports = client => {
+module.exports.init = (client) => {
   try {
+    console.log("[HANDLER] Loading Commands");
     categories.forEach(async (category) => {
       fs.readdir(`./commands/${category}/`, (err) => {
-        console.log(`[BOT] Loading Command Category - ${category}.`);
         if (err) return console.error(err);
         const init = async () => {
           const commands = fs.readdirSync(`./commands/${category}`).filter(file => file.endsWith('.js'));
@@ -17,20 +17,13 @@ module.exports = client => {
               client.slashCommands.set(command.name.toLowerCase(), command);
               client.slashArray.push(command);
             }
-            //console.log("[BOT] Komanda " + file + " je uspešno učitana ✔");
-            /*if (command.aliases && Array.isArray(command.aliases)) {
-              for (let i = 0; i < command.aliases.length; i++) {
-                client.aliases.set(command.aliases[i], command);
-              }
-            }*/
             if (command.aliases && Array.isArray(command.aliases)) command.aliases.forEach(alias => client.aliases.set(alias, command.name));
           }
         };
         init();
       });
     });
-  }
-  catch (error) {
+  } catch (error) {
     console.log(error);
   }
 };

@@ -20,12 +20,11 @@ module.exports = class RemoveKey extends Command {
     });
     if(!allowedToUse) return;
     let key = args[0];
-    let keyList = db.fetch(`premiumKeys`);
-    if(!key || !keyList.includes(key)) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, 
+    let keyList = await Bot.find({ used: false });
+    if(!key || !keyList.some((x) => x.toLowerCase() == key.toLowerCase())) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, 
         `Error`, "You have entered invalid Key.", "RED")] });
     
-    let filter = keyList.filter(k => k != key);
-    db.set(`premiumKeys`, filter);
+    await Key.findOneAndUpdate({ data: key, used: false }, { used: true })
 
     message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, `Key Removed`, `Premium Key \`${key}\` have been removed from database.`, "YELLOW")] });
   }

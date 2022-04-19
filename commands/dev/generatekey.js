@@ -20,13 +20,19 @@ module.exports = class GenerateKey extends Command {
       if (message.author.id == id) allowedToUse = true;
     });
     if(!allowedToUse) return;
-    let keyList = db.fetch(`premiumKeys`) || [];
-    let usedList = db.fetch(`invalidKeys`) || [];
-    let key = this.client.utils.premiumKey();
-    if(keyList.includes(key) || usedList.includes(key)) 
-      return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, `Error`, "Generated Key Already exist in Database, please run command again.", "RED")] });
+    let keyList = await Key.find({ used: false });
+    let usedList = await Key.find({ used: true });
 
-    db.push(`premiumKeys`, key);
+    let key = this.client.utils.premiumKey();
+    if(keyList.some((x) => x.data.toLowerCase() == key.toLowerCase()) || usedList.some((x) => x.data.toLowerCase() == key.toLowerCase())) 
+      return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, `Error`, "Generated Key Already exist in Database, please run command again.", "RED")] });
+  
+    Key.create({
+      data: key,
+      guild: null,
+      used: false,
+      user: null
+    });
     message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, `Premium Key`, `Premium Key \`${key}\` have been generated successfully.`, "YELLOW")] });
   }
 };

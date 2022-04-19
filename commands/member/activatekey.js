@@ -26,12 +26,13 @@ module.exports = class ActivateKey extends Command {
     let member = sGuild.members.cache.get(message.author.id);
     if(!member.roles.cache.some(r => r == this.client.config.developer.patreon)) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, `Error`, `You aren't our Patreon or have left Support Server.`, "RED")] });
     let key = args[0];
-    let keyList = db.fetch(`premiumKeys`) || [];
-    let invalidList = db.fetch(`invalidKeys`) || [];
-    let premium = db.fetch(`server_${message.guild.id}_premium`);
+    let keyList = await Key.find({ used: false });
+    let invalidKeys = await Key.find({ used: true });
+    let premium = await Guild.findOne({ id: message.guild.id }).premium;
+    
     if(!key) 
       return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, `Error`, `You haven't entered Key.`, "RED")] });
-    if(!keyList.includes(key) || invalidList.includes(key)) 
+    if(!keyList.some((x) => x.toLowerCase() == key.toLowerCase()) || invalidList.some((x) => x.toLowerCase() == key.toLowerCase())) 
       return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, `Error`, `You have entered an Invalid/Already Used Key.`, "RED")] });
     if(premium == true) 
       return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, `Error`, `This Server already have an Premium Subscription.`, "RED")] });
@@ -69,11 +70,9 @@ Use Buttons to Confirm your decision, you have **1 minute**.
     collector.on("collect", async(i) => {
       await i.deferUpdate();
       if(i.customId == "activate_key") {
-        let usedFilter = keyList.filter((k) => k != key);
-        db.set(`server_${message.guild.id}_premium`, true);
-        db.set(`premiumKeys`, usedFilter);
-        db.push(`userPremium_${message.guild.id}`, message.guild.id);
-        db.push(`invalidKeys`, key);
+        await Guild.findOneAndUpdate({ id: message.guild.id }, { premium: true });
+        await Bot.findOneAndUpdate({ data: key }, { used: true });
+        // ovde db.push(`userPremium_${message.guild.id}`, message.guild.id);
     
         message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, `Premium Activation`, `Premium Subscription have been successfully activated for Guild **${message.guild.name}** using Premium Key \`${key}\`.`, "YELLOW")] });
         console.log(`[Premium Activated - ${key}] User ${message.author.username} (${message.author.id}) on ${message.guild.name} (${message.guild.id})`);
@@ -108,12 +107,13 @@ Use Buttons to Confirm your decision, you have **1 minute**.
   async slashRun(interaction, args) {
     let sGuild = this.client.guilds.cache.get(this.client.config.developer.supportGuild);
     let member = sGuild.members.cache.get(interaction.user.id);
-    if(!member.roles.cache.some(r => r == this.client.config.developer.patreon)) return interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user, `Error`, `You aren't our Patreon or have left Support Server.`, "RED")], ephemeral: true });
+    if(!member.roles.cache.some(r => r == this.client.config.developer.patreon)) return interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user, `Error`, `You aren't our Patreon or you've left Support Server.`, "RED")], ephemeral: true });
     let key = interaction.options.getString("key");
-    let keyList = db.fetch(`premiumKeys`) || [];
-    let invalidList = db.fetch(`invalidKeys`) || [];
-    let premium = db.fetch(`server_${interaction.guild.id}_premium`);
-    if(!keyList.includes(key) || invalidList.includes(key)) 
+    let keyList = await Key.find({ used: false });
+    let invalidKeys = await Key.find({ used: true });
+    let premium = await Guild.findOne({ id: interaction.guild.id }).premium;
+
+    if(!keyList.some((x) => x.toLowerCase() == key.toLowerCase()) || invalidList.some((x) => x.toLowerCase() == key.toLowerCase())) 
       return interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user, `Error`, `You have entered an Invalid/Already Used Key.`, "RED")], ephemeral: true });
     if(premium == true) 
       return interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user, `Error`, `This Server already have an Premium Subscription.`, "RED")], ephemeral: true });
@@ -151,11 +151,9 @@ Use Buttons to Confirm your decision, you have **1 minute**.
     collector.on("collect", async(i) => {
       await i.deferUpdate();
       if(i.customId == "activate_key") {
-        let usedFilter = keyList.filter((k) => k != key);
-        db.set(`server_${interaction.guild.id}_premium`, true);
-        db.set(`premiumKeys`, usedFilter);
-        db.push(`userPremium_${interaction.guild.id}`, interaction.guild.id);
-        db.push(`invalidKeys`, key);
+        await Guild.findOneAndUpdate({ id: message.guild.id }, { premium: true });
+        await Key.findOneAndUpdate({ data: key }, { used: true });
+        // ovde db.push(`userPremium_${interaction.guild.id}`, interaction.guild.id);
     
         interaction.followUp({ embeds: [ this.client.embedBuilder(this.client, interaction.user, `Premium Activation`, `Premium Subscription have been successfully activated for Guild **${interaction.guild.name}** using Premium Key \`${key}\`.`, "YELLOW")], ephemeral: true });
         console.log(`[Premium Activated - ${key}] User ${interaction.user.username} (${interaction.user.id}) on ${interaction.guild.name} (${interaction.guild.id})`);

@@ -18,16 +18,26 @@ module.exports = class PremiumKey extends Command {
   async run(message, args) {
     let sGuild = this.client.guilds.cache.get(this.client.config.developer.supportGuild);
     let member = sGuild.members.cache.get(message.author.id);
-    let generated = db.fetch(`generated_${message.author.id}`);
+    let generated = await User.findOne({ id: message.author.id }).generateCount;
+    let limit = await User.findOne({ id: message.author.id }).generateLimit;
+    
     if(!member.roles.cache.some(r => r == this.client.config.developer.patreon)) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, `Error`, `You aren't our Patreon or have left Support Server.`, "RED")] });
-    if(generated == true) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, `Error`, `You have already generated key.`, "RED")] });
-    let keyList = db.fetch(`premiumKeys`) || [];
-    let usedList = db.fetch(`invalidKeys`) || [];
+    if(generated == limit) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, `Error`, `You have already generated maximum number of keys.`, "RED")] });
+    
+    let keyList = await Key.find({ used: false });
+    let usedKeys = await Key.find({ used: true });
+    
     let key = this.client.utils.premiumKey();
-    if(keyList.includes(key) || usedList.includes(key)) 
+    if(keyList.some((x) => x.toLowerCase() == key.toLowerCase()) || usedList.some((x) => x.toLowerCase() == key.toLowerCase())) 
       return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, `Error`, "Generated Key Already exist in Database, please run command again.", "RED")] });
 
-    db.push(`premiumKeys`, key);
+    await Key.create({
+      data: key,
+      guild: null,
+      used: false,
+      user: message.author.id
+    })
+
     let closed = false;
     message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, `Premium Key`, `Premium Key have been sent to your DM.`, "YELLOW")] });
     message.author.send({ embeds: [ this.client.embedBuilder(this.client, message.author, `Premium Key`, `Premium Key \`${key}\` have been generated successfully. To redeem it use \`activatekey\` command on Server you want to Upgrade.`, "YELLOW")] }).catch((err) => {
@@ -35,7 +45,7 @@ module.exports = class PremiumKey extends Command {
       message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, `Error`, `Your DM is closed, please open it.`, "RED")] });
     });
     if(closed == true) return;
-    db.set(`generated_${message.author.id}`, true);
+    await User.findOneAndUpdate({ id: message.author.id }, { $inc: { generateCount: 1 }});
   }
   async slashRun(interaction, args) {
     let sGuild = this.client.guilds.cache.get(this.client.config.developer.supportGuild);

@@ -38,6 +38,14 @@ const UserSchema = new mongoose.Schema({
   invitesBonus: {
     type: Number,
     default: 0
+  },
+  generateCount: {
+    type: Number,
+    default: 0
+  },
+  generateLimit: {
+    type: Number,
+    default: 1
   }
 });
 

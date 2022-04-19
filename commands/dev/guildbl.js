@@ -25,20 +25,19 @@ module.exports = class GuildBlacklist extends Command {
     if (!type) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, "Error", `You have entered invalid option \`(add, remove, list)\`.`, "RED")] });
     if (type.toLowerCase() == "add") {
       if (!guild || isNaN(guild)) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, "Error", `You have entered invalid Server ID.`, "RED")] });
-      let blArray = db.fetch(`guildBlacklist`) || [];
+      let blArray = await Bot.find({ name: "wireless" }).guildBlacklist;
       if (blArray.includes(guild)) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, "Error", "That Server is already Blacklisted", "RED")] });
-      blArray.unshift(guild);
-      db.set(`guildBlacklist`, blArray);
+
+      await Bot.findOneAndUpdate({ name: "wireless" }, { $push: { guildBlacklist: guild } });
       message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, "Guild Blacklist", `Server with ID \`${guild}\` have been blacklisted.`, "YELLOW")] });
     } else if (type.toLowerCase() == "remove") {
       if (!guild || isNaN(guild)) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, "Error", `You have entered invalid Guild ID.`, "RED")] });
-      let blArray = db.fetch(`guildBlacklist`) || [];
+      let blArray = await Bot.find({ name: "wireless" }).guildBlacklist;
       if (blArray.length == 0) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, "Guild Blacklist", `Blacklist is empty.`, "RED")] });
-      let newData = blArray.filter(id => id != guild);
-      db.set(`guildBlacklist`, newData);
+      await Bot.findOneAndUpdate({ name: "wireless" }, { $pull: { guildBlacklist: guild } });
       message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, "Guild Blacklist", `Server with ID \`(${guild})\` have been removed from blacklist.`, "YELLOW")] });
     } else if (type.toLowerCase() == "list") {
-      let blArray = db.fetch(`guildBlacklist`) || [];
+      let blArray = await Bot.find({ name: "wireless" }).guildBlacklist;
       if (blArray.length == 0) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, "Guild Blacklist", `Blacklist is empty.`, "RED")] });
       let content = "";
       for (let i = 0; i < blArray.length; i++) {

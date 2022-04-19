@@ -19,7 +19,7 @@ module.exports = class Invite extends Command {
     const row = new MessageActionRow()
 			.addComponents(
 				new MessageButton()
-          .setURL(this.client.config.links.inviteSite)
+          .setURL(this.client.config.links.inviteURL)
 					.setLabel('Invite Me')
 					.setStyle('LINK'),
 			);
@@ -34,7 +34,7 @@ module.exports = class Invite extends Command {
     const row = new MessageActionRow()
 			.addComponents(
 				new MessageButton()
-          .setURL(this.client.config.links.inviteSite)
+          .setURL(this.client.config.links.inviteURL)
 					.setLabel('Invite Me')
 					.setStyle('LINK'),
 			);

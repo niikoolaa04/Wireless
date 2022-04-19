@@ -20,7 +20,7 @@ const startGiveaway = async (client, message, gwObject) => {
 > **${client.emojisConfig.members} Number of Winners:** ${gwObject.winnerCount}
 ${reqContent}
 
-[Invite Me](${client.config.links.inviteURL}) | [Vote for me](${client.config.links.voteURL}) | [Website](${client.config.links.website}) | [Support Server](${client.config.links.supportServer})`)
+[Invite Me](${client.config.links.inviteURL}) | [Vote for me](${client.config.links.voteURL}) | [Support Server](${client.config.links.supportServer})`)
     .setColor("BLURPLE")
     .setThumbnail(message.guild.iconURL())
     .setFooter({ text: "Ends at", iconURL: client.user.displayAvatarURL() })
@@ -148,7 +148,7 @@ const endGiveaway = async (client, message, messageID, guild) => {
 > **${client.emojisConfig.winners} Winner(s):** ${randomWinner ? winners : "No Winner(s)"}
 ${reqContent}
 
-[Invite Me](${client.config.links.inviteURL}) | [Vote for me](${client.config.links.voteURL}) | [Website](${client.config.links.website}) | [Support Server](${client.config.links.supportServer})`)
+[Invite Me](${client.config.links.inviteURL}) | [Vote for me](${client.config.links.voteURL}) | [Support Server](${client.config.links.supportServer})`)
     .setColor("RED")
     .setThumbnail(message.guild.iconURL())
     .setFooter({ text: "Ended", iconURL: client.user.displayAvatarURL() })
@@ -297,7 +297,7 @@ const checkGiveaway = async (client, guild) => {
 > **${client.emojisConfig.winners} Winner(s):** ${randomWinner ? winners : "No Winner(s)"}
 ${reqContent}
 
-[Invite Me](${client.config.links.inviteURL}) | [Vote for me](${client.config.links.voteURL}) | [Website](${client.config.links.website}) | [Support Server](${client.config.links.supportServer})`)
+[Invite Me](${client.config.links.inviteURL}) | [Vote for me](${client.config.links.voteURL}) | [Support Server](${client.config.links.supportServer})`)
         .setColor("RED")
         .setThumbnail(guild.iconURL())
         .setFooter({ text: "Ended", iconURL: client.user.displayAvatarURL() })
@@ -341,7 +341,7 @@ ${reqContent}
 > **${client.emojisConfig.members} Number of Winners:** ${giveaways[i].winnerCount}
 ${reqContent}
 
-[Invite Me](${client.config.links.inviteURL}) | [Vote for me](${client.config.links.voteURL}) | [Website](${client.config.links.website}) | [Support Server](${client.config.links.supportServer})`)
+[Invite Me](${client.config.links.inviteURL}) | [Vote for me](${client.config.links.voteURL}) | [Support Server](${client.config.links.supportServer})`)
         .setColor("BLURPLE")
         .setThumbnail(guild.iconURL())
         .setFooter({ text: "Ends at", iconURL: client.user.displayAvatarURL() })

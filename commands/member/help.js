@@ -68,8 +68,8 @@ module.exports = class Help extends Command {
 `[Help Developers by Voting for Bot](${this.client.config.links.voteURL})`)
         .addField(`${this.client.emojisConfig.invite}・Invite Bot`,
 `[Invite Bot to your Server](${this.client.config.links.inviteURL})`)
-        .addField(`${this.client.emojisConfig.website}・Website`,
-`[Checkout Offical Bot Website](${this.client.config.links.website})`)
+      //  .addField(`${this.client.emojisConfig.website}・Website`,
+// `[Checkout Offical Bot Website](${this.client.config.links.website})`)
         .addField(`${this.client.emojisConfig.support}・Support`,
 `[To get Help with Bot, join Support Server](${this.client.config.links.supportServer})`)
         .setTimestamp()
@@ -88,7 +88,7 @@ module.exports = class Help extends Command {
             .setTitle("👤・Member Commands")
             .setDescription(`Use \`${prefix}help [command]\` to view more informations about command.`)
             .addField(`${this.client.emojisConfig.members}・Member`, `${contentMember}`)
-            .addField(`${this.client.emojisConfig.gem}・Informations`, `[Invite Me](${this.client.config.links.inviteURL}) | [Vote for me](${this.client.config.links.voteURL}) | [Website](${this.client.config.links.website}) | [Support Server](${this.client.config.links.supportServer})`)
+            .addField(`${this.client.emojisConfig.gem}・Informations`, `[Invite Me](${this.client.config.links.inviteURL}) | [Vote for me](${this.client.config.links.voteURL}) | [Support Server](${this.client.config.links.supportServer})`)
             .setTimestamp()
             .setColor("BLURPLE")
             .setThumbnail(user.displayAvatarURL({ size: 1024, dynamic: true }))
@@ -100,7 +100,7 @@ module.exports = class Help extends Command {
             .setTitle("🎁・Giveaway Commands")
             .setDescription(`Use \`${prefix}help [command]\` to view more informations about command.`)
             .addField(`${this.client.emojisConfig.prize}・Giveaway`, `${contentGiveaway}`)
-            .addField(`${this.client.emojisConfig.gem}・Informations`, `[Invite Me](${this.client.config.links.inviteURL}) | [Vote for me](${this.client.config.links.voteURL}) | [Website](${this.client.config.links.website}) | [Support Server](${this.client.config.links.supportServer})`)
+            .addField(`${this.client.emojisConfig.gem}・Informations`, `[Invite Me](${this.client.config.links.inviteURL}) | [Vote for me](${this.client.config.links.voteURL}) | [Support Server](${this.client.config.links.supportServer})`)
             .setTimestamp()
             .setColor("BLURPLE")
             .setThumbnail(user.displayAvatarURL({ size: 1024, dynamic: true }))
@@ -112,7 +112,7 @@ module.exports = class Help extends Command {
             .setTitle("🛠・Utility Commands")
             .setDescription(`Use \`${prefix}help [command]\` to view more informations about command.`)
             .addField(`${this.client.emojisConfig.utility}・Utility`, `${contentUtility}`)
-            .addField(`${this.client.emojisConfig.gem}・Informations`, `[Invite Me](${this.client.config.links.inviteURL}) | [Vote for me](${this.client.config.links.voteURL}) | [Website](${this.client.config.links.website}) | [Support Server](${this.client.config.links.supportServer})`)
+            .addField(`${this.client.emojisConfig.gem}・Informations`, `[Invite Me](${this.client.config.links.inviteURL}) | [Vote for me](${this.client.config.links.voteURL}) | [Support Server](${this.client.config.links.supportServer})`)
             .setTimestamp()
             .setColor("BLURPLE")
             .setThumbnail(user.displayAvatarURL({ size: 1024, dynamic: true }))
@@ -204,8 +204,8 @@ module.exports = class Help extends Command {
   `[Help Developers by Voting for Bot](${this.client.config.links.voteURL})`)
       .addField(`💳・Invite Bot`,
   `[Invite Bot to your Server](${this.client.config.links.inviteURL})`)
-      .addField(`🌐・Website`,
-  `[Checkout Offical Bot Website](${this.client.config.links.website})`)
+  //    .addField(`🌐・Website`,
+  //`[Checkout Offical Bot Website](${this.client.config.links.website})`)
       .addField(`🎭・Support`,
   `[To get Help with Bot, join Support Server](${this.client.config.links.supportServer})`)
       .setTimestamp()
@@ -224,7 +224,7 @@ module.exports = class Help extends Command {
           .setTitle("👤・Member Commands")
           .setDescription(`Use \`${prefix}help [command]\` to view more informations about command.`)
           .addField(`👤・Member`, `${contentMember}`)
-          .addField(`💎・Informations`, `[Invite Me](${this.client.config.links.inviteURL}) | [Vote for me](${this.client.config.links.voteURL}) | [Website](${this.client.config.links.website}) | [Support Server](${this.client.config.links.supportServer})`)
+          .addField(`💎・Informations`, `[Invite Me](${this.client.config.links.inviteURL}) | [Vote for me](${this.client.config.links.voteURL}) | [Support Server](${this.client.config.links.supportServer})`)
           .setTimestamp()
           .setColor("BLURPLE")
           .setThumbnail(interaction.user.displayAvatarURL({ size: 1024, dynamic: true }))
@@ -235,7 +235,7 @@ module.exports = class Help extends Command {
           .setTitle("🎁・Giveaway Commands")
           .setDescription(`Use \`${prefix}help [command]\` to view more informations about command.`)
           .addField(`🎉・Giveaway`, `${contentGiveaway}`)
-          .addField(`💎・Informations`, `[Invite Me](${this.client.config.links.inviteURL}) | [Vote for me](${this.client.config.links.voteURL}) | [Website](${this.client.config.links.website}) | [Support Server](${this.client.config.links.supportServer})`)
+          .addField(`💎・Informations`, `[Invite Me](${this.client.config.links.inviteURL}) | [Vote for me](${this.client.config.links.voteURL}) | [Support Server](${this.client.config.links.supportServer})`)
           .setTimestamp()
           .setColor("BLURPLE")
           .setThumbnail(interaction.user.displayAvatarURL({ size: 1024, dynamic: true }))
@@ -246,7 +246,7 @@ module.exports = class Help extends Command {
           .setTitle("🔎・Utility Commands")
           .setDescription(`Use \`${prefix}help [command]\` to view more informations about command.`)
           .addField(`🔎・Utility`, `${contentUtility}`)
-          .addField(`💎・Informations`, `[Invite Me](${this.client.config.links.inviteURL}) | [Vote for me](${this.client.config.links.voteURL}) | [Website](${this.client.config.links.website}) | [Support Server](${this.client.config.links.supportServer})`)
+          .addField(`💎・Informations`, `[Invite Me](${this.client.config.links.inviteURL}) | [Vote for me](${this.client.config.links.voteURL}) | [Support Server](${this.client.config.links.supportServer})`)
           .setTimestamp()
           .setColor("BLURPLE")
           .setThumbnail(interaction.user.displayAvatarURL({ size: 1024, dynamic: true }))

@@ -15,8 +15,7 @@ module.exports = class Help extends Command {
 		});
 	} 
 	async run(message, args) {
-    let prefix = await db.fetch(`settings_${message.guild.id}_prefix`);
-    if (prefix === null) prefix = this.client.config.prefix;
+    let prefix = await Guild.findOne({ id: message.guild.id }).prefix;
     let user = message.author;
     let commandArg = args[0];
 
@@ -154,9 +153,8 @@ module.exports = class Help extends Command {
     }
   }
   async slashRun(interaction, args) {
-    let prefix = await db.fetch(`settings_${interaction.guild.id}_prefix`);
-    if (prefix === null) prefix = this.client.config.prefix;
-
+    let prefix = await Guild.findOne({ id: interaction.guild.id }).prefix;
+    
 	  const helpRow = new MessageActionRow()
 	    .addComponents(
 	      new MessageSelectMenu()

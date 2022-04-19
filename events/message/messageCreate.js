@@ -11,8 +11,7 @@ module.exports = class MessageCreate extends Event {
 	async run(message) {
     if(this.client.disabledGuilds.includes(message.guild.id) && message.author.id != this.client.config.developer.id) return;
     if (message.channel.type === "DM") return;
-    let prefix = await db.fetch(`settings_${message.guild.id}_prefix`);
-    if (prefix == null) prefix = this.client.config.prefix;
+    let prefix = await Guild.findOne({ id: message.guild.id }).prefix;
 
     if (message.author.bot) return;
   
@@ -21,11 +20,9 @@ module.exports = class MessageCreate extends Event {
     // <== Mention Bota ==> //
     const prefixMention = new RegExp(`^<@!?${this.client.user.id}>( |)$`);
     if (message.content.match(prefixMention)) {
-      let mPrefix = db.fetch(`settings_${message.guild.id}_prefix`);
-      if(mPrefix === null) mPrefix = "+";
       let mentionEmbed = new Discord.MessageEmbed()
-        .setDescription(`Hey ${message.author}, my current prefix for this Guild is \`${mPrefix}\`.
-To view all commands do \`${mPrefix}help\`
+        .setDescription(`Hey ${message.author}, my current prefix for this Guild is \`${prefix}\`.
+To view all commands do \`${prefix}help\`
 
 [Invite Me](${this.client.config.links.inviteURL}) | [Vote for me](${this.client.config.links.voteURL}) | [Support Server](${this.client.config.links.supportServer})`)
         .setColor("YELLOW")

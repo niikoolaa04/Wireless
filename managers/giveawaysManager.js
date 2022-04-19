@@ -2,6 +2,8 @@ const Discord = require("discord.js");
 const db = require("quick.db");
 const ms = require("ms");
 const delay = require("delay");
+const Giveaway = require("../models/User.js");
+const Guild = require("../models/Guild.js");
 
 const startGiveaway = async (client, message, gwObject) => {
   let reqContent = "";
@@ -28,18 +30,33 @@ ${reqContent}
   
   let channel = client.channels.cache.get(gwObject.channelID);
   
-  let customEmoji = db.fetch(`server_${message.guild.id}_customReaction`) || "🎉";
+  let customEmoji = await Guild.findOne({ id: message.guild.id }).customEmoji || "🎉";
 
   let m = await channel.send({embeds: [startEmbed]});
   await m.react(customEmoji);
+  
+  let newObject = client.utils.giveawayObject(
+    gwObject.guildID,
+    gwObject.messageID,
+    gwObject.duration,
+    gwObjects.roleReq,
+    gwObject.channelID,
+    gwObject.winnerCount,
+    gwObject.messagesReq,
+    gwObject.invitesReq,
+    gwObject.ending,
+    gwObject.hostedBy,
+    gwObject.prize
+  );
     
   gwObject.messageID = m.id;
-  db.push(`giveaways_${message.guild.id}`, gwObject);
+  Giveaway.create(newObject, function(err, res) {
+    console.log("Saved");
+  });
 }
 
 const editGiveaway = async (client, message, messageID, guild, msgReq, invReq, winners, ending, prize) => {
-  let giveaways = db.fetch(`giveaways_${message.guild.id}`);
-  let gwData = giveaways.find(g => g.messageID == messageID && g.ended == false);
+  let gwData = await Giveaway.findOne({ messageID, guildID: message.guild.id, ended: false });
   
   let channel = client.channels.cache.get(gwData.channelID);
   let msg = await channel.messages.fetch(gwData.messageID);
@@ -61,6 +78,7 @@ const editGiveaway = async (client, message, messageID, guild, msgReq, invReq, w
     gwData.guildID,
     gwData.messageID,
     gwData.duration,
+    gwData.requirements.roleReq,
     gwData.channelID,
     winners,
     msgReq,
@@ -70,24 +88,19 @@ const editGiveaway = async (client, message, messageID, guild, msgReq, invReq, w
     prize
   );
 
-  const newData = giveaways.filter((giveaway) => giveaway.messageID != gwData.messageID);
-
-  newData.push(newObject);
-
-  db.set(`giveaways_${guild.id}`, newData);
+  await Giveaway.findOneAndUpdate({ guildID: message.guild.id, messageID: gwData.messageID }, newObject);
   
   delay(1000);
   await client.gw.checkGiveaway(client, message.guild);
 }
 
 const endGiveaway = async (client, message, messageID, guild) => {
-  let giveaways = db.fetch(`giveaways_${message.guild.id}`);
-  let gwData = giveaways.find(g => g.messageID == messageID && g.ended == false);
+  let gwData = await Giveaway.findOne({ messageID, guildID: guild.id, ended: false });
   
   let channel = client.channels.cache.get(gwData.channelID);
   let msg = await channel.messages.fetch(gwData.messageID);
     
-  let customEmoji = db.fetch(`server_${message.guild.id}_customReaction`) || "🎉";
+  let customEmoji = await Guild.findOne({ id: message.guild.id }).customEmoji || "🎉";
   let rUsers = await msg.reactions.cache.get(customEmoji).users.fetch();
   let rFilter = rUsers.filter(r => !r.bot);
 
@@ -125,11 +138,7 @@ const endGiveaway = async (client, message, messageID, guild) => {
   newObject.winners.push(winners);
   newObject.ended = true;
 
-  const newData = giveaways.filter((giveaway) => giveaway.messageID != gwData.messageID);
-
-  newData.push(newObject);
-
-  db.set(`giveaways_${guild.id}`, newData);
+  await Giveaway.findOneAndUpdate({ messageID: messageID, guildID: guild.id }, newObject);
 
   let reqContent = "";
   if (gwData.requirements.messagesReq > 0 || gwData.requirements.invitesReq > 0 || gwData.requirements.roleReq != null) reqContent += `\n**${client.emojisConfig.tasks} Requirements**`;
@@ -166,7 +175,7 @@ ${reqContent}
   
   channel.send({ embeds: [endEmbed] });
 
-  let dmStatus = db.fetch(`server_${message.guild.id}_dmWinners`);
+  let dmStatus = await Guild.findOne({ id: interaction.guild.id }).dmWinners;
   const dmWin = new Discord.MessageEmbed()
     .setTitle("🎁・Giveaway")
     .setDescription(`\`👑\` Congratulations, you have Won Giveaway in **${message.guild.name}**!
@@ -177,13 +186,12 @@ ${reqContent}
 }
 
 const rerollGiveaway = async (client, message, messageID) => {
-  let giveaways = db.fetch(`giveaways_${message.guild.id}`);
-  let gwData = giveaways.find(g => g.messageID == messageID && g.ended == true);
+  let gwData = await Giveaway.findOne({ messageID, guildID: message.guild.id, ended: true });
   
   let channel = client.channels.cache.get(gwData.channelID);
   let msg = await channel.messages.fetch(gwData.messageID);
     
-  let customEmoji = db.fetch(`server_${message.guild.id}_customReaction`) || "🎉";
+  let customEmoji = await Guild.findOne({ id: message.guild.id }).customEmoji || "🎉";
   let rUsers = await msg.reactions.cache.get(customEmoji).users.fetch();
   let rFilter = rUsers.filter(r => !r.bot);
 
@@ -214,7 +222,7 @@ const rerollGiveaway = async (client, message, messageID) => {
 }
 
 const checkGiveaway = async (client, guild) => {
-  let giveaways = db.fetch(`giveaways_${guild.id}`) || [];
+  let giveaways = await Giveaway.find({ })
   if(giveaways == null) return;
   if(giveaways.length == 0) return;
   
@@ -224,20 +232,18 @@ const checkGiveaway = async (client, guild) => {
     let removed = false;
     let channel = client.channels.cache.get(giveaways[i].channelID);
     if(channel == undefined) {
-      const cData = giveaways.filter((giveaway) => giveaway.messageID != giveaways[i].messageID);
-      db.set(`giveaways_${giveaways[i].guildID}`, cData);
+      await Giveaway.findOneAndDelete({ messageID: giveaways[i].messageID, guildID: guild.id });
       removed = true;
     }
     
     let msg = await channel.messages.fetch(giveaways[i].messageID).catch(async (err) => {
-      const mData = giveaways.filter((giveaway) => giveaway.messageID != giveaways[i].messageID);
-      db.set(`giveaways_${giveaways[i].guildID}`, mData);
+      await Giveaway.findOneAndDelete({ messageID: giveaways[i].messageID, guildID: guild.id });
       removed = true;
     });
     
     if(removed == true) continue;
     
-    let customEmoji = db.fetch(`server_${guild.id}_customReaction`) || "🎉";
+    let customEmoji = await Guild.findOne({ id: guild.id }).customEmoji || "🎉";
     let rUsers = await msg.reactions.cache.get(customEmoji).users.fetch();
     let rFilter = rUsers.filter(r => !r.bot);
     let rArray = [...rFilter.values()];
@@ -274,11 +280,7 @@ const checkGiveaway = async (client, guild) => {
       newObject.winners.push(winners);
       newObject.ended = true;
       
-      const newData = giveaways.filter((giveaway) => giveaway.messageID != giveaways[i].messageID);
-      
-      newData.push(newObject);
-      
-      db.set(`giveaways_${guild.id}`, newData);
+      await Giveaway.findOneAndUpdate({ messageID: giveaways[i].messageID, guildID: guild.id }, newObject);
       
       let reqContent = "";
       if(giveaways[i].requirements.messagesReq > 0 || giveaways[i].requirements.invitesReq > 0 || giveaways[i].requirements.roleReq != null) reqContent += `\n**${client.emojisConfig.tasks} Requirements**`;
@@ -315,7 +317,7 @@ ${reqContent}
       
       channel.send({ embeds: [endEmbed] });
 
-      let dmStatus = db.fetch(`server_${guild.id}_dmWinners`);
+      let dmStatus = Guild.findOne({ id: guild.id }).dmWinners;
       const dmWin = new Discord.MessageEmbed()
         .setTitle("🎁・Giveaway")
         .setDescription(`\`👑\` Congratulations, you have Won Giveaway in **${guild.name}**!

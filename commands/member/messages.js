@@ -24,7 +24,7 @@ module.exports = class Messages extends Command {
   async run(message, args) {
     var user = message.mentions.users.first() || this.client.users.cache.get(args[0]) || message.author;
   
-    let messages = db.fetch(`messages_${message.guild.id}_${user.id}`) || 0;
+    let messages = await User.findOne({ id: user.id, guild: interaction.guild.id }).messages;
 
     let every = db.all().filter(i => i.ID.startsWith(`messages_${message.guild.id}_`)).sort((a, b) => b.data - a.data);
     let rank = every.map(x => x.ID).indexOf(`messages_${message.guild.id}_${user.id}`) + 1 || 'N/A';
@@ -41,7 +41,7 @@ module.exports = class Messages extends Command {
   async slashRun(interaction, args) {
     var user = interaction.options.getUser("target") || interaction.user;
   
-    let messages = db.fetch(`messages_${interaction.guild.id}_${user.id}`) || 0;
+    let messages = await User.findOne({ id: user.id, guild: interaction.guild.id }).messages;
 
     let every = db.all().filter(i => i.ID.startsWith(`messages_${interaction.guild.id}_`)).sort((a, b) => b.data - a.data);
     let rank = every.map(x => x.ID).indexOf(`messages_${interaction.guild.id}_${user.id}`) + 1 || 'N/A';

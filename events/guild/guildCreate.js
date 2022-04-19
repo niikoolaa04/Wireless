@@ -10,8 +10,8 @@ module.exports = class GuildCreate extends Event {
 
 	async run(guild) {
     let owner = await guild.fetchOwner();
-	  let userBL = db.fetch(`userBlacklist`) || [];
-	  let guildBL = db.fetch(`guildBlacklist`) || [];
+	  let userBL = await Bot.findOne({}).userBlacklist;
+	  let guildBL = await Bot.findOne({}).guildBlacklist;
 	  if(userBL.includes(owner.user.id) || guildBL.includes(guild.id)) return guild.leave();
 	  
     let channel = this.client.channels.cache.get(this.client.config.logs);

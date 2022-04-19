@@ -27,8 +27,7 @@ module.exports = class GiveawayEdit extends Command {
     let messageID = args[0];
     if (!messageID) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, "Error", "You haven't entered Message ID.", "RED")] });
 
-    let giveaways = db.fetch(`giveaways_${message.guild.id}`);
-    let gwData = giveaways.find(g => g.messageID == messageID && g.ended == false);
+    let gwData = await Giveaway.findOne({ messageID, ended: false, guildID: message.guild.id });
     
     if(!gwData) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, "Error", "You have entered invalid Message ID.", "RED")] });
 
@@ -155,8 +154,7 @@ Example: \`Nitro Classic\``);
     let messageID = interaction.options.getString("msgid");
     messageID = parseInt(messageID);
   
-    let giveaways = db.fetch(`giveaways_${interaction.guild.id}`);
-    let gwData = giveaways.find(g => g.messageID == messageID && g.ended == false);
+    let gwData = await Giveaway.findOne({ messageID, ended: false, guildID: interaction.guild.id });
     
     if(!gwData) return interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user, "Error", "You have entered invalid Message ID.", "RED")], ephemeral: true });
   

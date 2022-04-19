@@ -2,7 +2,7 @@ const db = require("quick.db");
 const Discord = require("discord.js");
 
 function giveawayObject(guild, messageID, time, role, channel, winners, messages, invites, ending, hoster, prize) {
-  let roleBypass = db.fetch(`server_${guild.id}_bypassRole`);
+  let roleBypas = Guild.findOne({ id: guild.id }).bypassRole;
   if(roleBypass == null) roleBypas = "none";
   let gwObject = {
     messageID: messageID,
@@ -31,8 +31,7 @@ function capitalizeFirstLetter(string) {
 }
 
 function commandsList(client, message, category) {
-  let prefix = db.fetch(`settings_${message.guild.id}_prefix`);
-  if (prefix === null) prefix = client.config.prefix; 
+  let prefix = await Guild.findOne({ id: message.guild.id }).prefix;
   let commands = client.commands.filter(
     c => c.category === category && c.listed === true
   );
@@ -154,9 +153,7 @@ const asyncForEach = async (array, callback) => {
 };
 
 const pushHistory = (message, userId, text) => {
-  let history = db.fetch(`transakcije_${message.guild.id}_${userId}`) || [];
-  history.unshift(text);
-  db.set(`invitesHistory_${message.guild.id}_${userId}`, history);
+  User.findOneAndUpdate({ id: userId, guild: message.guild.id }, { $push: { invitesHistory: text } });
 }
 
 const parseArgs = (args, options) => {

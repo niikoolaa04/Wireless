@@ -6,7 +6,7 @@ const moment = require('moment-timezone');
 moment.locale('sr-latn');
 const Event = require("../../structures/Events");
 const { isEqual, generateInvitesCache } = require("../../utils/utils.js");
-
+const User = require("../../models/User.js");
 
 module.exports = class GuildMemberAdd extends Event {
 	constructor(...args) {
@@ -17,10 +17,9 @@ module.exports = class GuildMemberAdd extends Event {
 	  if(this.client.disabledGuilds.includes(member.guild.id)) return;
 	  if(!member.guild.me.permissions.has("MANAGE_GUILD")) return;
 
-    let wlcmImg = db.fetch(`server_${member.guild.id}_welcomeImg`);
-    let imgChannel = db.fetch(`channel_${member.guild.id}_welcome`);
+    let settings = await Guild.find({ id: member.guild.id });
 
-    if(wlcmImg != null && imgChannel != null) {
+    if(settings.wlcmImage != null && settings.welcomeChannel != null) {
       const applyText = (canvas, text) => {
       const ctx = canvas.getContext('2d');
       let fontSize = 40;
@@ -65,7 +64,7 @@ module.exports = class GuildMemberAdd extends Event {
       ctx.drawImage(avatar, 281, 38, 140, 140);
     
       const attachment = new Discord.MessageAttachment(canvas.toBuffer(), 'welcome.png');
-      let channelImg = this.client.channels.cache.get(imgChannel);
+      let channelImg = this.client.channels.cache.get(settings.welcomeChannel);
       await channelImg.send({ files: [attachment] });
     }
     
@@ -104,7 +103,7 @@ module.exports = class GuildMemberAdd extends Event {
     else inviter = this.client.users.cache.get(invite.inviter.id);
 
     if (inviter != "Unknown" && inviter != "Vanity URL") {
-      db.set(`inviter_${member.guild.id}_${member.id}`, inviter.id);
+      await User.findOneAndUpdate({ id: member.id, guild: member.guild.id }, { inviter: `${inviter.id}` });
 
       if (inviter.id !== member.id) {
         db.add(`invitesRegular_${member.guild.id}_${inviter.id}`, 1);
@@ -112,16 +111,15 @@ module.exports = class GuildMemberAdd extends Event {
         this.client.utils.pushHistory(member, inviter.id, `[ 📥 ] **${member.user.tag}** has **joined** server.`);
       }
     } else {
-      db.set(`inviter_${member.guild.id}_${member.id}`, inviter);
+      await User.findOneAndUpdate({ id: member.id, guild: member.guild.id }, { inviter: `${inviter}` });
     }
 
-    let invitesChannel = db.fetch(`channel_${member.guild.id}_invites`);
-    invitesChannel = this.client.channels.cache.get(invitesChannel);
+    let invitesChannel = this.client.channels.cache.get(settings.invitesChannel);
 
-    let msgJoin = db.fetch(`server_${member.guild.id}_joinMessage`);
+    let msgJoin = settings.joinMessage;
     if (invitesChannel != null && invitesChannel != undefined && msgJoin != null) {
       delay(1000);
-      let inviter = db.fetch(`inviter_${member.guild.id}_${member.id}`);
+      let inviter = await User.findOne({ id: member.id, guild: member.guild.id }).inviter;
       let invv = null;
       if (inviter == "Vanity URL") invv = "Vanity URL";
       else if (inviter == undefined || inviter == null || inviter == "Unknown") invv = "Unknown";
@@ -129,6 +127,7 @@ module.exports = class GuildMemberAdd extends Event {
 
       let inviterName = invv;
 
+      // ovde
       let joins = db.fetch(`invitesJoins_${member.guild.id}_${inviter}`) || 0;
       let regular = db.fetch(`invitesRegular_${member.guild.id}_${inviter}`) || 0;
       let leaves = db.fetch(`invitesLeaves_${member.guild.id}_${inviter}`) || 0;

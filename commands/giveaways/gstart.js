@@ -61,7 +61,7 @@ module.exports = class GiveawayStart extends Command {
     let messagesArg = args[4];
     let invitesArg = args[5];
     let prizeArg = args.slice(6).join(" ");
-    let premiumGuild = db.fetch(`server_${message.guild.id}_premium`);
+    let premiumGuild = await Guild.findOne({ id: message.guild.id }).premium;
     
     if(!durationArg || isNaN(ms(durationArg))) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, "Error", "You have entered invalid Giveaway Duration.", "RED")] });
     if(!channelArg) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, "Error", "You have mentioned invalid Channel.", "RED")] });
@@ -97,7 +97,7 @@ module.exports = class GiveawayStart extends Command {
     let messagesArg = interaction.options.getInteger("messages");
     let invitesArg = interaction.options.getInteger("invites");
     let prizeArg = interaction.options.getString("prize");
-    let premiumGuild = db.fetch(`server_${interaction.guild.id}_premium`);
+    let premiumGuild = await Guild.findOne({ id: interaction.guild.id }).premium;
 
     if(winnersArg > 20 && premiumGuild != true) return interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user, "Error", "To Create Giveaway with 20+ Winners you need Premium, get more informations using command `premium`.", "RED")], ephemeral: true });
 

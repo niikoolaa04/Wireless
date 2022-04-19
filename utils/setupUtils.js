@@ -235,7 +235,7 @@ Example: \`@Member\``);
 }
 
 async function winnersSetup(client, message, embed, filter, data) {
-  let premiumGuild = db.fetch(`server_${message.guild.id}_premium`);
+  let premiumGuild = await Guild.findOne({ id: message.guild.id }).premium;
   embed.setDescription(`Enter Number of how much Winners you want.
 Example: \`2\``);
   messageReply(message, embed);

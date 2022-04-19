@@ -23,12 +23,12 @@ module.exports = class Prefix extends Command {
   
   async run(message, args) {
     let prefix = args[0];
-    let real = db.fetch(`settings_${message.guild.id}_prefix`);
+    let real = await Guild.findOne({ id: message.guild.id }).prefix;
     if (!prefix) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, 
       `Error`, "You haven't entered prefix.", "RED") ]});
     if (prefix === real) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, 
         `Error`, "New Prefix cannot be same as old one.", "RED") ]});
-    db.set(`settings_${message.guild.id}_prefix`, prefix);
+    await Guild.findOneAndUpdate({ id: interaction.guild.id }, { prefix: `${prefix}` });
   
     let embed = new Discord.MessageEmbed()
     .setAuthor({ name: "Prefix", iconURL: this.client.user.displayAvatarURL() })
@@ -39,10 +39,10 @@ module.exports = class Prefix extends Command {
   }
   async slashRun(interaction, args) {
     let prefix = interaction.options.getString("prefix");
-    let real = db.fetch(`settings_${interaction.guild.id}_prefix`);
+    let real = await Guild.findOne({ id: interaction.guild.id }).prefix;
     if (prefix === real) return interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user, 
         `Error`, "New Prefix cannot be same as old one.", "RED")], ephemeral: true });
-    db.set(`settings_${interaction.guild.id}_prefix`, prefix);
+    await Guild.findOneAndUpdate({ id: interaction.guild.id }, { prefix: `${prefix}` });
   
     let embed = new Discord.MessageEmbed()
       .setAuthor({ name: "Prefix", iconURL: this.client.user.displayAvatarURL() })

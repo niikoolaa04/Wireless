@@ -27,8 +27,7 @@ module.exports = class GiveawayEdit extends Command {
 
     if (!messageID || isNaN(messageID)) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, "Error", "You haven't entered Message ID.", "RED")] });
 
-    let giveaways = db.fetch(`giveaways_${message.guild.id}`);
-    let gwData = giveaways.find(g => g.messageID == messageID && g.ended == false);
+    let gwData = await Giveaway.findOne({ messageID, ended: false, guildID: message.guild.id });
 
     if (!gwData) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, "Error", "You have entered invalid Message ID.", "RED")] });
 
@@ -38,8 +37,7 @@ module.exports = class GiveawayEdit extends Command {
   async slashRun(interaction, args) {
     let messageID = parseInt(interaction.options.getString("msgid")) || 0;
 
-    let giveaways = db.fetch(`giveaways_${interaction.guild.id}`);
-    let gwData = giveaways.find(g => g.messageID == messageID && g.ended == false);
+    let gwData = await Giveaway.findOne({ messageID, ended: false, guildID: interaction.guild.id });
 
     if (!gwData) return interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user, "Error", "You have entered invalid Message ID.", "RED")], ephemeral: true });
 

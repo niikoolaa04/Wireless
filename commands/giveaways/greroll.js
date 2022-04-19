@@ -28,8 +28,7 @@ module.exports = class GiveawayReroll extends Command {
 
     if (!messageID || isNaN(messageID)) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, "Error", "You haven't entered Message ID.", "RED")] });
 
-    let giveaways = db.fetch(`giveaways_${message.guild.id}`);
-    let gwData = giveaways.find(g => g.messageID == messageID && g.ended == true);
+    let gwData = await Giveaway.findOne({ messageID, ended: true, guildID: message.guild.id });
 
     if (!gwData) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, "Error", "You have entered invalid Message ID or that Giveaway haven't ended.", "RED")] });
 
@@ -37,8 +36,8 @@ module.exports = class GiveawayReroll extends Command {
   }
   async slashRun(interaction, args) {
     let messageID = parseInt(interaction.options.getString("msgid")) || 0;
-    let giveaways = db.fetch(`giveaways_${interaction.guild.id}`);
-    let gwData = giveaways.find(g => g.messageID == messageID && g.ended == true);
+
+    let gwData = await Giveaway.findOne({ messageID, ended: true, guildID: interaction.guild.id });
 
     if (!gwData) return interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user, "Error", "You have entered invalid Message ID or that Giveaway haven't ended.", "RED")], ephemeral: true });
 

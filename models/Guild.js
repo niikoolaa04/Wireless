@@ -2,8 +2,14 @@ const mongoose = require("mongoose");
 const config = require("../configs/config.json");
 
 const LiveSchema = new mongoose.Schema({
-  channel: String,
-  message: Number
+  channel: {
+    type: String,
+    default: ""
+  },
+  message: {
+    type: String,
+    default: ""
+  }
 });
 
 const GuildSchema = new mongoose.Schema({
@@ -20,31 +26,40 @@ const GuildSchema = new mongoose.Schema({
     default: false
   },
   bypassRole: {
-    type: String
+    type: String,
+    default: ""
   },
   blacklistRole: {
-    type: String
+    type: String,
+    default: ""
   },
   invitesChannel: {
-    type: String
+    type: String,
+    default: ""
   },
   joinMessage: {
-    type: String
+    type: String,
+    default: ""
   },
   leaveMessage: {
-    type: String
+    type: String,
+    default: ""
   },
   dmWinners: {
-    type: Boolean
+    type: Boolean,
+    default: false
   },
   snipes: {
-    type: Boolean
+    type: Boolean,
+    default: false
   },
   wlcmImage: {
-    type: String
+    type: String,
+    default: ""
   },
   welcomeChannel: {
-    type: String
+    type: String,
+    default: ""
   },
   customEmoji: {
     type: String,

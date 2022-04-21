@@ -21,6 +21,9 @@ module.exports = class MessageReactionAdd extends Event {
     if(message.channel.type === "DM") return;
     let member = message.guild.members.cache.get(user.id);
     let guildData = await Guild.findOne({ id: message.guild.id }, "customEmoji -_id");
+    if(!guildData) guildData = await Guild.create({
+      id: reaction.message.guild.id
+    })
     
     if(reaction.emoji.name == guildData.customEmoji) {
       // ovde

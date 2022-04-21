@@ -17,6 +17,15 @@ module.exports = class GuildMemberAdd extends Event {
 	  if(this.client.disabledGuilds.includes(member.guild.id)) return;
 	  if(!member.guild.me.permissions.has("MANAGE_GUILD")) return;
 
+    // temporary
+    Guild.findOne({ guild: member.guild.id }, async(err, result) => {
+      if(!result) {
+        await Guild.create({
+          id: member.guild.id,
+        });
+      }
+    });
+
     User.findOne({ id: member.id, guild: member.guild.id }, async(err, result) => {
       if(!result) {
         await User.create({

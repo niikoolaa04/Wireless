@@ -1,6 +1,6 @@
 const Command = require("../../structures/Command");
 const Discord = require("discord.js");
-const db = require("quick.db");
+const Bot = require("../../models/Bot.js");
 
 module.exports = class GuildBlacklist extends Command {
   constructor(client) {

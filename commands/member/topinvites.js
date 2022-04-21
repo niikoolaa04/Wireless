@@ -15,7 +15,7 @@ module.exports = class TopInvites extends Command {
   }
 
   async run(message, args) {
-    let content = this.client.utils.lbContent(this.client, message, "invitesRegular");
+    let content = await this.client.utils.lbContent(this.client, message, "invitesRegular");
 
     let embed = new Discord.MessageEmbed()
       .setDescription(content)
@@ -28,7 +28,7 @@ ${content}`)
     message.channel.send({ embeds: [embed] });
   }
   async slashRun(interaction, args) {
-    let content = this.client.utils.lbContent(this.client, interaction, "invitesRegular");
+    let content = await this.client.utils.lbContent(this.client, interaction, "invitesRegular");
 
     let embed = new Discord.MessageEmbed()
       .setDescription(content)

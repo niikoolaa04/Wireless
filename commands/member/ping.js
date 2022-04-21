@@ -17,18 +17,15 @@ module.exports = class Ping extends Command {
 
   async run(message, args) {
     let embed = new Discord.MessageEmbed()
-      .setAuthor({ name: "Ping", iconURL: this.client.user.displayAvatarURL() })
+      .setAuthor({ name: "Ping & Uptime", iconURL: this.client.user.displayAvatarURL() })
       .setDescription("Ping?")
-      .setColor("YELLOW");
+      .setColor("BLURPLE");
 
     const m = await message.channel.send({ embeds: [embed] });
 
     let embedEdit = new Discord.MessageEmbed()
-      .setAuthor({ name: "Ping", iconURL: this.client.user.displayAvatarURL() })
-      .setDescription(`Pong!
-**Bot Uptime ·** ${this.client.utils.formatVreme(this.client.uptime)}
-**Latency ·** ${m.createdTimestamp - message.createdTimestamp}ms
-**API Latency ·** ${this.client.ws.ping}ms`)
+      .setAuthor({ name: "Ping & Uptime", iconURL: this.client.user.displayAvatarURL() })
+      .setDescription(`Bot is online for **${this.client.utils.formatTime(this.client.uptime)}**, latency **${m.createdTimestamp - message.createdTimestamp}ms**, API latency **${this.client.ws.ping}ms**.`)
       .setColor("BLURPLE");
 
     m.edit({ embeds: [embedEdit] });
@@ -36,18 +33,15 @@ module.exports = class Ping extends Command {
   async slashRun(interaction, args) {
     await interaction.deferReply().catch(() => {});
     let embed = new Discord.MessageEmbed()
-      .setAuthor({ name: "Ping", iconURL: this.client.user.displayAvatarURL() })
+      .setAuthor({ name: "Ping & Uptime", iconURL: this.client.user.displayAvatarURL() })
       .setDescription("Ping?")
-      .setColor("YELLOW");
+      .setColor("BLURPLE");
 
     const m = await interaction.followUp({ embeds: [embed] });
 
     let embedEdit = new Discord.MessageEmbed()
-      .setAuthor({ name: "Ping", iconURL: this.client.user.displayAvatarURL() })
-      .setDescription(`Pong!
-**Bot Uptime ·** ${this.client.utils.formatVreme(this.client.uptime)}
-**Latency ·** ${m.createdTimestamp - interaction.createdTimestamp}ms
-**API Latency ·** ${this.client.ws.ping}ms`)
+      .setAuthor({ name: "Ping & Uptime", iconURL: this.client.user.displayAvatarURL() })
+      .setDescription(`Bot is online for **${this.client.utils.formatTime(this.client.uptime)}**, latency **${m.createdTimestamp - interaction.createdTimestamp}ms**, API latency **${this.client.ws.ping}ms**.`)
       .setColor("BLURPLE");
 
     m.edit({ embeds: [embedEdit] });

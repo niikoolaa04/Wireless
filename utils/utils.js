@@ -1,22 +1,23 @@
-const db = require("quick.db");
 const Discord = require("discord.js");
+const User = require("../models/User.js");
+const Guild = require("../models/Guild.js");
 
-function giveawayObject(guild, messageID, time, role, channel, winners, messages, invites, ending, hoster, prize) {
+function giveawayObject(guild, messageId, time, role, channel, winners, messages, invites, ending, hoster, prize) {
   let guildData = Guild.findOne({ id: guild.id });
   let gwObject = {
-    messageID: messageID,
-    guildID: guild, 
+    messageId: messageId,
+    guildId: guild, 
     channelID: channel,
     prize: prize,
     duration: time, 
     hostedBy: hoster, 
     winnerCount: winners, 
     requirements: {
-      messagesReq: messages, 
       invitesReq: invites,
-      roleReq: role,
+      messagesReq: messages,
+      roleReq: role
     },
-    roleBypass: guildData ? guildData.roleBypass : "none",
+    roleBypass: guildData.roleBypass ? guildData.roleBypass : "none",
     ended: false, 
     endsAt: ending,
     winners: []
@@ -39,7 +40,7 @@ function commandsList(client, message, category) {
     c => (content += `\`${c.name}\`, `)
   );
   
-  return content;
+  return content.slice(0, -2);
 }
 
 function formatTime(ms) {
@@ -55,27 +56,29 @@ function formatTime(ms) {
   return time;
 }
 
-function lbContent(client, message, lbType) {
-  let leaderboard = User.findOne({}).lean();
+async function lbContent(client, message, lbType) {
+  let leaderboard = await User.find({ guild: message.guild.id }).lean();
+  let suffix = lbType == "messages" ? "message(s)" : "invite(s)";
+
   leaderboard = leaderboard.map((x) => {
-    if(lbType == "invitesRegular") lbType = x.invitesRegular;
-    else if(lbType == "messages") lbType = x.messages;
-    
     return {
-      user: x.user,
-      value: lbType
+      user: x.id,
+      value: lbType == "messages" ? x.messages : x.invitesRegular,
     }
-  });
+  }).sort((a, b) => b.value - a.value);
+
   let content = "";
   
   for (let i = 0; i < leaderboard.length; i++) {
-    if (i === 10) break;
+    if (i == 10) break;
   
     let user = client.users.cache.get(leaderboard[i].user);
     if (user == undefined) user = "Unknown User";
     else user = user.username;
-    content += `\`${i + 1}.\` ${user} - **${leaderboard[i].value}**\n`;
+    content += `\`${i + 1}.\` ${user} - **${leaderboard[i].value}** ${suffix}\n`;
   }
+
+  if(content == "") content = "> No Data to show."
   
   return content;
 }
@@ -157,7 +160,7 @@ const asyncForEach = async (array, callback) => {
 };
 
 const pushHistory = (message, userId, text) => {
-  User.findOneAndUpdate({ id: userId, guild: message.guild.id }, { $push: { invitesHistory: text } });
+  User.findOneAndUpdate({ id: userId, guild: message.guild.id }, { $push: { invitesHistory: text } }, { new: true, upsert: true });
 }
 
 const parseArgs = (args, options) => {

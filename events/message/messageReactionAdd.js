@@ -1,6 +1,8 @@
 const Discord = require("discord.js");
-const fs = require("fs");
 const Event = require("../../structures/Events");
+const User = require("../../models/User.js");
+const Guild = require("../../models/Guild.js");
+const Giveaway = require("../../models/Giveaway.js");
 
 module.exports = class MessageReactionAdd extends Event {
 	constructor(...args) {
@@ -11,27 +13,26 @@ module.exports = class MessageReactionAdd extends Event {
     if(user.bot) return;
     if(reaction.partial) await reaction.fetch();
     if(reaction.message.partial) await reaction.message.fetch();
-    if(this.client.disabledGuilds.includes(reaction.message.guild.id)) return;
+
+	  if(this.client.disabledGuilds.includes(reaction.message.guild.id)) return;
+    
     if(user.partial) await user.fetch();
     const message = reaction.message;
     if(message.channel.type === "DM") return;
     let member = message.guild.members.cache.get(user.id);
-    let customEmoji;
-    await Guild.findOne({ id: message.guild.id }, (err, result) => {
-      if (result) customEmoji = result.customEmoji;
-    });
+    let guildData = await Guild.findOne({ id: message.guild.id }, "customEmoji -_id");
     
-    if(reaction.emoji.name == customEmoji) {
+    if(reaction.emoji.name == guildData.customEmoji) {
       // ovde
       let giveaways = await Giveaway.find({ guild: message.guild.id });
       if(giveaways == null || giveaways.length < 1) return;
     
-      let gwRunning = await Giveaway.find({ messageID: message.id, ended: false });
+      let gwRunning = await Giveaway.find({ messageId: message.id, ended: false });
       if(!gwRunning) return;
       
       let invitesReq, bonusReq, msgReq, role, blRole;
       
-      await User.findOne({ id: user.id, guild: message.guild.id }, (err, result) => {
+      User.findOne({ id: user.id, guild: message.guild.id }, (err, result) => {
         if (result) {
           invitesReq = result.invitesRegular;
           bonusReq = result.invitesBonus;
@@ -63,7 +64,7 @@ module.exports = class MessageReactionAdd extends Event {
 
 Your Giveaway Entry in **${message.guild.name}** has been \`approved\`.`);
 
-      if(message.id != gwRunning.messageID) return;
+      if(message.id != gwRunning.messageId) return;
       if(role != null && member.roles.cache.has(role)) return user.send({ embeds: [approveEmbed] });
       let haveInvites = true;
       let haveMessages = true;

@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 const Event = require("../../structures/Events");
+const Guild = require("../../models/Guild.js");
 const moment = require("moment");
-const db = require("quick.db");
 
 module.exports = class GuildCreate extends Event {
 	constructor(...args) {
@@ -23,7 +23,15 @@ module.exports = class GuildCreate extends Event {
 **\`👑\` Guild Owner** - ${owner.user.username}
 **\`👤\` Guild Member Count** - ${guild.memberCount}`)
       .setColor("YELLOW");
-    channel.send({ embeds: [embed] })
+    if(channel) channel.send({ embeds: [embed] })
+
+    await Guild.findOne({ id: guild.id }, async(err, result) => {
+      if(!result) {
+        await Guild.create({
+          id: guild.id
+        });
+      }
+    });
 
     console.log(
       `[BOT] (${moment.utc(new Date()).tz('Europe/Belgrade').format('HH:mm:ss, DD/MM/YYYY.')}) I'm added to the new Guild ${guild.name} (${guild.id}) which have ${guild.memberCount} total members!`

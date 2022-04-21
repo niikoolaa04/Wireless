@@ -1,6 +1,5 @@
 const Command = require("../../structures/Command");
 const Discord = require('discord.js');
-const db = require("quick.db");
 
 module.exports = class Test extends Command {
   constructor(client) {

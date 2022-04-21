@@ -1,22 +1,23 @@
 const { MessageEmbed } = require("discord.js");
-const db = require("quick.db");
+const User = require("../models/User.js");
+const Guild = require("../models/Guild.js");
 
 const updateLb = async (client, guild) => {
   let settings = await Guild.findOne({ id: guild.id });
-  if(!settings.live.channel || settings.live.message) return;
+  if(!settings) return;
+  if(!settings.live.channel || !settings.live.message) return;
   let channel = client.channels.cache.get(settings.live.channel);
   if(channel == undefined || channel == null) {
-    await Guild.findOneAndUpdate({ id: guild.id }, { $unset: { "live.$.channel": 1}, $unset: { "live.$.message": 1 }});
+    await Guild.findOneAndUpdate({ id: guild.id }, { $unset: { "live.$.channel": 1, "live.$.message": 1 }}, { new: true, upsert: true });
     return;
   }
   let message = channel.messages.fetch(settings.live.message); 
   if(message == undefined || message == null) {
-    await Guild.findOneAndUpdate({ id: guild.id }, { $unset: { "live.$.channel": 1}, $unset: { "live.$.message": 1 }});
+    await Guild.findOneAndUpdate({ id: guild.id }, { $unset: { "live.$.channel": 1, "live.$.message": 1 }}, { new: true, upsert: true });
     return;
   }
 
-  let invites = await User.find({ guild: guild.id 
-  }).lean();
+  let invites = await User.find({ guild: guild.id }).lean();
   invites = invites.map((x) =>{
     return {
       user: x.user,

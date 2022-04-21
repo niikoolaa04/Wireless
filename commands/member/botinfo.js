@@ -1,6 +1,6 @@
 const Command = require("../../structures/Command");
 const Discord = require("discord.js");
-const Topgg = require('@top-gg/sdk');
+// const Topgg = require('@top-gg/sdk');
 
 module.exports = class Botinfo extends Command {
   constructor(client) {
@@ -17,8 +17,8 @@ module.exports = class Botinfo extends Command {
 
   async run(message, args) {
     const memory = process.memoryUsage().heapUsed / 1024 / 1024;
-    const api = new Topgg.Api(process.env.TOP_GG_TOKEN);
-    let votes = await api.getVotes();
+/*     const api = new Topgg.Api(process.env.TOP_GG_TOKEN);
+    let votes = await api.getVotes(); */
 
     let embed = new Discord.MessageEmbed()
       .setAuthor({ name: "Bot Informations", iconURL: this.client.user.displayAvatarURL() })
@@ -27,7 +27,7 @@ module.exports = class Botinfo extends Command {
       .addField(`Version`, `${this.client.config.version}`, true)
       .addField(`Library`, `discord.js`, true)
       .addField(`Memory`, `${memory.toFixed(2)}MB`, true)
-      .addField(`Top.gg Votes`, `\`${votes.length}\``, true)
+      // .addField(`Top.gg Votes`, `\`${votes.length}\``, true)
       .addField(`Guild Count`, `\`${this.client.guilds.cache.size}\``, true)
       .addField(`Member Count`, `\`${this.client.users.cache.size}\``, true)
       .addField(`Vote Link`, `[Click Here to Get Vote Link](${this.client.config.links.voteURL})`, true)

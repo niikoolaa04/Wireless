@@ -1,5 +1,6 @@
 const Command = require("../../structures/Command");
 const Discord = require("discord.js");
+const Guild = require("../../models/Guild.js");
 
 module.exports = class RemovePremium extends Command {
 	constructor(client) {
@@ -23,11 +24,11 @@ module.exports = class RemovePremium extends Command {
     if(!guild || !this.client.guilds.cache.get(guild)) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, 
         `Error`, "You have entered invalid Guild ID.", "RED")] });
     
-    let premium = await Guild.findOne({ id: message.guild.id }).premium;
-    if(premium != true) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, 
+    let guildData = await Guild.findOne({ id: message.guild.id }, "premium -_id");
+    if(guildData.premium != true) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, 
       `Error`, "That Guild don't have Premium Subscription.", "RED")] });
 
-    await Guild.findOneAndUpdate({ id: guild }, { premium: false });
+    await Guild.findOneAndUpdate({ id: guild }, { premium: false }, { new: true, upsert: true });
     guild = this.client.guilds.cache.get(guild);
 
     message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, `Premium Removed`, `Premium Subscription have been removed from Guild **${guild.name}**.`, "YELLOW")] });

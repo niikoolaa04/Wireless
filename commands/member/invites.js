@@ -1,6 +1,6 @@
 const Command = require("../../structures/Command");
 const Discord = require("discord.js");
-const db = require("quick.db");
+const User = require("../../models/User");
 
 module.exports = class Invites extends Command {
 	constructor(client) {
@@ -32,14 +32,11 @@ module.exports = class Invites extends Command {
     }).sort((a, b) => b.value - a.value);
     let rank = leaderboard.findIndex((a) => a.member == user.id) + 1;
 
-    await User.find({ id: user.id, guild: message.guild.id }, (err, result) => {
+    User.findOne({ id: user.id, guild: message.guild.id }, (err, result) => {
       let inviter = this.client.users.cache.get(result.inviter);
       inviter = inviter ? inviter.username : 'Unknown User';
-      
-      let every = db.all().filter(i => i.ID.startsWith(`invitesRegular_${message.guild.id}_`)).sort((a, b) => b.data - a.data);
-      let rank = every.map(x => x.ID).indexOf(`invitesRegular_${message.guild.id}_${user.id}`) + 1 || 'N/A';
-      
-      let history = settings.invitesHistory.length > 0 ? invitesHistory : ["No History"];
+
+      let history = result.invitesHistory.length > 0 ? result.invitesHistory : ["No History"];
       let contentHistory = String();
       
       for (const inv of history.slice(0, 5)) {
@@ -73,7 +70,7 @@ ${contentHistory}`);
     }).sort((a,b) => b.value - a.value);
     let rank = leaderboard.findIndex((a) => a.member == user.id) + 1;
 
-    await User.find({ id: user.id, guild: interaction.guild.id }, (err, result) => {
+    User.findOne({ id: user.id, guild: interaction.guild.id }, (err, result) => {
       let inviter = this.client.users.cache.get(result.inviter);
       inviter = inviter ? inviter.username : 'Unknown User';
     

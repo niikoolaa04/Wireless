@@ -1,5 +1,5 @@
 const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
-const db = require("quick.db");
+const Guild = require("../models/Guild.js");
 const ms = require('ms');
 
 async function submitGiveaway(client, message, data) {
@@ -235,8 +235,8 @@ Example: \`@Member\``);
 }
 
 async function winnersSetup(client, message, embed, filter, data) {
-  await Guild.findOne({ id: message.guild.id }, async(err, guild) => {
-    if(!guild) guild = new Guild({
+  Guild.findOne({ id: message.guild.id }, async(err, guild) => {
+    if(!guild) guild = await Guild.create({
       id: message.guild.id
     });
     embed.setDescription(`Enter Number of how much Winners you want.
@@ -368,9 +368,9 @@ Example: \`2m\``);
 
 const messageReply = (message, content, comp = null) => {
   if(message.type == "APPLICATION_COMMAND") {
-    message.followUp({ embeds: [content], components: [comp], ephemeral: true });
+    message.followUp({ embeds: [content], components: comp ? [comp] : [], ephemeral: true });
   } else {
-    message.channel.send({ embeds: [content] });
+    message.channel.send({ embeds: [content], components: comp ? [comp] : [] });
   }
 }
 

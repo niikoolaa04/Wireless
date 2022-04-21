@@ -1,7 +1,7 @@
-const Discord = require("discord.js");
-const db = require("quick.db"); 
-const delay = require("delay");
 const Event = require("../../structures/Events");
+const Discord = require("discord.js");
+const Guild = require("../../models/Guild.js");
+const User = require("../../models/User.js");
 
 module.exports = class MessageCreate extends Event {
 	constructor(...args) {
@@ -11,33 +11,41 @@ module.exports = class MessageCreate extends Event {
 	async run(message) {
     if(this.client.disabledGuilds.includes(message.guild.id) && message.author.id != this.client.config.developer.id) return;
     if (message.channel.type === "DM") return;
-    let prefix;
-    await Guild.findOne({ id: message.guild.id }, (err, result) => {
-      if (result) prefix = result.prefix;
-    });
-
+    let guildData = await Guild.findOne({ id: message.guild.id }, "prefix -_id");
+    
     if (message.author.bot) return;
-  
-    db.add(`messages_${message.guild.id}_${message.author.id}`, 1);
+
+    /* User.findOne({ id: message.author.id, guild: message.guild.id }, async(err, result) => {
+      if(!result) {
+        await User.create({
+          id: message.author.id,
+          guild: message.guild.id
+        });
+        console.log('created - messageCreate');
+      }
+    }); */
+
+    
+    await User.findOneAndUpdate({ id: message.author.id, guild: message.guild.id }, { $inc: { messages: 1 } }, { new: true, upsert: true });
 
     // <== Mention Bota ==> //
     const prefixMention = new RegExp(`^<@!?${this.client.user.id}>( |)$`);
     if (message.content.match(prefixMention)) {
       let mentionEmbed = new Discord.MessageEmbed()
-        .setDescription(`Hey ${message.author}, my current prefix for this Guild is \`${prefix}\`.
-To view all commands do \`${prefix}help\`
+        .setDescription(`Hey ${message.author}, my current prefix for this Guild is \`${guildData.prefix}\`.
+To view all commands do \`${guildData.prefix}help\`
 
-[Invite Me](${this.client.config.links.inviteURL}) | [Vote for me](${this.client.config.links.voteURL}) | [Support Server](${this.client.config.links.supportServer})`)
+[Invite Me](${this.client.config.links.inviteURL}) | [Website](${this.client.config.links.website}) | [Vote for me](${this.client.config.links.voteURL}) | [Support Server](${this.client.config.links.supportServer})`)
         .setColor("YELLOW")
         .setAuthor({ name: message.author.username, iconURL: message.author.displayAvatarURL({ dynamic: true }) });
       message.channel.send({ embeds: [mentionEmbed] });
     }
 
     // <== Commands ==> //
-    if (message.content.indexOf(prefix) !== 0) return;
+    if (message.content.indexOf(guildData.prefix) !== 0) return;
   
     const args = message.content
-      .slice(prefix.length)
+      .slice(guildData.prefix.length)
       .trim()
       .split(/ +/g);
     const command = args.shift().toLowerCase();

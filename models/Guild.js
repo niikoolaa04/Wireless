@@ -47,7 +47,8 @@ const GuildSchema = new mongoose.Schema({
     type: String
   },
   customEmoji: {
-    type: String
+    type: String,
+    default: "🎉"
   },
   live: {
     type: LiveSchema

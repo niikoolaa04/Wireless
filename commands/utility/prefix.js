@@ -1,6 +1,6 @@
 const Command = require("../../structures/Command");
-const db = require("quick.db");
 const Discord = require("discord.js");
+const Guild = require("../../models/Guild.js");
 
 module.exports = class Prefix extends Command {
 	constructor(client) {
@@ -23,15 +23,13 @@ module.exports = class Prefix extends Command {
   
   async run(message, args) {
     let prefix = args[0];
-    let real;
-    await Guild.findOne({ id: message.guild.id }, (err, result) => {
-      if (result) real = result.prefix;
-    });
+    let guildData = await Guild.findOne({ id: message.guild.id }, "prefix -_id");
+
     if (!prefix) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, 
       `Error`, "You haven't entered prefix.", "RED") ]});
-    if (prefix === real) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, 
+    if (prefix === guildData.prefix) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, 
         `Error`, "New Prefix cannot be same as old one.", "RED") ]});
-    await Guild.findOneAndUpdate({ id: interaction.guild.id }, { prefix: `${prefix}` });
+    await Guild.findOneAndUpdate({ id: interaction.guild.id }, { prefix: `${prefix}` }, { new: true, upsert: true });
   
     let embed = new Discord.MessageEmbed()
     .setAuthor({ name: "Prefix", iconURL: this.client.user.displayAvatarURL() })
@@ -42,13 +40,11 @@ module.exports = class Prefix extends Command {
   }
   async slashRun(interaction, args) {
     let prefix = interaction.options.getString("prefix");
-    let real;
-    await Guild.findOne({ id: message.guild.id }, (err, result) => {
-      if (result) real = result.prefix;
-    });
-    if (prefix === real) return interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user, 
+    let guildData = await Guild.findOne({ id: interaction.guild.id }, "prefix -_id");
+
+    if (prefix === guildData.prefix) return interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user, 
         `Error`, "New Prefix cannot be same as old one.", "RED")], ephemeral: true });
-    await Guild.findOneAndUpdate({ id: interaction.guild.id }, { prefix: `${prefix}` });
+    await Guild.findOneAndUpdate({ id: interaction.guild.id }, { prefix: `${prefix}` }, { new: true, upsert: true });
   
     let embed = new Discord.MessageEmbed()
       .setAuthor({ name: "Prefix", iconURL: this.client.user.displayAvatarURL() })

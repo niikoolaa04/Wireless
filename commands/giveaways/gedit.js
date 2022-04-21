@@ -1,7 +1,6 @@
 const Command = require("../../structures/Command");
 const { MessageEmbed, MessageActionRow, MessageButton, MessageSelectMenu } = require('discord.js');
-const ms = require('ms');
-const db = require("quick.db");
+const Giveaway = require("../../models/Giveaway.js");
 
 module.exports = class GiveawayEdit extends Command {
   constructor(client) {
@@ -24,10 +23,10 @@ module.exports = class GiveawayEdit extends Command {
   }
 
   async run(message, args) {
-    let messageID = args[0];
-    if (!messageID) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, "Error", "You haven't entered Message ID.", "RED")] });
+    let messageId = args[0];
+    if (!messageId) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, "Error", "You haven't entered Message ID.", "RED")] });
 
-    let gwData = await Giveaway.findOne({ messageID, ended: false, guildID: message.guild.id });
+    let gwData = await Giveaway.findOne({ messageId, ended: false, guildId: message.guild.id });
     
     if(!gwData) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, "Error", "You have entered invalid Message ID.", "RED")] });
 
@@ -85,7 +84,7 @@ Example: \`500\``);
           let m = c.first();
           m = m.content;
           if(isNaN(m)) return message.channel.send({ embeds: [ client.embedBuilder(client, message.author, "Error", `You have entered Invalid Number of Messages.`, "RED")] });
-          this.client.gw.editGiveaway(this.client, message, messageID, message.guild, parseInt(m), 0, 0, 0, 0);
+          this.client.gw.editGiveaway(this.client, message, messageId, message.guild, parseInt(m), 0, 0, 0, 0);
           i.followUp({ embeds: [ this.client.embedBuilder(this.client, message.author, "Giveaway", `Giveaway have been edited successfuly.`, "YELLOW")], ephemeral: true });
         });
       } else if(i.values[0] == "inv_req") {
@@ -98,7 +97,7 @@ Example: \`500\``);
           let m = c.first();
           m = m.content;
           if(isNaN(m)) return message.channel.send({ embeds: [ client.embedBuilder(client, message.author, "Error", `You have entered Invalid Number of Invites.`, "RED")] });
-          this.client.gw.editGiveaway(this.client, message, messageID, message.guild, 0, parseInt(m), 0, 0, 0);
+          this.client.gw.editGiveaway(this.client, message, messageId, message.guild, 0, parseInt(m), 0, 0, 0);
           i.followUp({ embeds: [ this.client.embedBuilder(this.client, message.author, "Giveaway", `Giveaway have been edited successfuly.`, "YELLOW")], ephemeral: true });
         });
       } else if(i.values[0] == "winners") {
@@ -111,7 +110,7 @@ Example: \`2\``);
           let m = c.first();
           m = m.content;
           if(isNaN(m)) return message.channel.send({ embeds: [ client.embedBuilder(client, message.author, "Error", `You have entered Invalid Number of Winners.`, "RED")] });
-          this.client.gw.editGiveaway(this.client, message, messageID, message.guild, 0, 0, parseInt(m), 0, 0);
+          this.client.gw.editGiveaway(this.client, message, messageId, message.guild, 0, 0, parseInt(m), 0, 0);
           i.followUp({ embeds: [ this.client.embedBuilder(this.client, message.author, "Giveaway", `Giveaway have been edited successfuly.`, "YELLOW")], ephemeral: true });
         });
       } else if(i.values[0] == "extra_time") {
@@ -123,7 +122,7 @@ Example: \`2m\``);
         message.channel.awaitMessages({ eFilter, max: 1, time: 30000, errors: ["time"]}).then(async (c) => {
           let m = c.first();
           m = m.content;
-          this.client.gw.editGiveaway(this.client, message, messageID, message.guild, 0, 0, 0, m, 0);
+          this.client.gw.editGiveaway(this.client, message, messageId, message.guild, 0, 0, 0, m, 0);
           i.followUp({ embeds: [ this.client.embedBuilder(this.client, message.author, "Giveaway", `Giveaway have been edited successfuly.`, "YELLOW")], ephemeral: true });
         });
       } else if(i.values[0] == "prize") {
@@ -136,7 +135,7 @@ Example: \`Nitro Classic\``);
           let m = c.first();
           m = m.content;
           if(m.length < 3 || m.length > 32) return message.channel.send({ embeds: [ client.embedBuilder(client, message.author, "Giveaway Setup", `You have entered Invalid Prize.`, "RED")] });
-          this.client.gw.editGiveaway(this.client, message, messageID, message.guild, 0, 0, 0, 0, m);
+          this.client.gw.editGiveaway(this.client, message, messageId, message.guild, 0, 0, 0, 0, m);
           i.followUp({ embeds: [ this.client.embedBuilder(this.client, message.author, "Giveaway", `Giveaway have been edited successfuly.`, "YELLOW")], ephemeral: true });
         });
       } else if(i.values[0] == "finish") {
@@ -151,10 +150,10 @@ Example: \`Nitro Classic\``);
     });
   }
   async slashRun(interaction, args) {
-    let messageID = interaction.options.getString("msgid");
-    messageID = parseInt(messageID);
+    let messageId = interaction.options.getString("msgid");
+    messageId = parseInt(messageId);
   
-    let gwData = await Giveaway.findOne({ messageID, ended: false, guildID: interaction.guild.id });
+    let gwData = await Giveaway.findOne({ messageId, ended: false, guildId: interaction.guild.id });
     
     if(!gwData) return interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user, "Error", "You have entered invalid Message ID.", "RED")], ephemeral: true });
   
@@ -213,7 +212,7 @@ Example: \`500\``);
           let m = c.first();
           m = m.content;
           if(isNaN(m)) return interaction.followUp({ embeds: [ this.client.embedBuilder(client, interaction.user, "Error", `You have entered Invalid Number of Messages.`, "RED")] });
-          this.client.gw.editGiveaway(this.client, interaction, messageID, interaction.guild, parseInt(m), 0, 0, 0, 0);
+          this.client.gw.editGiveaway(this.client, interaction, messageId, interaction.guild, parseInt(m), 0, 0, 0, 0);
           interaction.followUp({ embeds: [ this.client.embedBuilder(this.client, interaction.user, "Giveaway", `Giveaway have been edited successfuly.`, "YELLOW")], ephemeral: true });
         });
       } else if(i.values[0] == "inv_req") {
@@ -226,7 +225,7 @@ Example: \`500\``);
           let m = c.first();
           m = m.content;
           if(isNaN(m)) return interaction.followUp({ embeds: [ this.client.embedBuilder(client, interaction.user, "Error", `You have entered Invalid Number of Invites.`, "RED")] });
-          this.client.gw.editGiveaway(this.client, interaction, messageID, interaction.guild, 0, parseInt(m), 0, 0, 0);
+          this.client.gw.editGiveaway(this.client, interaction, messageId, interaction.guild, 0, parseInt(m), 0, 0, 0);
           interaction.followUp({ embeds: [ this.client.embedBuilder(this.client, interaction.user, "Giveaway", `Giveaway have been edited successfuly.`, "YELLOW")], ephemeral: true });
         });
       } else if(i.values[0] == "winners") {
@@ -239,7 +238,7 @@ Example: \`2\``);
           let m = c.first();
           m = m.content;
           if(isNaN(m)) return interaction.followUp({ embeds: [ this.client.embedBuilder(client, interaction.user, "Error", `You have entered Invalid Number of Winners.`, "RED")] });
-          this.client.gw.editGiveaway(this.client, interaction, messageID, interaction.guild, 0, 0, parseInt(m), 0, 0);
+          this.client.gw.editGiveaway(this.client, interaction, messageId, interaction.guild, 0, 0, parseInt(m), 0, 0);
           interaction.followUp({ embeds: [ this.client.embedBuilder(this.client, interaction.user, "Giveaway", `Giveaway have been edited successfuly.`, "YELLOW")], ephemeral: true });
         });
       } else if(i.values[0] == "extra_time") {
@@ -251,7 +250,7 @@ Example: \`2m\``);
         interaction.channel.awaitMessages({ eFilter, max: 1, time: 30000, errors: ["time"]}).then(async (c) => {
           let m = c.first();
           m = m.content;
-          this.client.gw.editGiveaway(this.client, interaction, messageID, interaction.guild, 0, 0, 0, m, 0);
+          this.client.gw.editGiveaway(this.client, interaction, messageId, interaction.guild, 0, 0, 0, m, 0);
           interaction.followUp({ embeds: [ this.client.embedBuilder(this.client, interaction.user, "Giveaway", `Giveaway have been edited successfuly.`, "YELLOW")], ephemeral: true });
         });
       } else if(i.values[0] == "prize") {
@@ -264,7 +263,7 @@ Example: \`Nitro Classic\``);
           let m = c.first();
           m = m.content;
           if(m.length < 3 || m.length > 32) return interaction.followUp({ embeds: [ this.client.embedBuilder(client, interaction.user, "Giveaway Setup", `You have entered Invalid Prize.`, "RED")] });
-          this.client.gw.editGiveaway(this.client, interaction, messageID, interaction.guild, 0, 0, 0, 0, m);
+          this.client.gw.editGiveaway(this.client, interaction, messageId, interaction.guild, 0, 0, 0, 0, m);
           interaction.followUp({ embeds: [ this.client.embedBuilder(this.client, interaction.user, "Giveaway", `Giveaway have been edited successfuly.`, "YELLOW")], ephemeral: true });
         });
       } else if(i.values[0] == "finish") {

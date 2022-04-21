@@ -1,6 +1,7 @@
 const Command = require("../../structures/Command");
 const Discord = require('discord.js');
-const db = require("quick.db");
+const User = require("../../models/User");
+const Guild = require("../../models/Guild.js");
 
 module.exports = class LiveLb extends Command {
   constructor(client) {
@@ -16,15 +17,14 @@ module.exports = class LiveLb extends Command {
   }
 
   async run(message, args) {
-    let live = await Guild.findOne({ id: message.guild.id });
+    let guildData = await Guild.findOne({ id: message.guild.id });
 
-    if (live != null) {
-      await Guild.findOneAndUpdate({ id: message.guild.id }, { $unset: { "live.$.channel": 1}, $unset: { "live.$.message": 1 }});
+    if (guildData.live.channel) {
+      await Guild.findOneAndUpdate({ id: message.guild.id }, { $unset: { "live.$.channel": 1, "live.$.message": 1 }}, { new: true, upsert: true });
 
       message.channel.send({ embeds: [this.client.embedBuilder(this.client, message.author, "Live Leaderboard", "Live Leaderboard have been removed from Database, you can delete Embed now.", "YELLOW")] })
     } else {
-      let leaderboard = await User.find({ guild: message.guild.id 
-      }).lean();
+      let leaderboard = await User.find({ guild: message.guild.id }).lean();
       leaderboard = leaderboard.map((x) =>{
         return {
           user: x.user,
@@ -55,19 +55,18 @@ module.exports = class LiveLb extends Command {
         .setTimestamp();
 
       message.channel.send({ embeds: [embed] }).then(async (m) => {
-        await Guild.findOneAndUpdate({ id: interaction.guild.id }, {"live.$.channel": m.channelId, "live.$.message": m.id });
+        await Guild.findOneAndUpdate({ id: interaction.guild.id }, {"live.$.channel": m.channelId, "live.$.message": m.id }, { new: true, upsert: true });
       });
     }
   }
   async slashRun(interaction, args) {
-    let live = await Guild.findOne({ id: message.guild.id });
+    let guildData = await Guild.findOne({ id: interaction.guild.id });
 
-    if (live != null) {
-      await Guild.findOneAndUpdate({ id: message.guild.id }, { $unset: { "live.$.channel": 1}, $unset: { "live.$.message": 1 }});
+    if (guildData.live.channel) {
+      await Guild.findOneAndUpdate({ id: interaction.guild.id }, { $unset: { "live.$.channel": 1, "live.$.message": 1 }}, { new: true, upsert: true });
       interaction.reply({ embeds: [this.client.embedBuilder(this.client, interaction.user, "Live Leaderboard", "Live Leaderboard have been removed from Database, you can delete Embed now.", "YELLOW")] })
     } else {
-      let leaderboard = await User.find({ guild: interaction.guild.id 
-      }).lean();
+      let leaderboard = await User.find({ guild: interaction.guild.id }).lean();
       leaderboard = leaderboard.map((x) =>{
         return {
           user: x.user,
@@ -99,7 +98,7 @@ module.exports = class LiveLb extends Command {
 
       interaction.reply({ content: "> Live Leaderboard have been created successfully.", ephemeral: true  });
       interaction.channel.send({ embeds: [embed] }).then(async (m) => {
-        await Guild.findOneAndUpdate({ id: interaction.guild.id }, {"live.$.channel": m.channelId, "live.$.message": m.id });
+        await Guild.findOneAndUpdate({ id: interaction.guild.id }, {"live.$.channel": m.channelId, "live.$.message": m.id }, { new: true, upsert: true });
       });
     }
   }

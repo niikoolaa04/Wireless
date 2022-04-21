@@ -1,9 +1,10 @@
-const db = require("quick.db");
+const Discord = require("discord.js");
+const Event = require("../../structures/Events");
+const User = require("../../models/User.js");
+const Guild = require("../../models/Guild.js");
 const delay = require("delay");
 const moment = require('moment-timezone');
 moment.locale('sr-latn');
-const Event = require("../../structures/Events");
-const Discord = require("discord.js");
 
 module.exports = class GuildMemberRemove extends Event {
 	constructor(...args) {
@@ -11,15 +12,14 @@ module.exports = class GuildMemberRemove extends Event {
 	}
 
 	async run(member) {
-	  let disabledGuilds = await Bot.find({ name: "wireless "}).disabledGuilds;
-	  if(disabledGuilds.includes(member.guild.id)) return;
+	  if(this.client.disabledGuilds.includes(member.guild.id)) return;
     
     let settings = await Guild.find({ id: member.guild.id });
 
-    let inviter = await User.findOne({ id: member.id, guild: member.guild.id }).inviter;
+    let inviter = await User.findOne({ id: member.id, guild: member.guild.id }, "inviter");
     if(inviter != member.id && inviter != "Unknown" && inviter != "Vanity URL") {
-      await User.findOneAndUpdate({ id: inviter, guild: member.guild.id }, { $inc: { invitesLeaves: 1 } });
-      await User.findOneAndUpdate({ id: inviter, guild: member.guild.id }, { $inc: { invitesRegular: -1 } });
+      await User.findOneAndUpdate({ id: inviter, guild: member.guild.id }, { $inc: { invitesLeaves: 1 } }, { new: true, upsert: true });
+      await User.findOneAndUpdate({ id: inviter, guild: member.guild.id }, { $inc: { invitesRegular: -1 } }, { new: true, upsert: true });
       this.client.utils.pushHistory(member, inviter, `[ 📤 ] **${member.user.tag}** has **left** server.`);
     }
     invitesChannel = this.client.channels.cache.get(settings.invitesChannel);
@@ -40,7 +40,7 @@ module.exports = class GuildMemberRemove extends Event {
         bonus: 0
       };
       
-      await User.findOne({ id: inviter, guild: member.guild.id }, (err, result) => {
+      User.findOne({ id: inviter, guild: member.guild.id }, (err, result) => {
         if (result) {
           invitesCount.joins = result.invitesJoin;
           invitesCount.regular = results.invitesRegular;

@@ -1,5 +1,6 @@
 const Command = require("../../structures/Command");
 const Discord = require("discord.js");
+const Key = require("../../models/Key.js");
 
 module.exports = class RemoveKey extends Command {
 	constructor(client) {
@@ -24,7 +25,7 @@ module.exports = class RemoveKey extends Command {
     if(!key || !keyList.some((x) => x.toLowerCase() == key.toLowerCase())) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, 
         `Error`, "You have entered invalid Key.", "RED")] });
     
-    await Key.findOneAndUpdate({ data: key, used: false }, { used: true })
+    await Key.findOneAndUpdate({ data: key, used: false }, { used: true }, { new: true, upsert: true });
 
     message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, `Key Removed`, `Premium Key \`${key}\` have been removed from database.`, "YELLOW")] });
   }

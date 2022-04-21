@@ -1,12 +1,12 @@
 const Discord = require("discord.js");
-const db = require("quick.db");
+const Event = require("../../structures/Events");
+const User = require("../../models/User.js");
+const Guild = require("../../models/Guild.js");
 const Canvas = require("canvas");
 const delay = require("delay");
+const { isEqual, generateInvitesCache } = require("../../utils/utils.js");
 const moment = require('moment-timezone');
 moment.locale('sr-latn');
-const Event = require("../../structures/Events");
-const { isEqual, generateInvitesCache } = require("../../utils/utils.js");
-const User = require("../../models/User.js");
 
 module.exports = class GuildMemberAdd extends Event {
 	constructor(...args) {
@@ -14,9 +14,17 @@ module.exports = class GuildMemberAdd extends Event {
 	}
 
 	async run(member) {
-	  let disabledGuilds = await Bot.find({ name: "wireless "}).disabledGuilds;
-	  if(disabledGuilds.includes(member.guild.id)) return;
+	  if(this.client.disabledGuilds.includes(member.guild.id)) return;
 	  if(!member.guild.me.permissions.has("MANAGE_GUILD")) return;
+
+    User.findOne({ id: member.id, guild: member.guild.id }, async(err, result) => {
+      if(!result) {
+        await User.create({
+          id: member.id,
+          guild: member.guild.id
+        });
+      }
+    });
 
     let settings = await Guild.find({ id: member.guild.id });
 
@@ -104,15 +112,15 @@ module.exports = class GuildMemberAdd extends Event {
     else inviter = this.client.users.cache.get(invite.inviter.id);
 
     if (inviter != "Unknown" && inviter != "Vanity URL") {
-      await User.findOneAndUpdate({ id: member.id, guild: member.guild.id }, { inviter: `${inviter.id}` });
+      await User.findOneAndUpdate({ id: member.id, guild: member.guild.id }, { inviter: `${inviter.id}` }, { new: true, upsert: true });
 
       if (inviter.id !== member.id) {
-        await User.findOneAndUpdate({ id: inviter, guild: member.guild.id }, { $inc: { invitesJoins: 1 } });
-        await User.findOneAndUpdate({ id: inviter, guild: member.guild.id }, { $inc: { invitesRegular: 1 } });
+        await User.findOneAndUpdate({ id: inviter, guild: member.guild.id }, { $inc: { invitesJoins: 1 } }, { new: true, upsert: true });
+        await User.findOneAndUpdate({ id: inviter, guild: member.guild.id }, { $inc: { invitesRegular: 1 } }, { new: true, upsert: true });
         this.client.utils.pushHistory(member, inviter.id, `[ 📥 ] **${member.user.tag}** has **joined** server.`);
       }
     } else {
-      await User.findOneAndUpdate({ id: member.id, guild: member.guild.id }, { inviter: `${inviter}` });
+      await User.findOneAndUpdate({ id: member.id, guild: member.guild.id }, { inviter: `${inviter}` }, { new: true, upsert: true });
     }
 
     let invitesChannel = this.client.channels.cache.get(settings.invitesChannel);
@@ -120,7 +128,7 @@ module.exports = class GuildMemberAdd extends Event {
     let msgJoin = settings.joinMessage;
     if (invitesChannel != null && invitesChannel != undefined && msgJoin != null) {
       delay(1000);
-      let inviterData = await User.findOne({ id: member.id, guild: member.guild.id }).inviter;
+      let inviterData = await User.findOne({ id: member.id, guild: member.guild.id }, "inviter");
       let invv = null;
       if (inviterData == "Vanity URL") invv = "Vanity URL";
       else if (inviterData == undefined || inviterData == null || inviter == "Unknown") invv = "Unknown";
@@ -134,7 +142,7 @@ module.exports = class GuildMemberAdd extends Event {
         bonus: 0
       };
       
-      await User.findOne({ id: inviterData, guild: member.guild.id }, (err, result) => {
+      User.findOne({ id: inviterData, guild: member.guild.id }, (err, result) => {
         if (result) {
           invitesCount.joins = result.invitesJoin;
           invitesCount.regular = results.invitesRegular;

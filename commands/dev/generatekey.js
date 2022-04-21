@@ -1,6 +1,6 @@
 const Command = require("../../structures/Command");
 const Discord = require("discord.js");
-const db = require("quick.db");
+const Key = require("../../models/Key.js");
 
 module.exports = class GenerateKey extends Command {
 	constructor(client) {

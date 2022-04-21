@@ -1,5 +1,7 @@
 const Command = require("../../structures/Command");
 const { MessageEmbed, MessageActionRow, MessageButton } = require("discord.js");
+const Guild = require("../../models/Guild.js");
+const Key = require("../../models/Key.js");
 
 module.exports = class ActivateKey extends Command {
 	constructor(client) {
@@ -27,13 +29,13 @@ module.exports = class ActivateKey extends Command {
     let key = args[0];
     let keyList = await Key.find({ used: false });
     let invalidKeys = await Key.find({ used: true });
-    let premium = await Guild.findOne({ id: message.guild.id }).premium;
+    let guildData = await Guild.findOne({ id: message.guild.id }, "premium -_id");
     
     if(!key) 
       return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, `Error`, `You haven't entered Key.`, "RED")] });
-    if(!keyList.some((x) => x.toLowerCase() == key.toLowerCase()) || invalidList.some((x) => x.toLowerCase() == key.toLowerCase())) 
+    if(!keyList.some((x) => x.toLowerCase() == key.toLowerCase()) || invalidKeys.some((x) => x.toLowerCase() == key.toLowerCase())) 
       return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, `Error`, `You have entered an Invalid/Already Used Key.`, "RED")] });
-    if(premium == true) 
+    if(guildData.premium == true) 
       return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, `Error`, `This Server already have an Premium Subscription.`, "RED")] });
 
     const row = new MessageActionRow()
@@ -69,8 +71,8 @@ Use Buttons to Confirm your decision, you have **1 minute**.
     collector.on("collect", async(i) => {
       await i.deferUpdate();
       if(i.customId == "activate_key") {
-        await Guild.findOneAndUpdate({ id: message.guild.id }, { premium: true });
-        await Bot.findOneAndUpdate({ data: key }, { used: true });
+        await Guild.findOneAndUpdate({ id: message.guild.id }, { premium: true }, { new: true, upsert: true });
+        await Key.findOneAndUpdate({ data: key }, { used: true }, { new: true, upsert: true });
     
         message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, `Premium Activation`, `Premium Subscription have been successfully activated for Guild **${message.guild.name}** using Premium Key \`${key}\`.`, "YELLOW")] });
         console.log(`[Premium Activated - ${key}] User ${message.author.username} (${message.author.id}) on ${message.guild.name} (${message.guild.id})`);
@@ -109,11 +111,11 @@ Use Buttons to Confirm your decision, you have **1 minute**.
     let key = interaction.options.getString("key");
     let keyList = await Key.find({ used: false });
     let invalidKeys = await Key.find({ used: true });
-    let premium = await Guild.findOne({ id: interaction.guild.id }).premium;
+    let guildData = await Guild.findOne({ id: interaction.guild.id }, "premium -_id");
 
-    if(!keyList.some((x) => x.toLowerCase() == key.toLowerCase()) || invalidList.some((x) => x.toLowerCase() == key.toLowerCase())) 
+    if(!keyList.some((x) => x.toLowerCase() == key.toLowerCase()) || invalidKeys.some((x) => x.toLowerCase() == key.toLowerCase())) 
       return interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user, `Error`, `You have entered an Invalid/Already Used Key.`, "RED")], ephemeral: true });
-    if(premium == true) 
+    if(guildData.premium == true) 
       return interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user, `Error`, `This Server already have an Premium Subscription.`, "RED")], ephemeral: true });
   
     const row = new MessageActionRow()
@@ -149,8 +151,8 @@ Use Buttons to Confirm your decision, you have **1 minute**.
     collector.on("collect", async(i) => {
       await i.deferUpdate();
       if(i.customId == "activate_key") {
-        await Guild.findOneAndUpdate({ id: message.guild.id }, { premium: true });
-        await Key.findOneAndUpdate({ data: key }, { used: true });
+        await Guild.findOneAndUpdate({ id: message.guild.id }, { premium: true }, { new: true, upsert: true });
+        await Key.findOneAndUpdate({ data: key }, { used: true }, { new: true, upsert: true });
     
         interaction.followUp({ embeds: [ this.client.embedBuilder(this.client, interaction.user, `Premium Activation`, `Premium Subscription have been successfully activated for Guild **${interaction.guild.name}** using Premium Key \`${key}\`.`, "YELLOW")], ephemeral: true });
         console.log(`[Premium Activated - ${key}] User ${interaction.user.username} (${interaction.user.id}) on ${interaction.guild.name} (${interaction.guild.id})`);

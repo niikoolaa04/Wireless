@@ -1,6 +1,7 @@
 const Command = require("../../structures/Command");
 const Discord = require("discord.js");
-const db = require("quick.db");
+const User = require("../../models/User");
+const Guild = require("../../models/Guild.js");
 
 module.exports = class Messages extends Command {
 	constructor(client) {
@@ -24,10 +25,7 @@ module.exports = class Messages extends Command {
   async run(message, args) {
     var user = message.mentions.users.first() || this.client.users.cache.get(args[0]) || message.author;
   
-    let messages;
-    await Guild.findOne({ id: message.guild.id }, (err, result) => {
-      if (result) messages = result.messages;
-    });
+    let userData = await User.findOne({ id: user.id, guild: message.guild.id }, "messages -_id");
 
     let leaderboard = await User.find({ guild: message.guild.id }).lean();
     leaderboard = leaderboard.map((x) => {
@@ -41,7 +39,7 @@ module.exports = class Messages extends Command {
     let embed = new Discord.MessageEmbed()
       .setAuthor({ name: "Messages Count", iconURL: this.client.user.displayAvatarURL() })
       .setColor("BLURPLE")
-      .setDescription(`> ${user.id == message.author.id ? "You" : user} sent **${messages}** Messages in Total.
+      .setDescription(`> ${user.id == message.author.id ? "You" : user} sent **${userData.messages}** Messages in Total.
 > 
 > **Leaderboard Rank:** #${rank}`);
   
@@ -50,10 +48,7 @@ module.exports = class Messages extends Command {
   async slashRun(interaction, args) {
     var user = interaction.options.getUser("target") || interaction.user;
   
-    let messages;
-    await Guild.findOne({ id: interaction.guild.id }, (err, result) => {
-      if (result) messages = result.messages;
-    });
+    let userData = await User.findOne({ id: user.id, guild: interaction.guild.id }, "messages -_id");
 
     let leaderboard = await User.find({ guild: interaction.guild.id }).lean();
     leaderboard = leaderboard.map((x) => {
@@ -67,7 +62,7 @@ module.exports = class Messages extends Command {
     let embed = new Discord.MessageEmbed()
       .setAuthor({ name: "Messages Count", iconURL: this.client.user.displayAvatarURL() })
       .setColor("BLURPLE")
-      .setDescription(`> ${user.id == interaction.user.id ? "You" : user} sent **${messages}** Messages in Total.
+      .setDescription(`> ${user.id == interaction.user.id ? "You" : user} sent **${userData.messages}** Messages in Total.
 > 
 > **Leaderboard Rank:** #${rank}`);
   

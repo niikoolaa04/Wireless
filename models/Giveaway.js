@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const config = require("../../configs/config.json");
 
 const ReqSchema = new mongoose.Schema({
   messagesReq: Number,
@@ -8,10 +7,10 @@ const ReqSchema = new mongoose.Schema({
 });
 
 const GiveawaysSchema = new mongoose.Schema({
-  messageID: {
+  messageId: {
     type: String
   },
-  guildID: {
+  guildId: {
     type: String,
   },
   channelID: {
@@ -27,11 +26,9 @@ const GiveawaysSchema = new mongoose.Schema({
     type: String,
   },
   winnerCount: {
-    type: String,
+    type: Number,
   },
-  requirements: {
-    type: ReqSchema
-  },
+  requirements: ReqSchema,
   roleBypass: {
     type: String,
   },
@@ -44,25 +41,6 @@ const GiveawaysSchema = new mongoose.Schema({
   winners: {
     type: Array,
   },
-  /*
-  
-  messageID: messageID,
-    guildID: guild,
-    channelID: channel,
-    prize: prize,
-    duration: time,
-    hostedBy: hoster,
-    winnerCount: winners,
-    requirements: {
-      messagesReq: messages,
-      invitesReq: invites,
-      roleReq: role,
-    },
-    roleBypass,
-    ended: false,
-    endsAt: ending,
-    winners: []
-  */
 });
 
 module.exports = mongoose.model("Giveaways", GiveawaysSchema);

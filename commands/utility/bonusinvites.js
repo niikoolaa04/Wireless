@@ -1,5 +1,5 @@
 const Command = require("../../structures/Command");
-const db = require("quick.db");
+const User = require("../../models/User");
 const Discord = require("discord.js");
 
 module.exports = class BonusInvites extends Command {
@@ -48,19 +48,19 @@ module.exports = class BonusInvites extends Command {
       `Error`, "You have entered invalid option (add/remove).", "RED") ]});
     
     if(type == "add") {
-      await User.findOneAndUpdate({ id: user.id, guild: message.guild.id }, { $inc: { invitesBonus: parseInt(amount) } });
+      await User.findOneAndUpdate({ id: user.id, guild: message.guild.id }, { $inc: { invitesBonus: parseInt(amount) } }, { new: true, upsert: true });
       message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author,
         `Bonus Invites`, `You have successfully added ${amount} Bonus Invites to ${user}.`, "YELLOW") ]});
     } else if(type == "remove") {
       let bonus;
-      await User.findOne({ id: user.id, guild: message.guild.id }, (err, result) => {
+      User.findOne({ id: user.id, guild: message.guild.id }, (err, result) => {
         if (result) bonus = result.invitesBonus;
       });
       
       if((bonus - amount) < 0) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author,
-      `Error`, "You cannot remove that much invites.", "RED") ]});
+        `Error`, "You cannot remove that much invites.", "RED") ]});
       
-      await User.findOneAndUpdate({ id: user.id, guild: message.guild.id }, { $inc: { invitesBonus: -parseInt(amount) } });
+      await User.findOneAndUpdate({ id: user.id, guild: message.guild.id }, { $inc: { invitesBonus: -parseInt(amount) } }, { new: true, upsert: true });
       message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author,
         `Bonus Invites`, `You have successfully added ${amount} Bonus Invites to ${user}.`, "YELLOW") ]});
     }
@@ -74,19 +74,19 @@ module.exports = class BonusInvites extends Command {
       `Error`, "You have entered invalid amount of invites.", "RED")], ephemeral: true });
     
     if(type == "add") {
-      await User.findOneAndUpdate({ id: user.id, guild: interaction.guild.id }, { $inc: { invitesBonus: parseInt(amount) } });
+      await User.findOneAndUpdate({ id: user.id, guild: interaction.guild.id }, { $inc: { invitesBonus: parseInt(amount) } }, { new: true, upsert: true });
       interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user,
         `Bonus Invites`, `You have successfully added ${amount} Bonus Invites to ${user}.`, "YELLOW") ]});
     } else if(type == "remove") {
       let bonus;
-      await User.findOne({ id: user.id, guild: interaction.guild.id }, (err, result) => {
+      User.findOne({ id: user.id, guild: interaction.guild.id }, (err, result) => {
         if (result) bonus = result.invitesBonus;
       });
       
       if((bonus - amount) < 0) return interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user,
       `Error`, "You cannot remove that much invites.", "RED")], ephemeral: true });
       
-      await User.findOneAndUpdate({ id: user.id, guild: interaction.guild.id }, { $inc: { invitesBonus: -parseInt(amount) } });
+      await User.findOneAndUpdate({ id: user.id, guild: interaction.guild.id }, { $inc: { invitesBonus: -parseInt(amount) } }, { new: true, upsert: true });
       interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user,
         `Bonus Invites`, `You have successfully added ${amount} Bonus Invites to ${user}.`, "YELLOW")] });
     }

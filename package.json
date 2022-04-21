@@ -2,9 +2,9 @@
   "name": "wireless",
   "version": "canary",
   "description": "Wireless is Giveaway Bot rich with features.",
-  "main": "wirecanary.js",
+  "main": "wire.js",
   "scripts": {
-    "start": "node wirecanary.js"
+    "start": "node wire.js"
   },
   "dependencies": {
     "@top-gg/sdk": "^3.1.2",
@@ -16,7 +16,6 @@
     "hastebin-gen": "^2.0.5",
     "moment-timezone": "latest",
     "ms": "^2.1.2",
-    "quick.db": "latest",
     "topgg-autoposter": "latest",
     "twemoji-parser": "latest",
     "mongoose": "latest"

@@ -22,7 +22,7 @@ module.exports = class GuildMemberRemove extends Event {
       await User.findOneAndUpdate({ id: inviter, guild: member.guild.id }, { $inc: { invitesRegular: -1 } }, { new: true, upsert: true });
       this.client.utils.pushHistory(member, inviter, `[ 📤 ] **${member.user.tag}** has **left** server.`);
     }
-    invitesChannel = this.client.channels.cache.get(settings.invitesChannel);
+    let invitesChannel = this.client.channels.cache.get(settings.invitesChannel);
     if (invitesChannel != null) {
       delay(1000);
       let invv = null;

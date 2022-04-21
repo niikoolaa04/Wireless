@@ -1,6 +1,6 @@
 {
   "name": "wireless",
-  "version": "canary",
+  "version": "1.2.0",
   "description": "Wireless is Giveaway Bot rich with features.",
   "main": "wire.js",
   "scripts": {

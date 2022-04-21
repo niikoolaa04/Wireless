@@ -2,24 +2,37 @@ const { MessageEmbed } = require("discord.js");
 const db = require("quick.db");
 
 const updateLb = async (client, guild) => {
-  let live = db.fetch(`server_${guild.id}_liveLb`);
-  if(live == null) return;
-  let channel = client.channels.cache.get(live.channel);
-  if(channel == undefined || channel == null) return db.delete(`server_${guild.id}_liveLb`);
-  let message = channel.messages.fetch(live.message); 
-  if(message == undefined || message == null) return db.delete(`server_${guild.id}_liveLb`);
-  
-  let invites = db.all().filter(i => i.ID.startsWith(`invitesRegular_${guild.id}_`)).sort((a, b) => b.data - a.data);
+  let settings = await Guild.findOne({ id: guild.id });
+  if(!settings.live.channel || settings.live.message) return;
+  let channel = client.channels.cache.get(settings.live.channel);
+  if(channel == undefined || channel == null) {
+    await Guild.findOneAndUpdate({ id: guild.id }, { $unset: { "live.$.channel": 1}, $unset: { "live.$.message": 1 }});
+    return;
+  }
+  let message = channel.messages.fetch(settings.live.message); 
+  if(message == undefined || message == null) {
+    await Guild.findOneAndUpdate({ id: guild.id }, { $unset: { "live.$.channel": 1}, $unset: { "live.$.message": 1 }});
+    return;
+  }
+
+  let invites = await User.find({ guild: guild.id 
+  }).lean();
+  invites = invites.map((x) =>{
+    return {
+      user: x.user,
+      value: x.invitesRegular
+    }
+  }).sort((a, b) => b.value - a.value);
     
   let content = "";
   
   for(let i = 0; i < invites.length; i++) {
     if(i == 10) break;
-    let user = client.users.cache.get(invites[i].ID.split("_")[2]);
+    let user = client.users.cache.get(invites[i].user);
     if (user == undefined) user = "Unknown User";
     else user = user.username;
     
-    content += `> \`#${i + 1}\` ${user} - **${invites[i].data}**\n`;
+    content += `> \`#${i + 1}\` ${user} - **${invites[i].value}**\n`;
   }
   
   if(invites.length == 0) content = `> Leaderboard is Empty`;

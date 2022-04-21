@@ -14,7 +14,7 @@ module.exports = class RemovePremium extends Command {
 	}
   
   async run(message, args) {
-    var allowedToUse = false;
+    let allowedToUse = false;
     this.client.dev_ids.forEach(id => {
       if (message.author.id == id) allowedToUse = true;
     });
@@ -23,11 +23,11 @@ module.exports = class RemovePremium extends Command {
     if(!guild || !this.client.guilds.cache.get(guild)) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, 
         `Error`, "You have entered invalid Guild ID.", "RED")] });
     
-    let premium = db.fetch(`server_${guild}_premium`);
+    let premium = await Guild.findOne({ id: message.guild.id }).premium;
     if(premium != true) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, 
       `Error`, "That Guild don't have Premium Subscription.", "RED")] });
-    
-    db.delete(`server_${guild}_premium`);
+
+    await Guild.findOneAndUpdate({ id: guild }, { premium: false });
     guild = this.client.guilds.cache.get(guild);
 
     message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, `Premium Removed`, `Premium Subscription have been removed from Guild **${guild.name}**.`, "YELLOW")] });

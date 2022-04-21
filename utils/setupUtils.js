@@ -235,43 +235,47 @@ Example: \`@Member\``);
 }
 
 async function winnersSetup(client, message, embed, filter, data) {
-  let premiumGuild = await Guild.findOne({ id: message.guild.id }).premium;
-  embed.setDescription(`Enter Number of how much Winners you want.
-Example: \`2\``);
-  messageReply(message, embed);
-  // message.channel.send({ embeds: [embed] });
-
-  let winnerCollector = message.channel.createMessageCollector({ filter, time: 60000, errors: ["time"] });
-
-  winnerCollector.on("collect", async (msg) => {
-    let cancelEmbed = new MessageEmbed()
-      .setColor("BLURPLE")
-      .setDescription('You have canceled Giveaway Creation')
-      .setAuthor({ name: "Giveaway Setup", iconURL: client.user.displayAvatarURL() });
-    if(msg.content.toLowerCase() == "cancel") {
-      client.gwCreation.set(message.member.id, false);
-      messageReply(message, cancelEmbed);
-      // message.channel.send({ embeds: [cancelEmbed] });
-      winnerCollector.stop()
-      return;
-    }
+  await Guild.findOne({ id: message.guild.id }, async(err, guild) => {
+    if(!guild) guild = new Guild({
+      id: message.guild.id
+    });
+    embed.setDescription(`Enter Number of how much Winners you want.
+    Example: \`2\``);
+    messageReply(message, embed);
+    // message.channel.send({ embeds: [embed] });
     
-    if(isNaN(msg.content)) return messageReply(message, client.embedBuilder(client, message.member.user, "Giveaway Setup", `You have entered Invalid Number of Winners.`, "RED"));
-    if(msg.content > 20 && premiumGuild != true) return messageReply(message, client.embedBuilder(client, message.member, "Error", "To Create Giveaway with 20+ Winners you need Premium, get more informations using command `premium`.", "RED"));
-    data.winners = msg.content;
-    await roleSetup(client, message, embed, filter, data);
-    winnerCollector.stop();
-  });
-
-  winnerCollector.on("end", (collected, reason) => {
-    if(reason != "time") return;
-    client.gwCreation.set(message.member.id, false);
-    let endEmbed = new MessageEmbed()
-      .setColor("RED")
-      .setDescription('Time has passed without response, giveaway creation stopped')
-      .setAuthor({ name: "Giveaway Setup", iconURL: client.user.displayAvatarURL() });
-    messageReply(message, endEmbed);
-    // message.channel.send({ embeds: [endEmbed] });
+    let winnerCollector = message.channel.createMessageCollector({ filter, time: 60000, errors: ["time"] });
+    
+    winnerCollector.on("collect", async (msg) => {
+      let cancelEmbed = new MessageEmbed()
+        .setColor("BLURPLE")
+        .setDescription('You have canceled Giveaway Creation')
+        .setAuthor({ name: "Giveaway Setup", iconURL: client.user.displayAvatarURL() });
+      if (msg.content.toLowerCase() == "cancel") {
+        client.gwCreation.set(message.member.id, false);
+        messageReply(message, cancelEmbed);
+        // message.channel.send({ embeds: [cancelEmbed] });
+        winnerCollector.stop()
+        return;
+      }
+    
+      if (isNaN(msg.content)) return messageReply(message, client.embedBuilder(client, message.member.user, "Giveaway Setup", `You have entered Invalid Number of Winners.`, "RED"));
+      if (msg.content > 20 && guild.premiumGuild != true) return messageReply(message, client.embedBuilder(client, message.member, "Error", "To Create Giveaway with 20+ Winners you need Premium, get more informations using command `premium`.", "RED"));
+      data.winners = msg.content;
+      await roleSetup(client, message, embed, filter, data);
+      winnerCollector.stop();
+    });
+    
+    winnerCollector.on("end", (collected, reason) => {
+      if (reason != "time") return;
+      client.gwCreation.set(message.member.id, false);
+      let endEmbed = new MessageEmbed()
+        .setColor("RED")
+        .setDescription('Time has passed without response, giveaway creation stopped')
+        .setAuthor({ name: "Giveaway Setup", iconURL: client.user.displayAvatarURL() });
+      messageReply(message, endEmbed);
+      // message.channel.send({ embeds: [endEmbed] });
+    });
   });
 }
 

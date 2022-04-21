@@ -16,23 +16,31 @@ module.exports = class LiveLb extends Command {
   }
 
   async run(message, args) {
-    let live = db.fetch(`server_${message.guild.id}_liveLb`);
+    let live = await Guild.findOne({ id: message.guild.id });
 
     if (live != null) {
-      db.delete(`server_${message.guild.id}_liveLb`);
+      await Guild.findOneAndUpdate({ id: message.guild.id }, { $unset: { "live.$.channel": 1}, $unset: { "live.$.message": 1 }});
+
       message.channel.send({ embeds: [this.client.embedBuilder(this.client, message.author, "Live Leaderboard", "Live Leaderboard have been removed from Database, you can delete Embed now.", "YELLOW")] })
     } else {
-      let invites = db.all().filter(i => i.ID.startsWith(`invitesRegular_${message.guild.id}_`)).sort((a, b) => b.data - a.data);
+      let leaderboard = await User.find({ guild: message.guild.id 
+      }).lean();
+      leaderboard = leaderboard.map((x) =>{
+        return {
+          user: x.user,
+          value: x.invitesRegular
+        }
+      }).sort((a, b) => b.value - a.value);
 
       let content = "";
 
       for (let i = 0; i < invites.length; i++) {
         if (i == 10) break;
-        let user = this.client.users.cache.get(invites[i].ID.split("_")[2]);
+        let user = this.client.users.cache.get(invites[i].user);
         if (user == undefined) user = "Unknown User";
         else user = user.username;
 
-        content += `> \`#${i + 1}\` ${user} - **${invites[i].data}**\n`;
+        content += `> \`#${i + 1}\` ${user} - **${invites[i].value}**\n`;
       }
       
       if(invites.length == 0) content = `> Leaderboard is Empty`;
@@ -47,33 +55,35 @@ module.exports = class LiveLb extends Command {
         .setTimestamp();
 
       message.channel.send({ embeds: [embed] }).then(async (m) => {
-        let channelData = {
-          channel: m.channelId,
-          message: m.id,
-        }
-
-        db.set(`server_${message.guild.id}_liveLb`, channelData);
+        await Guild.findOneAndUpdate({ id: interaction.guild.id }, {"live.$.channel": m.channelId, "live.$.message": m.id });
       });
     }
   }
   async slashRun(interaction, args) {
-    let live = db.fetch(`server_${interaction.guild.id}_liveLb`);
+    let live = await Guild.findOne({ id: message.guild.id });
 
     if (live != null) {
-      db.delete(`server_${interaction.guild.id}_liveLb`);
+      await Guild.findOneAndUpdate({ id: message.guild.id }, { $unset: { "live.$.channel": 1}, $unset: { "live.$.message": 1 }});
       interaction.reply({ embeds: [this.client.embedBuilder(this.client, interaction.user, "Live Leaderboard", "Live Leaderboard have been removed from Database, you can delete Embed now.", "YELLOW")] })
     } else {
-      let invites = db.all().filter(i => i.ID.startsWith(`invitesRegular_${interaction.guild.id}_`)).sort((a, b) => b.data - a.data);
+      let leaderboard = await User.find({ guild: interaction.guild.id 
+      }).lean();
+      leaderboard = leaderboard.map((x) =>{
+        return {
+          user: x.user,
+          value: x.invitesRegular
+        }
+      }).sort((a, b) => b.value - a.value);
 
       let content = "";
 
       for (let i = 0; i < invites.length; i++) {
         if (i == 10) break;
-        let user = this.client.users.cache.get(invites[i].ID.split("_")[2]);
+        let user = this.client.users.cache.get(invites[i].user);
         if (user == undefined) user = "Unknown User";
         else user = user.username;
 
-        content += `> \`#${i + 1}\` ${user} - **${invites[i].data}**\n`;
+        content += `> \`#${i + 1}\` ${user} - **${invites[i].value}**\n`;
       }
 
       if (invites.length == 0) content = `> Leaderboard is Empty`;
@@ -89,12 +99,7 @@ module.exports = class LiveLb extends Command {
 
       interaction.reply({ content: "> Live Leaderboard have been created successfully.", ephemeral: true  });
       interaction.channel.send({ embeds: [embed] }).then(async (m) => {
-        let channelData = {
-          channel: m.channelId,
-          message: m.id,
-        }
-
-        db.set(`server_${interaction.guild.id}_liveLb`, channelData);
+        await Guild.findOneAndUpdate({ id: interaction.guild.id }, {"live.$.channel": m.channelId, "live.$.message": m.id });
       });
     }
   }

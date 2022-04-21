@@ -24,10 +24,19 @@ module.exports = class Messages extends Command {
   async run(message, args) {
     var user = message.mentions.users.first() || this.client.users.cache.get(args[0]) || message.author;
   
-    let messages = await User.findOne({ id: user.id, guild: interaction.guild.id }).messages;
+    let messages;
+    await Guild.findOne({ id: message.guild.id }, (err, result) => {
+      if (result) messages = result.messages;
+    });
 
-    let every = db.all().filter(i => i.ID.startsWith(`messages_${message.guild.id}_`)).sort((a, b) => b.data - a.data);
-    let rank = every.map(x => x.ID).indexOf(`messages_${message.guild.id}_${user.id}`) + 1 || 'N/A';
+    let leaderboard = await User.find({ guild: message.guild.id }).lean();
+    leaderboard = leaderboard.map((x) => {
+      return {
+        member: x.id,
+        value: x.messages
+      }
+    }).sort((a, b) => b.value - a.value);
+    let rank = leaderboard.findIndex((a) => a.member == user.id) + 1;
   
     let embed = new Discord.MessageEmbed()
       .setAuthor({ name: "Messages Count", iconURL: this.client.user.displayAvatarURL() })
@@ -41,10 +50,19 @@ module.exports = class Messages extends Command {
   async slashRun(interaction, args) {
     var user = interaction.options.getUser("target") || interaction.user;
   
-    let messages = await User.findOne({ id: user.id, guild: interaction.guild.id }).messages;
+    let messages;
+    await Guild.findOne({ id: interaction.guild.id }, (err, result) => {
+      if (result) messages = result.messages;
+    });
 
-    let every = db.all().filter(i => i.ID.startsWith(`messages_${interaction.guild.id}_`)).sort((a, b) => b.data - a.data);
-    let rank = every.map(x => x.ID).indexOf(`messages_${interaction.guild.id}_${user.id}`) + 1 || 'N/A';
+    let leaderboard = await User.find({ guild: interaction.guild.id }).lean();
+    leaderboard = leaderboard.map((x) => {
+      return {
+        member: x.id,
+        value: x.messages
+      }
+    }).sort((a, b) => b.value - a.value);
+    let rank = leaderboard.findIndex((a) => a.member == user.id) + 1;
   
     let embed = new Discord.MessageEmbed()
       .setAuthor({ name: "Messages Count", iconURL: this.client.user.displayAvatarURL() })

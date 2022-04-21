@@ -15,7 +15,10 @@ module.exports = class Help extends Command {
 		});
 	} 
 	async run(message, args) {
-    let prefix = await Guild.findOne({ id: message.guild.id }).prefix;
+    let prefix;
+    await Guild.findOne({ id: message.guild.id }, (err, result) => {
+      if (result) prefix = result.prefix;
+    });
     let user = message.author;
     let commandArg = args[0];
 
@@ -153,7 +156,10 @@ module.exports = class Help extends Command {
     }
   }
   async slashRun(interaction, args) {
-    let prefix = await Guild.findOne({ id: interaction.guild.id }).prefix;
+    let prefix;
+    await Guild.findOne({ id: interaction.guild.id }, (err, result) => {
+      if (result) prefix = result.prefix;
+    });
     
 	  const helpRow = new MessageActionRow()
 	    .addComponents(

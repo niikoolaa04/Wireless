@@ -1,6 +1,5 @@
 const Command = require("../../structures/Command");
 const { MessageEmbed, MessageActionRow, MessageButton } = require("discord.js");
-const db = require("quick.db");
 
 module.exports = class ActivateKey extends Command {
 	constructor(client) {
@@ -72,7 +71,6 @@ Use Buttons to Confirm your decision, you have **1 minute**.
       if(i.customId == "activate_key") {
         await Guild.findOneAndUpdate({ id: message.guild.id }, { premium: true });
         await Bot.findOneAndUpdate({ data: key }, { used: true });
-        // ovde db.push(`userPremium_${message.guild.id}`, message.guild.id);
     
         message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, `Premium Activation`, `Premium Subscription have been successfully activated for Guild **${message.guild.name}** using Premium Key \`${key}\`.`, "YELLOW")] });
         console.log(`[Premium Activated - ${key}] User ${message.author.username} (${message.author.id}) on ${message.guild.name} (${message.guild.id})`);
@@ -153,7 +151,6 @@ Use Buttons to Confirm your decision, you have **1 minute**.
       if(i.customId == "activate_key") {
         await Guild.findOneAndUpdate({ id: message.guild.id }, { premium: true });
         await Key.findOneAndUpdate({ data: key }, { used: true });
-        // ovde db.push(`userPremium_${interaction.guild.id}`, interaction.guild.id);
     
         interaction.followUp({ embeds: [ this.client.embedBuilder(this.client, interaction.user, `Premium Activation`, `Premium Subscription have been successfully activated for Guild **${interaction.guild.name}** using Premium Key \`${key}\`.`, "YELLOW")], ephemeral: true });
         console.log(`[Premium Activated - ${key}] User ${interaction.user.username} (${interaction.user.id}) on ${interaction.guild.name} (${interaction.guild.id})`);

@@ -15,7 +15,7 @@ module.exports = class GenerateKey extends Command {
 	}
   
   async run(message, args) {
-    var allowedToUse = false;
+    let allowedToUse = false;
     this.client.dev_ids.forEach(id => {
       if (message.author.id == id) allowedToUse = true;
     });

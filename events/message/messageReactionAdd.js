@@ -1,5 +1,4 @@
 const Discord = require("discord.js");
-const db = require("quick.db");
 const fs = require("fs");
 const Event = require("../../structures/Events");
 
@@ -17,24 +16,40 @@ module.exports = class MessageReactionAdd extends Event {
     const message = reaction.message;
     if(message.channel.type === "DM") return;
     let member = message.guild.members.cache.get(user.id);
-    let customEmoji = db.fetch(`server_${message.guild.id}_customReaction`) || "🎉";
+    let customEmoji;
+    await Guild.findOne({ id: message.guild.id }, (err, result) => {
+      if (result) customEmoji = result.customEmoji;
+    });
     
     if(reaction.emoji.name == customEmoji) {
-      let giveaways = db.fetch(`giveaways_${message.guild.id}`);
+      // ovde
+      let giveaways = await Giveaway.find({ guild: message.guild.id });
       if(giveaways == null || giveaways.length < 1) return;
     
-      let gwRunning = giveaways.find(g => g.messageID == message.id && g.ended == false);
+      let gwRunning = await Giveaway.find({ messageID: message.id, ended: false });
       if(!gwRunning) return;
       
-      let invitesReq = db.fetch(`invitesRegular_${message.guild.id}_${user.id}`);
-      let bonusReq = db.fetch(`invitesBonus_${message.guild.id}_${user.id}`); 
-      let msgReq = db.fetch(`messages_${message.guild.id}_${user.id}`);
+      let invitesReq, bonusReq, msgReq, role, blRole;
+      
+      await User.findOne({ id: user.id, guild: message.guild.id }, (err, result) => {
+        if (result) {
+          invitesReq = result.invitesRegular;
+          bonusReq = result.invitesBonus;
+          msgReq = result.messages;
+        }
+      });
+      
+      await Guild.findOne({ id: message.guild.id }, (err, result) => {
+        if (result) {
+          role = result.bypassRole;
+          blRole = result.blacklistRole;
+        }
+      });
+      
       let roleReq = gwRunning.requirements.roleReq;
       let gwInvites = gwRunning.requirements.invitesReq;
       let gwMsg = gwRunning.requirements.messagesReq; 
       let totalReq = parseInt(invitesReq + bonusReq);
-      let role = db.fetch(`server_${message.guild.id}_bypassRole`);
-      let blRole = db.fetch(`server_${message.guild.id}_blacklistRole`);
     
       let denyEmbed = new Discord.MessageEmbed()
         .setTitle("🎁・Giveaway Entry")

@@ -2,8 +2,7 @@ const db = require("quick.db");
 const Discord = require("discord.js");
 
 function giveawayObject(guild, messageID, time, role, channel, winners, messages, invites, ending, hoster, prize) {
-  let roleBypas = Guild.findOne({ id: guild.id }).bypassRole;
-  if(roleBypass == null) roleBypas = "none";
+  let guildData = Guild.findOne({ id: guild.id });
   let gwObject = {
     messageID: messageID,
     guildID: guild, 
@@ -17,7 +16,7 @@ function giveawayObject(guild, messageID, time, role, channel, winners, messages
       invitesReq: invites,
       roleReq: role,
     },
-    roleBypass,
+    roleBypass: guildData ? guildData.roleBypass : "none",
     ended: false, 
     endsAt: ending,
     winners: []
@@ -31,9 +30,8 @@ function capitalizeFirstLetter(string) {
 }
 
 function commandsList(client, message, category) {
-  let prefix = await Guild.findOne({ id: message.guild.id }).prefix;
   let commands = client.commands.filter(
-    c => c.category === category && c.listed === true
+    c => c.category == category && c.listed == true
   );
   let content = "";
   
@@ -58,26 +56,32 @@ function formatTime(ms) {
 }
 
 function lbContent(client, message, lbType) {
-  let leaderboard = db
-    .all()
-    .filter(data => data.ID.startsWith(`${lbType}_${message.guild.id}`))
-    .sort((a, b) => b.data - a.data);
+  let leaderboard = User.findOne({}).lean();
+  leaderboard = leaderboard.map((x) => {
+    if(lbType == "invitesRegular") lbType = x.invitesRegular;
+    else if(lbType == "messages") lbType = x.messages;
+    
+    return {
+      user: x.user,
+      value: lbType
+    }
+  });
   let content = "";
   
   for (let i = 0; i < leaderboard.length; i++) {
     if (i === 10) break;
   
-    let user = client.users.cache.get(leaderboard[i].ID.split("_")[2]);
+    let user = client.users.cache.get(leaderboard[i].user);
     if (user == undefined) user = "Unknown User";
     else user = user.username;
-    content += `\`${i + 1}.\` ${user} - **${leaderboard[i].data}**\n`;
+    content += `\`${i + 1}.\` ${user} - **${leaderboard[i].value}**\n`;
   }
   
   return content;
 }
 
 function configStrings() {
-  const opcije = [
+  const options = [
     "`1.` **-** Requirements Bypass Role",
     "`2.` **-** Giveaway Blacklist Role",
     "`3.` **-** Invites Messages Channel",
@@ -86,8 +90,8 @@ function configStrings() {
     "`6.` **-** DM Winners"
   ];
   let text = "";
-  for(const opcija of opcije) {
-    text += `\n> ${opcija}`
+  for(const option of options) {
+    text += `\n> ${option}`
   }
   return text;
 }
@@ -209,7 +213,7 @@ function premiumKey() {
       const char = tokens.charAt(random);
       key += char;
     }
-    if (i !== 4) key += '-';
+    if (i != 4) key += '-';
   }
 
   return key;

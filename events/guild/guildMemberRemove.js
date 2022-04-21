@@ -11,26 +11,20 @@ module.exports = class GuildMemberRemove extends Event {
 	}
 
 	async run(member) {
-	  if(this.client.disabledGuilds.includes(member.guild.id)) return;
+	  let disabledGuilds = await Bot.find({ name: "wireless "}).disabledGuilds;
+	  if(disabledGuilds.includes(member.guild.id)) return;
+    
+    let settings = await Guild.find({ id: member.guild.id });
 
-    let userPremium = db.fetch(`userPremium_${member.guild.id}`) || [];
-    if(userPremium.length > 0) {
-      userPremium.forEach(g => {
-        db.delete(`server_${g}_premium`);
-      });
-    }
-
-    const inviter = db.fetch(`inviter_${member.guild.id}_${member.id}`);
+    let inviter = await User.findOne({ id: member.id, guild: member.guild.id }).inviter;
     if(inviter != member.id && inviter != "Unknown" && inviter != "Vanity URL") {
-      db.add(`invitesLeaves_${member.guild.id}_${inviter}`, 1);
-      db.subtract(`invitesRegular_${member.guild.id}_${inviter}`, 1);
+      await User.findOneAndUpdate({ id: inviter, guild: member.guild.id }, { $inc: { invitesLeaves: 1 } });
+      await User.findOneAndUpdate({ id: inviter, guild: member.guild.id }, { $inc: { invitesRegular: -1 } });
       this.client.utils.pushHistory(member, inviter, `[ 📤 ] **${member.user.tag}** has **left** server.`);
     }
-    let invitesChannel = db.fetch(`channel_${member.guild.id}_invites`);
-    invitesChannel = this.client.channels.cache.get(invitesChannel);
+    invitesChannel = this.client.channels.cache.get(settings.invitesChannel);
     if (invitesChannel != null) {
       delay(1000);
-      let inviter = db.fetch(`inviter_${member.guild.id}_${member.id}`);
       let invv = null;
 
       if(inviter == "Vanity URL") invv = "Vanity URL";
@@ -39,11 +33,21 @@ module.exports = class GuildMemberRemove extends Event {
         
       let inviterName = invv;
       
-      let joins = db.fetch(`invitesJoins_${member.guild.id}_${inviter}`) || 0;
-      let leaves = db.fetch(`invitesLeaves_${member.guild.id}_${inviter}`) || 0;
-      let regular = db.fetch(`invitesRegular_${member.guild.id}_${member.id}`) || 0;
-      let bonus = db.fetch(`invitesBonus_${member.guild.id}_${member.id}`) || 0;
-      let msgLeave = db.fetch(`server_${member.guild.id}_leaveMessage`);
+      let invitesCount = {
+        joins: 0,
+        regular: 0,
+        leaves: 0,
+        bonus: 0
+      };
+      
+      await User.findOne({ id: inviter, guild: member.guild.id }, (err, result) => {
+        if (result) {
+          invitesCount.joins = result.invitesJoin;
+          invitesCount.regular = results.invitesRegular;
+          invitesCount.leaves = result.invitesLeaves;
+          invitesCount.bonus = result.invitesBonus;
+        }
+      });
       
       if(invitesChannel !== null && invitesChannel !== undefined && msgLeave !== null) {
         invitesChannel.send({ content: `${msgLeave
@@ -52,11 +56,11 @@ module.exports = class GuildMemberRemove extends Event {
           .replace("{username}", member.user.username)
           .replace("{userID}", member.user.id)
           .replace("{invitedBy}", inviterName)
-          .replace("{totalInvites}", parseInt(regular + bonus))
-          .replace("{leavesInvites}", leaves)
-          .replace("{bonusInvites}", bonus)
-          .replace("{regularInvites}", regular)
-          .replace("{joinsInvites}", joins)
+          .replace("{totalInvites}", parseInt(invitesCount.regular + invitesCount.bonus))
+          .replace("{leavesInvites}", invitesCount.leaves)
+          .replace("{bonusInvites}", invitesCount.bonus)
+          .replace("{regularInvites}", invitesCount.regular)
+          .replace("{joinsInvites}", invitesCount.joins)
           .replace("{created}", moment.utc(member.user.createdAt).tz("Europe/Belgrade").format("dddd, MMMM Do YYYY, HH:mm:ss"))}` });
       }
     }  

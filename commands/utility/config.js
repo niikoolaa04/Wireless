@@ -106,11 +106,13 @@ module.exports = class Config extends Command {
   
   async run(message, args) {
     let option = args[0];
-    let premiumGuild = await Guild.findOne({ id: message.guild.id }).premium;
+    let settings;
+    await Guild.findOne({ id: message.guild.id }, (err, result) => {
+      if (result) settings = result;
+    });
+    let premiumGuild = settings.premium;
     
     if(!option || option > 11 || option < 1) {
-      let settings = await Guild.findOne({ id: message.guild.id });
-
       let noOption = new Discord.MessageEmbed()
         .setAuthor({ name: "Configuration", iconURL: this.client.user.displayAvatarURL() })
         .setDescription(`To Change Config Value do \`${settings.prefix}config [Option] [Value]\``)
@@ -134,7 +136,7 @@ module.exports = class Config extends Command {
 
     if(option == 1) {
       let role = message.mentions.roles.first();
-      let gwRole = await Guild.findOne({ id: message.guild.id }).bypassRole;
+      let gwRole = settings.bypassRole;
        
       if(!gwRole) {
         if (!role) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author,
@@ -151,7 +153,7 @@ module.exports = class Config extends Command {
     }
     if(option == 2) {
       let role = message.mentions.roles.first();
-      let gwRole = await Guild.findOne({ id: message.guild.id }).blacklistRole;
+      let gwRole = settings.blacklistRole;
 
       if(!gwRole) {
         if (!role) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author,
@@ -217,7 +219,7 @@ Use \`variables\` Command to view all available Variables.`, "YELLOW") ]});
       }
     }
     if(option == 6) {
-      let dm = await Guild.findOne({ id: message.guild.id }).dmWinners;
+      let dm = settings.dmWinners;
       if(dm == null) {
         await Guild.findOneAndUpdate({ id: message.guild.id }, { dmWinners: true });
         message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author,
@@ -229,7 +231,7 @@ Use \`variables\` Command to view all available Variables.`, "YELLOW") ]});
       }
     }
     if(option == 7) {
-      let snStatus = await Guild.findOne({ id: message.guild.id }).snipes;
+      let snStatus = settings.snipes;
       if(snStatus == null) {
         await Guild.findOneAndUpdate({ id: message.guild.id }, { snipes: true });
         message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author,
@@ -241,7 +243,7 @@ Use \`variables\` Command to view all available Variables.`, "YELLOW") ]});
       }
     }
     if(option == 8) {
-      let img = await Guild.findOne({ id: message.guild.id }).wlcmImage;
+      let img = settings.wlcmImage;
       if(img == null) {
         await Guild.findOneAndUpdate({ id: message.guild.id }, { wlcmImage: true });
         message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author,
@@ -287,11 +289,13 @@ but users who are already participating won't be affected** ❗`, "YELLOW") ]});
   async slashRun(interaction, args) {
     let option = args[0];
     let value = args[1];
-    let premiumGuild = await Guild.findOne({ id: interaction.guild.id }).premium;
+    let settings;
+    await Guild.findOne({ id: interaction.guild.id }, (err, result) => {
+      if (result) settings = result;
+    });
+    let premiumGuild = settings.premium;
     
     if(option == "list") {
-      let settings = await Guild.findOne({ id: interaction.guild.id });
-
       let noOption = new Discord.MessageEmbed()
         .setAuthor({ name: "Configuration", iconURL: this.client.user.displayAvatarURL() })
         .setDescription(`To Change Config Value do \`${settings.prefix}config [Option] [Value]\``)
@@ -314,7 +318,7 @@ but users who are already participating won't be affected** ❗`, "YELLOW") ]});
     }
 
     if(option == "bypassrole") {
-      let gwRole = await Guild.findOne({ id: interaction.guild.id }).bypassRole;
+      let gwRole = settings.bypassRole;
       let role = interaction.guild.roles.cache.get(value); 
        
       if(!gwRole) {
@@ -332,7 +336,7 @@ but users who are already participating won't be affected** ❗`, "YELLOW") ]});
     }
     if(option == "blacklistrole") {
       let role = interaction.guild.roles.cache.get(value);
-      let gwRole = await Guild.findOne({ id: interaction.guild.id }).blacklistRole;
+      let gwRole = settings.blacklistRole;
 
       if(!gwRole) {
         if (!value) return interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user,
@@ -397,7 +401,7 @@ Use \`variables\` Command to view all available Variables.`, "YELLOW") ]});
       }
     }
     if(option == "dmwinners") {
-      let dm = await Guild.findOne({ id: interaction.guild.id }).dmWinners;
+      let dm = settings.dmWinners;
       if(dm == null) {
         await Guild.findOneAndUpdate({ id: interaction.guild.id }, { dmWinners: true });
         interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user,
@@ -409,7 +413,7 @@ Use \`variables\` Command to view all available Variables.`, "YELLOW") ]});
       }
     }
     if(option == "snipes") {
-      let snStatus = await Guild.findOne({ id: interaction.guild.id }).snipes;
+      let snStatus = settings.snipes;
       if(snStatus == null) {
         await Guild.findOneAndUpdate({ id: interaction.guild.id }, { snipes: true });
         interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user,
@@ -421,7 +425,7 @@ Use \`variables\` Command to view all available Variables.`, "YELLOW") ]});
       }
     }
     if(option == "wlcmimg") {
-      let img = await Guild.findOne({ id: interaction.guild.id }).wlcmImage;
+      let img = settings.wlcmImage;
       if(img == null) {
         await Guild.findOneAndUpdate({ id: interaction.guild.id }, { wlcmImage: true });
         interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user,

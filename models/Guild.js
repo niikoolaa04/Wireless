@@ -1,9 +1,15 @@
 const mongoose = require("mongoose");
 const config = require("../configs/config.json");
 
+const LiveSchema = new mongoose.Schema({
+  channel: String,
+  message: Number
+});
+
 const GuildSchema = new mongoose.Schema({
   id: {
-    type: String
+    type: String,
+    required: true
   },
   prefix: {
     type: String,
@@ -42,6 +48,9 @@ const GuildSchema = new mongoose.Schema({
   },
   customEmoji: {
     type: String
+  },
+  live: {
+    type: LiveSchema
   },
 });
 

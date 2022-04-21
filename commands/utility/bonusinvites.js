@@ -52,7 +52,11 @@ module.exports = class BonusInvites extends Command {
       message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author,
         `Bonus Invites`, `You have successfully added ${amount} Bonus Invites to ${user}.`, "YELLOW") ]});
     } else if(type == "remove") {
-      let bonus = await User.findOne({ id: user.id, guild: message.guild.id }).invitesBonus;
+      let bonus;
+      await User.findOne({ id: user.id, guild: message.guild.id }, (err, result) => {
+        if (result) bonus = result.invitesBonus;
+      });
+      
       if((bonus - amount) < 0) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author,
       `Error`, "You cannot remove that much invites.", "RED") ]});
       
@@ -74,7 +78,11 @@ module.exports = class BonusInvites extends Command {
       interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user,
         `Bonus Invites`, `You have successfully added ${amount} Bonus Invites to ${user}.`, "YELLOW") ]});
     } else if(type == "remove") {
-      let bonus = await User.findOne({ id: user.id, guild: interaction.guild.id }).invitesBonus;
+      let bonus;
+      await User.findOne({ id: user.id, guild: interaction.guild.id }, (err, result) => {
+        if (result) bonus = result.invitesBonus;
+      });
+      
       if((bonus - amount) < 0) return interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user,
       `Error`, "You cannot remove that much invites.", "RED")], ephemeral: true });
       

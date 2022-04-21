@@ -11,7 +11,10 @@ module.exports = class MessageCreate extends Event {
 	async run(message) {
     if(this.client.disabledGuilds.includes(message.guild.id) && message.author.id != this.client.config.developer.id) return;
     if (message.channel.type === "DM") return;
-    let prefix = await Guild.findOne({ id: message.guild.id }).prefix;
+    let prefix;
+    await Guild.findOne({ id: message.guild.id }, (err, result) => {
+      if (result) prefix = result.prefix;
+    });
 
     if (message.author.bot) return;
   

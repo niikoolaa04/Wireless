@@ -14,7 +14,8 @@ module.exports = class GuildMemberAdd extends Event {
 	}
 
 	async run(member) {
-	  if(this.client.disabledGuilds.includes(member.guild.id)) return;
+	  let disabledGuilds = await Bot.find({ name: "wireless "}).disabledGuilds;
+	  if(disabledGuilds.includes(member.guild.id)) return;
 	  if(!member.guild.me.permissions.has("MANAGE_GUILD")) return;
 
     let settings = await Guild.find({ id: member.guild.id });
@@ -106,8 +107,8 @@ module.exports = class GuildMemberAdd extends Event {
       await User.findOneAndUpdate({ id: member.id, guild: member.guild.id }, { inviter: `${inviter.id}` });
 
       if (inviter.id !== member.id) {
-        db.add(`invitesRegular_${member.guild.id}_${inviter.id}`, 1);
-        db.add(`invitesJoins_${member.guild.id}_${inviter.id}`, 1);
+        await User.findOneAndUpdate({ id: inviter, guild: member.guild.id }, { $inc: { invitesJoins: 1 } });
+        await User.findOneAndUpdate({ id: inviter, guild: member.guild.id }, { $inc: { invitesRegular: 1 } });
         this.client.utils.pushHistory(member, inviter.id, `[ 📥 ] **${member.user.tag}** has **joined** server.`);
       }
     } else {
@@ -119,19 +120,28 @@ module.exports = class GuildMemberAdd extends Event {
     let msgJoin = settings.joinMessage;
     if (invitesChannel != null && invitesChannel != undefined && msgJoin != null) {
       delay(1000);
-      let inviter = await User.findOne({ id: member.id, guild: member.guild.id }).inviter;
+      let inviterData = await User.findOne({ id: member.id, guild: member.guild.id }).inviter;
       let invv = null;
-      if (inviter == "Vanity URL") invv = "Vanity URL";
-      else if (inviter == undefined || inviter == null || inviter == "Unknown") invv = "Unknown";
-      else invv = this.client.users.cache.get(inviter).tag;
+      if (inviterData == "Vanity URL") invv = "Vanity URL";
+      else if (inviterData == undefined || inviterData == null || inviter == "Unknown") invv = "Unknown";
+      else invv = this.client.users.cache.get(inviterData).tag;
 
       let inviterName = invv;
-
-      // ovde
-      let joins = db.fetch(`invitesJoins_${member.guild.id}_${inviter}`) || 0;
-      let regular = db.fetch(`invitesRegular_${member.guild.id}_${inviter}`) || 0;
-      let leaves = db.fetch(`invitesLeaves_${member.guild.id}_${inviter}`) || 0;
-      let bonus = db.fetch(`invitesBonus_${member.guild.id}_${inviter}`) || 0;
+      let invitesCount = {
+        joins: 0,
+        regular: 0,
+        leaves: 0,
+        bonus: 0
+      };
+      
+      await User.findOne({ id: inviterData, guild: member.guild.id }, (err, result) => {
+        if (result) {
+          invitesCount.joins = result.invitesJoin;
+          invitesCount.regular = results.invitesRegular;
+          invitesCount.leave = result.invitesLeaves;
+          invitesCount.bonus = result.invitesBonus;
+        }
+      });
 
       invitesChannel.send({ content: `${msgJoin
         .replace("{userTag}", member.user.tag)
@@ -139,11 +149,11 @@ module.exports = class GuildMemberAdd extends Event {
         .replace("{username}", member.user.username)
         .replace("{userID}", member.user.id)
         .replace("{invitedBy}", inviterName)
-        .replace("{totalInvites}", parseInt(regular + bonus))
-        .replace("{leavesInvites}", leaves)
-        .replace("{bonusInvites}", bonus)
-        .replace("{regularInvites}", regular)
-        .replace("{joinsInvites}", joins)
+        .replace("{totalInvites}", parseInt(invitesCount.regular + invitesCount.bonus))
+        .replace("{leavesInvites}", invitesCount.leaves)
+        .replace("{bonusInvites}", invitesCount.bonus)
+        .replace("{regularInvites}", invitesCount.regular)
+        .replace("{joinsInvites}", invitesCount.joins)
         .replace("{created}", moment.utc(member.user.createdAt).tz("Europe/Belgrade").format("dddd, MMMM Do YYYY, HH:mm:ss"))}` });
       }
 	} 

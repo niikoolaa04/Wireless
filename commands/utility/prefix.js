@@ -23,7 +23,10 @@ module.exports = class Prefix extends Command {
   
   async run(message, args) {
     let prefix = args[0];
-    let real = await Guild.findOne({ id: message.guild.id }).prefix;
+    let real;
+    await Guild.findOne({ id: message.guild.id }, (err, result) => {
+      if (result) real = result.prefix;
+    });
     if (!prefix) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, 
       `Error`, "You haven't entered prefix.", "RED") ]});
     if (prefix === real) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, 
@@ -39,7 +42,10 @@ module.exports = class Prefix extends Command {
   }
   async slashRun(interaction, args) {
     let prefix = interaction.options.getString("prefix");
-    let real = await Guild.findOne({ id: interaction.guild.id }).prefix;
+    let real;
+    await Guild.findOne({ id: message.guild.id }, (err, result) => {
+      if (result) real = result.prefix;
+    });
     if (prefix === real) return interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user, 
         `Error`, "New Prefix cannot be same as old one.", "RED")], ephemeral: true });
     await Guild.findOneAndUpdate({ id: interaction.guild.id }, { prefix: `${prefix}` });

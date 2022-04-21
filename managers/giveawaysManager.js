@@ -30,7 +30,10 @@ ${reqContent}
   
   let channel = client.channels.cache.get(gwObject.channelID);
   
-  let customEmoji = await Guild.findOne({ id: message.guild.id }).customEmoji || "🎉";
+  let customEmoji;
+  await Guild.findOne({ id: message.guild.id }, (err, result) => {
+    if(result) customEmoji = result.customEmoji;
+  });
 
   let m = await channel.send({embeds: [startEmbed]});
   await m.react(customEmoji);
@@ -100,7 +103,11 @@ const endGiveaway = async (client, message, messageID, guild) => {
   let channel = client.channels.cache.get(gwData.channelID);
   let msg = await channel.messages.fetch(gwData.messageID);
     
-  let customEmoji = await Guild.findOne({ id: message.guild.id }).customEmoji || "🎉";
+  let customEmoji;
+  await Guild.findOne({ id: message.guild.id }, (err, result) => {
+    if (result) customEmoji = result.customEmoji;
+  });
+  
   let rUsers = await msg.reactions.cache.get(customEmoji).users.fetch();
   let rFilter = rUsers.filter(r => !r.bot);
 
@@ -191,7 +198,11 @@ const rerollGiveaway = async (client, message, messageID) => {
   let channel = client.channels.cache.get(gwData.channelID);
   let msg = await channel.messages.fetch(gwData.messageID);
     
-  let customEmoji = await Guild.findOne({ id: message.guild.id }).customEmoji || "🎉";
+  let customEmoji;
+  await Guild.findOne({ id: message.guild.id }, (err, result) => {
+    if (result) customEmoji = result.customEmoji;
+  });
+  
   let rUsers = await msg.reactions.cache.get(customEmoji).users.fetch();
   let rFilter = rUsers.filter(r => !r.bot);
 
@@ -222,7 +233,7 @@ const rerollGiveaway = async (client, message, messageID) => {
 }
 
 const checkGiveaway = async (client, guild) => {
-  let giveaways = await Giveaway.find({ })
+  let giveaways = await Giveaway.find({ guildID: guild.id });
   if(giveaways == null) return;
   if(giveaways.length == 0) return;
   
@@ -243,7 +254,11 @@ const checkGiveaway = async (client, guild) => {
     
     if(removed == true) continue;
     
-    let customEmoji = await Guild.findOne({ id: guild.id }).customEmoji || "🎉";
+  let customEmoji;
+  await Guild.findOne({ id: guild.id }, (err, result) => {
+    if (result) customEmoji = result.customEmoji;
+  });
+    
     let rUsers = await msg.reactions.cache.get(customEmoji).users.fetch();
     let rFilter = rUsers.filter(r => !r.bot);
     let rArray = [...rFilter.values()];

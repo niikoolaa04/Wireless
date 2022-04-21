@@ -11,7 +11,7 @@ module.exports = class GuildDelete extends Event {
   async run(guild) {
     await Giveaway.deleteMany({ guildId: guild.id });
 
-    let owner = await guild.fetchOwner();
+    let owner = guild.ownerId;
     let channel = this.client.channels.cache.get(this.client.config.logs);
     
     let embed = new Discord.MessageEmbed()
@@ -19,7 +19,7 @@ module.exports = class GuildDelete extends Event {
       .setDescription(`
 **\`⭐\` Guild Name** - ${guild.name}
 **\`#️⃣\` Guild ID** - ${guild.id}
-**\`👑\` Guild Owner** - ${owner.user.username}
+**\`👑\` Guild Owner** - <@${owner}>
 **\`👤\` Guild Member Count** - ${guild.memberCount}`)
       .setColor("RED");
     if(channel) channel.send({ embeds: [embed] })

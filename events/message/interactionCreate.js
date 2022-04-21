@@ -8,7 +8,7 @@ module.exports = class InteractionCreate extends Event {
 	}
 
 	async run(interaction) {
-    if(this.client.disabledGuilds.includes(interaction.guild.id)) return;
+    if(this.client.disabledGuilds.includes(interaction.guild.id) && interaction.user.id != this.client.config.developer.id) return;
     if (interaction.isCommand()) {
       User.findOne({ id: interaction.user.id, guild: interaction.guild.id }, async(err, result) => {
         if(!result) {

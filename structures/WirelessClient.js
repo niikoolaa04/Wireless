@@ -1,8 +1,8 @@
 const { MessageEmbed, Collection, Intents, Client } = require("discord.js");
-// const { AutoPoster } = require('topgg-autoposter');
+const { AutoPoster } = require('topgg-autoposter');
 const mongoose = require("mongoose");
-// const express = require('express');
-// const Topgg = require('@top-gg/sdk');
+const express = require('express');
+const Topgg = require('@top-gg/sdk');
 
 module.exports = class WirelessClient extends Client {
   constructor() {
@@ -27,7 +27,7 @@ module.exports = class WirelessClient extends Client {
       useUnifiedTopology: true
     });
 
-    /* const poster = AutoPoster(process.env.TOP_GG_TOKEN, this)
+    const poster = AutoPoster(process.env.TOP_GG_TOKEN, this)
     
     const app = express();
     const webhook = new Topgg.Webhook('wireless_wh11551');
@@ -41,7 +41,7 @@ module.exports = class WirelessClient extends Client {
       channel.send({ embeds: [embed] })
     }));
     
-    app.listen(7542); */
+    app.listen(7542);
 
     // Files
     

@@ -55,7 +55,7 @@ module.exports = class LiveLb extends Command {
         .setTimestamp();
 
       message.channel.send({ embeds: [embed] }).then(async (m) => {
-        await Guild.findOneAndUpdate({ id: interaction.guild.id }, {"live.$.channel": m.channelId, "live.$.message": m.id }, { new: true, upsert: true });
+        await Guild.findOneAndUpdate({ id: message.guild.id }, {"live.$.channel": m.channelId, "live.$.message": m.id }, { new: true, upsert: true });
       });
     }
   }

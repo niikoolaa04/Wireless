@@ -29,7 +29,7 @@ module.exports = class Prefix extends Command {
       `Error`, "You haven't entered prefix.", "RED") ]});
     if (prefix === guildData.prefix) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, 
         `Error`, "New Prefix cannot be same as old one.", "RED") ]});
-    await Guild.findOneAndUpdate({ id: interaction.guild.id }, { prefix: `${prefix}` }, { new: true, upsert: true });
+    await Guild.findOneAndUpdate({ id: message.guild.id }, { prefix: `${prefix}` }, { new: true, upsert: true });
   
     let embed = new Discord.MessageEmbed()
     .setAuthor({ name: "Prefix", iconURL: this.client.user.displayAvatarURL() })

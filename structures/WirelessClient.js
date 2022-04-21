@@ -1,7 +1,8 @@
 const { MessageEmbed, Collection, Intents, Client } = require("discord.js");
-const { AutoPoster } = require('topgg-autoposter');
-const express = require('express');
-const Topgg = require('@top-gg/sdk');
+// const { AutoPoster } = require('topgg-autoposter');
+const mongoose = require("mongoose");
+// const express = require('express');
+// const Topgg = require('@top-gg/sdk');
 
 module.exports = class WirelessClient extends Client {
   constructor() {
@@ -21,7 +22,12 @@ module.exports = class WirelessClient extends Client {
 
     super({ intents: myIntents, partials: ['MESSAGE', 'CHANNEL', 'REACTION', 'USER', 'GUILD_MEMBER']});
 
-    const poster = AutoPoster(process.env.TOP_GG_TOKEN, this)
+    mongoose.connect(process.env.MONGODB, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true
+    });
+
+    /* const poster = AutoPoster(process.env.TOP_GG_TOKEN, this)
     
     const app = express();
     const webhook = new Topgg.Webhook('wireless_wh11551');
@@ -35,7 +41,7 @@ module.exports = class WirelessClient extends Client {
       channel.send({ embeds: [embed] })
     }));
     
-    app.listen(7542);
+    app.listen(7542); */
 
     // Files
     
@@ -50,14 +56,14 @@ module.exports = class WirelessClient extends Client {
     // End Of Files
     // Other //
     
-    this.db = require("quick.db");
-    
     this.dev_ids = [
       "823228305167351808", 
     ];
+    // ovde
     this.disabledGuilds = [
       "110373943822540800",
       "361577445704466432",
+      "823495216878452757"
     ];
     this.invites = {};
     this.snipes = new Map();

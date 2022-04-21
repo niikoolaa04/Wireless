@@ -1,12 +1,12 @@
 const Discord = require("discord.js");
-const db = require("quick.db");
+const Event = require("../../structures/Events");
+const User = require("../../models/User.js");
+const Guild = require("../../models/Guild.js");
 const Canvas = require("canvas");
 const delay = require("delay");
+const { isEqual, generateInvitesCache } = require("../../utils/utils.js");
 const moment = require('moment-timezone');
 moment.locale('sr-latn');
-const Event = require("../../structures/Events");
-const { isEqual, generateInvitesCache } = require("../../utils/utils.js");
-
 
 module.exports = class GuildMemberAdd extends Event {
 	constructor(...args) {
@@ -17,10 +17,18 @@ module.exports = class GuildMemberAdd extends Event {
 	  if(this.client.disabledGuilds.includes(member.guild.id)) return;
 	  if(!member.guild.me.permissions.has("MANAGE_GUILD")) return;
 
-    let wlcmImg = db.fetch(`server_${member.guild.id}_welcomeImg`);
-    let imgChannel = db.fetch(`channel_${member.guild.id}_welcome`);
+    User.findOne({ id: member.id, guild: member.guild.id }, async(err, result) => {
+      if(!result) {
+        await User.create({
+          id: member.id,
+          guild: member.guild.id
+        });
+      }
+    });
 
-    if(wlcmImg != null && imgChannel != null) {
+    let settings = await Guild.find({ id: member.guild.id });
+
+    if(settings.wlcmImage != null && settings.welcomeChannel != null) {
       const applyText = (canvas, text) => {
       const ctx = canvas.getContext('2d');
       let fontSize = 40;
@@ -65,7 +73,7 @@ module.exports = class GuildMemberAdd extends Event {
       ctx.drawImage(avatar, 281, 38, 140, 140);
     
       const attachment = new Discord.MessageAttachment(canvas.toBuffer(), 'welcome.png');
-      let channelImg = this.client.channels.cache.get(imgChannel);
+      let channelImg = this.client.channels.cache.get(settings.welcomeChannel);
       await channelImg.send({ files: [attachment] });
     }
     
@@ -104,35 +112,44 @@ module.exports = class GuildMemberAdd extends Event {
     else inviter = this.client.users.cache.get(invite.inviter.id);
 
     if (inviter != "Unknown" && inviter != "Vanity URL") {
-      db.set(`inviter_${member.guild.id}_${member.id}`, inviter.id);
+      await User.findOneAndUpdate({ id: member.id, guild: member.guild.id }, { inviter: `${inviter.id}` }, { new: true, upsert: true });
 
       if (inviter.id !== member.id) {
-        db.add(`invitesRegular_${member.guild.id}_${inviter.id}`, 1);
-        db.add(`invitesJoins_${member.guild.id}_${inviter.id}`, 1);
+        await User.findOneAndUpdate({ id: inviter, guild: member.guild.id }, { $inc: { invitesJoins: 1 } }, { new: true, upsert: true });
+        await User.findOneAndUpdate({ id: inviter, guild: member.guild.id }, { $inc: { invitesRegular: 1 } }, { new: true, upsert: true });
         this.client.utils.pushHistory(member, inviter.id, `[ 📥 ] **${member.user.tag}** has **joined** server.`);
       }
     } else {
-      db.set(`inviter_${member.guild.id}_${member.id}`, inviter);
+      await User.findOneAndUpdate({ id: member.id, guild: member.guild.id }, { inviter: `${inviter}` }, { new: true, upsert: true });
     }
 
-    let invitesChannel = db.fetch(`channel_${member.guild.id}_invites`);
-    invitesChannel = this.client.channels.cache.get(invitesChannel);
+    let invitesChannel = this.client.channels.cache.get(settings.invitesChannel);
 
-    let msgJoin = db.fetch(`server_${member.guild.id}_joinMessage`);
+    let msgJoin = settings.joinMessage;
     if (invitesChannel != null && invitesChannel != undefined && msgJoin != null) {
       delay(1000);
-      let inviter = db.fetch(`inviter_${member.guild.id}_${member.id}`);
+      let inviterData = await User.findOne({ id: member.id, guild: member.guild.id }, "inviter");
       let invv = null;
-      if (inviter == "Vanity URL") invv = "Vanity URL";
-      else if (inviter == undefined || inviter == null || inviter == "Unknown") invv = "Unknown";
-      else invv = this.client.users.cache.get(inviter).tag;
+      if (inviterData == "Vanity URL") invv = "Vanity URL";
+      else if (inviterData == undefined || inviterData == null || inviter == "Unknown") invv = "Unknown";
+      else invv = this.client.users.cache.get(inviterData).tag;
 
       let inviterName = invv;
-
-      let joins = db.fetch(`invitesJoins_${member.guild.id}_${inviter}`) || 0;
-      let regular = db.fetch(`invitesRegular_${member.guild.id}_${inviter}`) || 0;
-      let leaves = db.fetch(`invitesLeaves_${member.guild.id}_${inviter}`) || 0;
-      let bonus = db.fetch(`invitesBonus_${member.guild.id}_${inviter}`) || 0;
+      let invitesCount = {
+        joins: 0,
+        regular: 0,
+        leaves: 0,
+        bonus: 0
+      };
+      
+      User.findOne({ id: inviterData, guild: member.guild.id }, (err, result) => {
+        if (result) {
+          invitesCount.joins = result.invitesJoin;
+          invitesCount.regular = results.invitesRegular;
+          invitesCount.leave = result.invitesLeaves;
+          invitesCount.bonus = result.invitesBonus;
+        }
+      });
 
       invitesChannel.send({ content: `${msgJoin
         .replace("{userTag}", member.user.tag)
@@ -140,11 +157,11 @@ module.exports = class GuildMemberAdd extends Event {
         .replace("{username}", member.user.username)
         .replace("{userID}", member.user.id)
         .replace("{invitedBy}", inviterName)
-        .replace("{totalInvites}", parseInt(regular + bonus))
-        .replace("{leavesInvites}", leaves)
-        .replace("{bonusInvites}", bonus)
-        .replace("{regularInvites}", regular)
-        .replace("{joinsInvites}", joins)
+        .replace("{totalInvites}", parseInt(invitesCount.regular + invitesCount.bonus))
+        .replace("{leavesInvites}", invitesCount.leaves)
+        .replace("{bonusInvites}", invitesCount.bonus)
+        .replace("{regularInvites}", invitesCount.regular)
+        .replace("{joinsInvites}", invitesCount.joins)
         .replace("{created}", moment.utc(member.user.createdAt).tz("Europe/Belgrade").format("dddd, MMMM Do YYYY, HH:mm:ss"))}` });
       }
 	} 

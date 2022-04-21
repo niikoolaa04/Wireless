@@ -25,7 +25,7 @@ module.exports = class Invite extends Command {
 			);
 
     let embed = new MessageEmbed()
-      .setDescription(`Invite Me to your Server by clicking on Button.`)
+      .setDescription(`> If you want to Invite Bot to your Server use button below.`)
       .setColor("BLURPLE");
     message.channel.send({ embeds: [embed], components: [row] });
   }
@@ -40,7 +40,7 @@ module.exports = class Invite extends Command {
 			);
 
     let embed = new MessageEmbed()
-      .setDescription(`Invite Me to your Server by clicking on Button.`)
+      .setDescription(`> If you want to Invite Bot to your Server use button below.`)
       .setColor("BLURPLE");
     interaction.reply({ embeds: [embed], components: [row] });
   }

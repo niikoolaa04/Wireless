@@ -1,6 +1,5 @@
-const Discord = require("discord.js");
-const db = require("quick.db");
 const Event = require("../../structures/Events");
+const Discord = require("discord.js");
 
 module.exports = class InviteDelete extends Event {
   constructor(...args) {

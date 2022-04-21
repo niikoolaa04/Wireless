@@ -1,6 +1,6 @@
 const Command = require("../../structures/Command");
-const db = require("quick.db");
 const Discord = require("discord.js");
+const User = require("../../models/User.js");
 
 module.exports = class ResetInvites extends Command {
 	constructor(client) {
@@ -15,6 +15,7 @@ module.exports = class ResetInvites extends Command {
 			options: [{
 			  name: "reset_type",
 			  description: "Whether to reset Invites of User or Guild",
+        type: "STRING",
 			  required: true,
 			  choices: [{
 			    name: "Reset User Invites",
@@ -39,15 +40,14 @@ module.exports = class ResetInvites extends Command {
     else reset = "all";
     
     if(reset == "all") {
-      let allInv = await db.all().filter(data => data.ID.startsWith(`invitesLeaves_${message.guild.id}`) && data.ID.startsWith(`invitesJoins_${message.guild.id}`) && data.ID.startsWith(`invitesRegular_${message.guild.id}`) && data.ID.startsWith(`invitesBonus_${message.guild.id}`));
-      allInv.forEach(d => db.delete(d.ID));
+      await User.updateMany({ guild: message.guild.id }, { $unset: { "invitesJoins": 1
+        , "invitesLeaves": 1, "invitesBonus": 1, "invitesRegular": 1 }});
       
       message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, "Invites Reseted", "Invites of all users have been reseted", "YELLOW") ]});
     } else if(reset == "user") {
-      db.delete(`invitesLeaves_${message.guild.id}_${user.id}`);
-      db.delete(`invitesBonus_${message.guild.id}_${user.id}`);
-      db.delete(`invitesRegular_${message.guild.id}_${user.id}`);
-      db.delete(`invitesJoins_${message.guild.id}_${user.id}`);
+      await User.findOneAndUpdate({ id: user.id, guild: message.guild.id }, { $unset: { "invitesJoins": 1
+        , "invitesLeaves": 1, "invitesBonus": 1, "invitesRegular": 1 }}, { new: true, upsert: true });
+
       message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, "Invites Reseted", `Invites of user ${user} have been reseted`, "YELLOW") ]});
     }
   }
@@ -56,17 +56,16 @@ module.exports = class ResetInvites extends Command {
     let user = interaction.options.getUser("user");
   
     if (reset == "guild") {
-      let allInv = await db.all().filter(data => data.ID.startsWith(`invitesLeaves_${interaction.guild.id}`) && data.ID.startsWith(`invitesJoins_${interaction.guild.id}`) && data.ID.startsWith(`invitesRegular_${interaction.guild.id}`) && data.ID.startsWith(`invitesBonus_${interaction.guild.id}`));
-      allInv.forEach(d => db.delete(d.ID));
+      await User.updateMany({ guild: interaction.guild.id }, { $unset: { "invitesJoins": 1
+        , "invitesLeaves": 1, "invitesBonus": 1, "invitesRegular": 1 }});
   
       interaction.reply({ embeds: [this.client.embedBuilder(this.client, interaction.user, "Invites Reseted", "Invites of all users have been reseted", "YELLOW")] });
     } else if (reset == "user") {
       if(!user) 
         return interaction.reply({ embeds: [this.client.embedBuilder(this.client, interaction.user, "Error", "You didn't provide User whoes Invites to reset.", "RED")] });
-      db.delete(`invitesLeaves_${interaction.guild.id}_${user.id}`);
-      db.delete(`invitesBonus_${interaction.guild.id}_${user.id}`);
-      db.delete(`invitesRegular_${interaction.guild.id}_${user.id}`);
-      db.delete(`invitesJoins_${interaction.guild.id}_${user.id}`);
+      await User.findOneAndUpdate({ id: user.id, guild: interaction.guild.id }, { $unset: { "invitesJoins": 1
+        , "invitesLeaves": 1, "invitesBonus": 1, "invitesRegular": 1 }}, { new: true, upsert: true });
+
       interaction.reply({ embeds: [this.client.embedBuilder(this.client, interaction.user, "Invites Reseted", `Invites of user ${user} have been reseted`, "YELLOW")] });
     }
   }

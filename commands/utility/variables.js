@@ -1,5 +1,4 @@
 const Command = require("../../structures/Command");
-const db = require("quick.db");
 const Discord = require("discord.js");
 
 module.exports = class Variables extends Command {

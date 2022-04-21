@@ -22,10 +22,18 @@ module.exports = class Support extends Command {
           .setURL(this.client.config.links.supportServer)
 					.setLabel('Support Server')
 					.setStyle('LINK'),
+        new MessageButton()
+          .setURL(this.client.config.links.inviteSite)
+					.setLabel('Vote')
+					.setStyle('LINK'),
+        new MessageButton()
+          .setURL(this.client.config.links.website)
+					.setLabel('Website')
+					.setStyle('LINK'),
 			);
 
     let embed = new MessageEmbed()
-      .setDescription(`Join Support Server by clicking on Button.`)
+      .setDescription(`> If you need help with bot or have a question, use button to Join Support Server.`)
       .setColor("BLURPLE");
     message.channel.send({ embeds: [embed], components: [row] });
   }
@@ -35,12 +43,20 @@ module.exports = class Support extends Command {
 			.addComponents(
 				new MessageButton()
           .setURL(this.client.config.links.supportServer)
-					.setLabel('Vote for me')
+					.setLabel('Support Server')
+					.setStyle('LINK'),
+        new MessageButton()
+          .setURL(this.client.config.links.inviteSite)
+					.setLabel('Vote')
+					.setStyle('LINK'),
+				new MessageButton()
+          .setURL(this.client.config.links.website)
+					.setLabel('Website')
 					.setStyle('LINK'),
 			);
 
     let embed = new MessageEmbed()
-      .setDescription(`Join Support Server by clicking on Button.`)
+      .setDescription(`> If you need help with bot or have a question, use button to Join Support Server.`)
       .setColor("BLURPLE");
     interaction.reply({ embeds: [embed], components: [row] });
   }

@@ -1,7 +1,5 @@
 const Command = require("../../structures/Command");
 const Discord = require('discord.js');
-const ms = require('ms');
-const db = require("quick.db");
 
 module.exports = class GiveawayCreate extends Command {
 	constructor(client) {

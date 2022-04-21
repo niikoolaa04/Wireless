@@ -1,23 +1,23 @@
-const db = require("quick.db");
 const Discord = require("discord.js");
+const User = require("../models/User.js");
+const Guild = require("../models/Guild.js");
 
-function giveawayObject(guild, messageID, time, role, channel, winners, messages, invites, ending, hoster, prize) {
-  let roleBypass = db.fetch(`server_${guild.id}_bypassRole`);
-  if(roleBypass == null) roleBypas = "none";
+function giveawayObject(guild, messageId, time, role, channel, winners, messages, invites, ending, hoster, prize) {
+  let guildData = Guild.findOne({ id: guild.id });
   let gwObject = {
-    messageID: messageID,
-    guildID: guild, 
+    messageId: messageId,
+    guildId: guild, 
     channelID: channel,
     prize: prize,
     duration: time, 
     hostedBy: hoster, 
     winnerCount: winners, 
     requirements: {
-      messagesReq: messages, 
       invitesReq: invites,
-      roleReq: role,
+      messagesReq: messages,
+      roleReq: role
     },
-    roleBypass,
+    roleBypass: guildData.roleBypass ? guildData.roleBypass : "none",
     ended: false, 
     endsAt: ending,
     winners: []
@@ -31,10 +31,8 @@ function capitalizeFirstLetter(string) {
 }
 
 function commandsList(client, message, category) {
-  let prefix = db.fetch(`settings_${message.guild.id}_prefix`);
-  if (prefix === null) prefix = client.config.prefix; 
   let commands = client.commands.filter(
-    c => c.category === category && c.listed === true
+    c => c.category == category && c.listed == true
   );
   let content = "";
   
@@ -42,7 +40,7 @@ function commandsList(client, message, category) {
     c => (content += `\`${c.name}\`, `)
   );
   
-  return content;
+  return content.slice(0, -2);
 }
 
 function formatTime(ms) {
@@ -58,27 +56,35 @@ function formatTime(ms) {
   return time;
 }
 
-function lbContent(client, message, lbType) {
-  let leaderboard = db
-    .all()
-    .filter(data => data.ID.startsWith(`${lbType}_${message.guild.id}`))
-    .sort((a, b) => b.data - a.data);
+async function lbContent(client, message, lbType) {
+  let leaderboard = await User.find({ guild: message.guild.id }).lean();
+  let suffix = lbType == "messages" ? "message(s)" : "invite(s)";
+
+  leaderboard = leaderboard.map((x) => {
+    return {
+      user: x.id,
+      value: lbType == "messages" ? x.messages : x.invitesRegular,
+    }
+  }).sort((a, b) => b.value - a.value);
+
   let content = "";
   
   for (let i = 0; i < leaderboard.length; i++) {
-    if (i === 10) break;
+    if (i == 10) break;
   
-    let user = client.users.cache.get(leaderboard[i].ID.split("_")[2]);
+    let user = client.users.cache.get(leaderboard[i].user);
     if (user == undefined) user = "Unknown User";
     else user = user.username;
-    content += `\`${i + 1}.\` ${user} - **${leaderboard[i].data}**\n`;
+    content += `\`${i + 1}.\` ${user} - **${leaderboard[i].value}** ${suffix}\n`;
   }
+
+  if(content == "") content = "> No Data to show."
   
   return content;
 }
 
 function configStrings() {
-  const opcije = [
+  const options = [
     "`1.` **-** Requirements Bypass Role",
     "`2.` **-** Giveaway Blacklist Role",
     "`3.` **-** Invites Messages Channel",
@@ -87,8 +93,8 @@ function configStrings() {
     "`6.` **-** DM Winners"
   ];
   let text = "";
-  for(const opcija of opcije) {
-    text += `\n> ${opcija}`
+  for(const option of options) {
+    text += `\n> ${option}`
   }
   return text;
 }
@@ -154,9 +160,7 @@ const asyncForEach = async (array, callback) => {
 };
 
 const pushHistory = (message, userId, text) => {
-  let history = db.fetch(`transakcije_${message.guild.id}_${userId}`) || [];
-  history.unshift(text);
-  db.set(`invitesHistory_${message.guild.id}_${userId}`, history);
+  User.findOneAndUpdate({ id: userId, guild: message.guild.id }, { $push: { invitesHistory: text } }, { new: true, upsert: true });
 }
 
 const parseArgs = (args, options) => {
@@ -212,7 +216,7 @@ function premiumKey() {
       const char = tokens.charAt(random);
       key += char;
     }
-    if (i !== 4) key += '-';
+    if (i != 4) key += '-';
   }
 
   return key;

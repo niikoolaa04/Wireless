@@ -15,7 +15,7 @@ module.exports = class TopMessages extends Command {
   }
 
   async run(message, args) {
-    let content = this.client.utils.lbContent(this.client, message, "messages");
+    let content = await this.client.utils.lbContent(this.client, message, "messages");
 
     let embed = new Discord.MessageEmbed()
       .setDescription(content)
@@ -28,7 +28,7 @@ ${content}`)
     message.channel.send({ embeds: [embed] });
   }
   async slashRun(interaction, args) {
-    let content = this.client.utils.lbContent(this.client, interaction, "messages");
+    let content = await this.client.utils.lbContent(this.client, interaction, "messages");
 
     let embed = new Discord.MessageEmbed()
       .setDescription(content)

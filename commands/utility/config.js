@@ -1,6 +1,6 @@
 const Command = require("../../structures/Command");
 const Discord = require("discord.js");
-const db = require("quick.db");
+const Guild = require("../../models/Guild.js");
 const { parse } = require("twemoji-parser");
 
 module.exports = class Config extends Command {
@@ -105,34 +105,23 @@ module.exports = class Config extends Command {
   
   async run(message, args) {
     let option = args[0];
-    let premiumGuild = db.fetch(`server_${message.guild.id}_premium`);
+    let settings = await Guild.findOne({ id: message.guild.id });
+    let premiumGuild = settings.premium;
     
     if(!option || option > 11 || option < 1) {
-      let prefix = db.fetch(`settings_${message.guild.id}_prefix`) || this.client.config.prefix;
-      let bypass = db.fetch(`server_${message.guild.id}_bypassRole`);
-      let blacklist = db.fetch(`server_${message.guild.id}_blacklistRole`);
-      let channel = db.fetch(`channel_${message.guild.id}_invites`);
-      let join = db.fetch(`server_${message.guild.id}_joinMessage`) || 'No Message';
-      let leave = db.fetch(`server_${message.guild.id}_leaveMessage`) || 'No Message';
-      let winners = db.fetch(`server_${message.guild.id}_dmWinners`);
-      let snipes = db.fetch(`server_${message.guild.id}_snipes`);
-      let image = db.fetch(`server_${message.guild.id}_welcomeImg`);
-      let wlcmChannel = db.fetch(`channel_${message.guild.id}_welcome`);
-      let customReaction = db.fetch(`server_${message.guild.id}_customReaction`);
-
       let noOption = new Discord.MessageEmbed()
         .setAuthor({ name: "Configuration", iconURL: this.client.user.displayAvatarURL() })
-        .setDescription(`To Change Config Value do \`${prefix}config [Option] [Value]\``)
-        .addField(`🌙 - Bypass Role (1)`, bypass ? `<@${bypass}>` : 'No Role')
-        .addField(`❌ - Blacklist Role (2)`, blacklist ? `<@${blacklist}>` : 'No Role')
-        .addField(`🎫 - Invites Channel (3)`, channel ? `<#${channel}>` : 'No Channel')
-        .addField(`🚪 - Join Message (4)`, "`" + join + "`")
-        .addField(`✨ - Leave Message (5)`, "`" + leave + "`")
-        .addField(`💬 - DM Winners (6)`, winners ? `Yes` : 'No')
-        .addField(`🔎 - Snipes (7)`, snipes ? `Yes` : 'No')
-        .addField(`👋 - Welcome Image (8)`, image ? `Yes` : 'No')
-        .addField(`📞 - Welcome Channel for Image (9)`, wlcmChannel ? `<#${wlcmChannel}>` : 'No Channel')
-        .addField(`💥 - Custom GW Reaction (10)`, customReaction ? `${customReaction}` : '🎉')
+        .setDescription(`To Change Config Value do \`${settings.prefix}config [Option] [Value]\``)
+        .addField(`🌙 - Bypass Role (1)`, settings.bypassRole ? `<@${settings.bypassRole}>` : 'No Role')
+        .addField(`❌ - Blacklist Role (2)`, settings.blacklistRole ? `<@${settings.blacklistRole}>` : 'No Role')
+        .addField(`🎫 - Invites Channel (3)`, settings.invitesChannel ? `<#${setting.invitesChannel}>` : 'No Channel')
+        .addField(`🚪 - Join Message (4)`, settings.joinMessage ? `\`${settings.joinMessage}\`` : '`No Join Message Setuped`')
+        .addField(`✨ - Leave Message (5)`, settings.leaveMessage ? `\`${settings.leaveMessage}\`` : '`No Leave Message Setuped`')
+        .addField(`💬 - DM Winners (6)`, settings.dmWinners ? `Yes` : 'No')
+        .addField(`🔎 - Snipes (7)`, settings.snipes ? `Yes` : 'No')
+        .addField(`👋 - Welcome Image (8)`, settings.wlcmImage ? `Yes` : 'No')
+        .addField(`📞 - Welcome Channel for Image (9)`, settings.wlcmChannel ? `<#${settings.welcomeChannel}>` : 'No Channel')
+        .addField(`💥 - Custom GW Reaction (10)`, `${settings.customEmoji}`)
         .setColor("BLURPLE")
         .setThumbnail(this.client.user.displayAvatarURL())
         .setTimestamp()
@@ -143,34 +132,34 @@ module.exports = class Config extends Command {
 
     if(option == 1) {
       let role = message.mentions.roles.first();
-      let gwRole = db.fetch(`server_${message.guild.id}_bypassRole`);
+      let gwRole = settings.bypassRole;
        
       if(!gwRole) {
         if (!role) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author,
           `Error`, "You haven't mentioned role.", "RED") ]});
-        
-        db.set(`server_${message.guild.id}_bypassRole`, role.id);
+
+        await Guild.findOneAndUpdate({ id: message.guild.id }, { bypassRole : `${role.id}` }, { new: true, upsert: true });
         message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author,
           `Config`, `Giveaway Requirements Bypass Role have been successfully changed to \`${role}\`.`, "YELLOW") ]});
       } else {
-        db.delete(`server_${message.guild.id}_bypassRole`);
+        await Guild.findOneAndUpdate({ id: message.guild.id }, { bypassRole: null }, { new: true, upsert: true });
         message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author,
         `Config`, "You have successfully reseted Bypass Role.", "RED") ]});
       }
     }
     if(option == 2) {
       let role = message.mentions.roles.first();
-      let gwRole = db.fetch(`server_${message.guild.id}_blacklistRole`);
+      let gwRole = settings.blacklistRole;
 
       if(!gwRole) {
         if (!role) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author,
           `Error`, "You haven't mentioned role.", "RED") ]});
     
-        db.set(`server_${message.guild.id}_blacklistRole`, role.id);
+        await Guild.findOneAndUpdate({ id: message.guild.id }, { blacklistRole : `${role.id}` }, { new: true, upsert: true });
         message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author,
           `Config`, `Giveaway Requirements Blacklist Role have been successfully changed to \`${role}\`.`, "YELLOW") ]});
       } else {
-        db.delete(`server_${message.guild.id}_blacklistRole`);
+        await Guild.findOneAndUpdate({ id: message.guild.id }, { blacklistRole : null }, { new: true, upsert: true });
         message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author,
           `Config`, "You have successfully reseted Blacklist Role.", "RED") ]});
       }
@@ -178,12 +167,12 @@ module.exports = class Config extends Command {
     if(option == 3) {
       let channel = message.mentions.channels.first();
       if (!channel) {
-        db.delete(`channel_${message.guild.id}_invites`);
+        await Guild.findOneAndUpdate({ id: message.guild.id }, { invitesChannel: null }, { new: true, upsert: true });
         message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author,
           `Config`, `Invites Channel have been rested.`, "RED") ]});
       }
       if (channel) {
-        db.set(`channel_${message.guild.id}_invites`, channel.id);
+        await Guild.findOneAndUpdate({ id: message.guild.id }, { invitesChannel: `${channel.id}` }, { new: true, upsert: true });
         message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author,
           `Config`, `Invites Channel has been set to ${channel}.
 To reset it just use command without arguments.`, "YELLOW") ]});
@@ -194,13 +183,13 @@ To reset it just use command without arguments.`, "YELLOW") ]});
         { embeds: [this.client.embedBuilder(this.client, message.author, "Error", "You need to enter join message or in order to clear it just type 'none'", "RED") ]}
       );
       if (args[1].toLowerCase() == "none") {
-        db.delete(`server_${message.guild.id}_joinMessage`);
+        await Guild.findOneAndUpdate({ id: message.guild.id }, { joinMessage: null }, { new: true, upsert: true });
         message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author,
           `Config`, "Join Message have been reseted.", "RED") ]});
       }
       if (args[1] && args[1].toLowerCase() != "none") {
         let content = args.slice(1).join(" ");
-        db.set(`server_${message.guild.id}_joinMessage`, content);
+        await Guild.findOneAndUpdate({ id: message.guild.id }, { joinMessage: `${content}` }, { new: true, upsert: true });
         message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author,
           `Config`, `You have Changed Message which is sent to invites logging channel when member joins server.
 To clear Message just use "none".
@@ -212,13 +201,13 @@ Use \`variables\` Command to view all available Variables.`, "YELLOW") ]});
         { embeds: [this.client.embedBuilder(this.client, message.author, "Error", "You need to enter leave message or in order to clear it just type 'none'", "RED")] }
       );
       if (args[1].toLowerCase() == "none") {
-        db.delete(`server_${message.guild.id}_leaveMessage`);
+        await Guild.findOneAndUpdate({ id: message.guild.id }, { leaveMessage: null }, { new: true, upsert: true });
         message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author,
           `Config`, "Leave Message have been reseted.", "RED") ]});
       }
       if (args[1] && args[1].toLowerCase() != "none") {
         let content = args.slice(1).join(" ");
-        db.set(`server_${message.guild.id}_leaveMessage`, content);
+        await Guild.findOneAndUpdate({ id: message.guild.id }, { leaveMessage: `${content}` }, { new: true, upsert: true });
         message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author,
           `Config`, `You have Changed Message which is sent to invites logging channel when member leave server.
 To clear Message just use "none".
@@ -226,38 +215,37 @@ Use \`variables\` Command to view all available Variables.`, "YELLOW") ]});
       }
     }
     if(option == 6) {
-      let dm = db.fetch(`server_${message.guild.id}_dmWinners`);
+      let dm = settings.dmWinners;
       if(dm == null) {
-        db.set(`server_${message.guild.id}_dmWinners`, true);
+        await Guild.findOneAndUpdate({ id: message.guild.id }, { dmWinners: true }, { new: true, upsert: true });
         message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author,
           `Config`, "You have Enabled DM Winners Option.", "YELLOW") ]});
       } else {
-        db.delete(`server_${message.guild.id}_dmWinners`);
+        await Guild.findOneAndUpdate({ id: message.guild.id }, { dmWinners: null }, { new: true, upsert: true });
         message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author,
           `Config`, "You have Disabled DM Winners Option.", "RED") ]});
       }
     }
     if(option == 7) {
-      let snStatus = db.fetch(`server_${message.guild.id}_snipes`);
+      let snStatus = settings.snipes;
       if(snStatus == null) {
-        db.set(`server_${message.guild.id}_snipes`, true);
+        await Guild.findOneAndUpdate({ id: message.guild.id }, { snipes: true }, { new: true, upsert: true });
         message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author,
           `Config`, "You have Enabled Snipes Option.", "YELLOW") ]});
       } else {
-        db.delete(`server_${message.guild.id}_snipes`);
-        db.delete(`snipes_${message.guild.id}`);
+        await Guild.findOneAndUpdate({ id: message.guild.id }, { snipes: null }, { new: true, upsert: true });
         message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author,
           `Config`, "You have Disabled Snipes Option.", "RED") ]});
       }
     }
     if(option == 8) {
-      let img = db.fetch(`server_${message.guild.id}_welcomeImg`);
+      let img = settings.wlcmImage;
       if(img == null) {
-        db.set(`server_${message.guild.id}_welcomeImg`, true);
+        await Guild.findOneAndUpdate({ id: message.guild.id }, { wlcmImage: true }, { new: true, upsert: true });
         message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author,
           `Config`, "You have Enabled Welcome Image Option.", "YELLOW") ]});
       } else {
-        db.delete(`server_${message.guild.id}_welcomeImg`);
+        await Guild.findOneAndUpdate({ id: message.guild.id }, { wlcmImage: null }, { new: true, upsert: true });
         message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author,
           `Config`, "You have Disabled Welcome Image Option.", "RED") ]});
       }
@@ -265,12 +253,12 @@ Use \`variables\` Command to view all available Variables.`, "YELLOW") ]});
     if(option == 9) {
       let channel = message.mentions.channels.first();
       if (!channel) {
-        db.delete(`channel_${message.guild.id}_welcome`);
+        await Guild.findOneAndUpdate({ id: message.guild.id }, { welcomeChannel: null }, { new: true, upsert: true });
         message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author,
           `Config`, `Welcome Channel have been rested.`, "RED") ]});
       }
       if (channel) {
-        db.set(`channel_${message.guild.id}_welcome`, channel.id);
+        await Guild.findOneAndUpdate({ id: message.guild.id }, { welcomeChannel: `${channel.id}` }, { new: true, upsert: true });
         message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author,
           `Config`, `Welcome Channel has been set to ${channel}.
 To reset it just use command without arguments.`, "YELLOW") ]});
@@ -285,7 +273,7 @@ To reset it just use command without arguments.`, "YELLOW") ]});
       if (!parse(args[1])[0]) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author,
           `Error`, "You have entered invalid emoji (Custom Emojis are not supported).", "RED") ]});
       if (parse(args[1])[0]) {
-        db.set(`server_${message.guild.id}_customReaction`, parse(args[1])[0].text);
+        await Guild.findOneAndUpdate({ id: message.guild.id }, { customEmoji: `${parse(args[1])[0].text}` }, { new: true, upsert: true });
         message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author,
           `Config`, `You have Changed Giveaway Reaction Emoji to ${parse(args[1])[0].text}.
 
@@ -297,34 +285,24 @@ but users who are already participating won't be affected** ❗`, "YELLOW") ]});
   async slashRun(interaction, args) {
     let option = args[0];
     let value = args[1];
-    let premiumGuild = db.fetch(`server_${interaction.guild.id}_premium`);
+    let settings = await Guild.findOne({ id: interaction.guild.id });
+    
+    let premiumGuild = settings.premium;
     
     if(option == "list") {
-      let prefix = db.fetch(`settings_${interaction.guild.id}_prefix`) || this.client.config.prefix;
-      let bypass = db.fetch(`server_${interaction.guild.id}_bypassRole`);
-      let blacklist = db.fetch(`server_${interaction.guild.id}_blacklistRole`);
-      let channel = db.fetch(`channel_${interaction.guild.id}_invites`);
-      let join = db.fetch(`server_${interaction.guild.id}_joinMessage`) || 'No Message';
-      let leave = db.fetch(`server_${interaction.guild.id}_leaveMessage`) || 'No Message';
-      let winners = db.fetch(`server_${interaction.guild.id}_dmWinners`);
-      let snipes = db.fetch(`server_${interaction.guild.id}_snipes`);
-      let image = db.fetch(`server_${interaction.guild.id}_welcomeImg`);
-      let wlcmChannel = db.fetch(`channel_${interaction.guild.id}_welcome`);
-      let customReaction = db.fetch(`server_${interaction.guild.id}_customReaction`);
-
       let noOption = new Discord.MessageEmbed()
         .setAuthor({ name: "Configuration", iconURL: this.client.user.displayAvatarURL() })
-        .setDescription(`To Change Config Value do \`${prefix}config [Option] [Value]\``)
-        .addField(`🌙 - Bypass Role (1)`, bypass ? `<@${bypass}>` : 'No Role')
-        .addField(`❌ - Blacklist Role (2)`, blacklist ? `<@${blacklist}>` : 'No Role')
-        .addField(`🎫 - Invites Channel (3)`, channel ? `<#${channel}>` : 'No Channel')
-        .addField(`🚪 - Join Message (4)`, "`" + join + "`")
-        .addField(`✨ - Leave Message (5)`, "`" + leave + "`")
-        .addField(`💬 - DM Winners (6)`, winners ? `Yes` : 'No')
-        .addField(`🔎 - Snipes (7)`, snipes ? `Yes` : 'No')
-        .addField(`👋 - Welcome Image (8)`, image ? `Yes` : 'No')
-        .addField(`📞 - Welcome Channel for Image (9)`, wlcmChannel ? `<#${wlcmChannel}>` : 'No Channel')
-        .addField(`💥 - Custom GW Reaction (10)`, customReaction ? `${customReaction}` : '🎉')
+        .setDescription(`To Change Config Value do \`${settings.prefix}config [Option] [Value]\``)
+        .addField(`🌙 - Bypass Role (1)`, settings.bypassRole ? `<@${settings.bypassRole}>` : 'No Role')
+        .addField(`❌ - Blacklist Role (2)`, settings.blacklistRole ? `<@${settings.blacklistRole}>` : 'No Role')
+        .addField(`🎫 - Invites Channel (3)`, settings.invitesChannel ? `<#${setting.invitesChannel}>` : 'No Channel')
+        .addField(`🚪 - Join Message (4)`, settings.joinMessage ? `\`${settings.joinMessage}\`` : '`No Join Message Setuped`')
+        .addField(`✨ - Leave Message (5)`, settings.leaveMessage ? `\`${settings.leaveMessage}\`` : '`No Leave Message Setuped`')
+        .addField(`💬 - DM Winners (6)`, settings.dmWinners ? `Yes` : 'No')
+        .addField(`🔎 - Snipes (7)`, settings.snipes ? `Yes` : 'No')
+        .addField(`👋 - Welcome Image (8)`, settings.wlcmImage ? `Yes` : 'No')
+        .addField(`📞 - Welcome Channel for Image (9)`, settings.wlcmChannel ? `<#${settings.welcomeChannel}>` : 'No Channel')
+        .addField(`💥 - Custom GW Reaction (10)`, `${settings.customEmoji}`)
         .setColor("BLURPLE")
         .setThumbnail(this.client.user.displayAvatarURL())
         .setTimestamp()
@@ -334,35 +312,35 @@ but users who are already participating won't be affected** ❗`, "YELLOW") ]});
     }
 
     if(option == "bypassrole") {
-      let gwRole = db.fetch(`server_${interaction.guild.id}_bypassRole`);
+      let gwRole = settings.bypassRole;
       let role = interaction.guild.roles.cache.get(value); 
        
       if(!gwRole) {
         if (!value) return interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user,
           `Error`, "You haven't mentioned role.", "RED")], ephemeral: true });
-          
-        db.set(`server_${interaction.guild.id}_bypassRole`, role.id);
+
+        await Guild.findOneAndUpdate({ id: interaction.guild.id }, { bypassRole: `${role.id}` }, { new: true, upsert: true });
         interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user,
           `Config`, `Giveaway Requirements Bypass Role have been successfully changed to \`${role}\`.`, "YELLOW") ]});
       } else {
-        db.delete(`server_${interaction.guild.id}_bypassRole`);
+        await Guild.findOneAndUpdate({ id: interaction.guild.id }, { bypassRole: null }, { new: true, upsert: true });
         interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user,
         `Config`, "You have successfully reseted Bypass Role.", "RED") ]});
       }
     }
     if(option == "blacklistrole") {
       let role = interaction.guild.roles.cache.get(value);
-      let gwRole = db.fetch(`server_${interaction.guild.id}_blacklistRole`);
+      let gwRole = settings.blacklistRole;
 
       if(!gwRole) {
         if (!value) return interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user,
           `Error`, "You haven't mentioned role.", "RED")], ephemeral: true });
-    
-        db.set(`server_${interaction.guild.id}_blacklistRole`, role.id);
+        
+        await Guild.findOneAndUpdate({ id: interaction.guild.id }, { blacklistRole: `${role.id}` }, { new: true, upsert: true });
         interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user,
           `Config`, `Giveaway Requirements Blacklist Role have been successfully changed to \`${role}\`.`, "YELLOW") ]});
       } else {
-        db.delete(`server_${interaction.guild.id}_blacklistRole`);
+        await Guild.findOneAndUpdate({ id: interaction.guild.id }, { blacklistRole: null }, { new: true, upsert: true });
         interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user,
           `Config`, "You have successfully reseted Blacklist Role.", "RED") ]});
       }
@@ -370,12 +348,12 @@ but users who are already participating won't be affected** ❗`, "YELLOW") ]});
     if(option == "inviteschannel") {
       let channel = interaction.guild.channels.cache.get(value);
       if (!value) {
-        db.delete(`channel_${interaction.guild.id}_invites`);
+        await Guild.findOneAndUpdate({ id: interaction.guild.id }, { invitesChannel: null }, { new: true, upsert: true });
         interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user,
           `Config`, `Invites Channel have been rested.`, "RED") ]});
       }
       if (value) {
-        db.set(`channel_${interaction.guild.id}_invites`, channel.id);
+        await Guild.findOneAndUpdate({ id: interaction.guild.id }, { invitesChannel: `${channel.id}` }, { new: true, upsert: true });
         interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user,
           `Config`, `Invites Channel has been set to ${channel}.
 To reset it just use command without arguments.`, "YELLOW") ]});
@@ -386,12 +364,13 @@ To reset it just use command without arguments.`, "YELLOW") ]});
         { embeds: [this.client.embedBuilder(this.client, interaction.user, "Error", "You need to enter join message or in order to clear it just type 'none'", "RED")], ephemeral: true }
       );
       if (args[1].toLowerCase() == "none") {
-        db.delete(`server_${interaction.guild.id}_joinMessage`);
+        await Guild.findOneAndUpdate({ id: interaction.guild.id }, { joinMessage: null }, { new: true, upsert: true });
         interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user,
           `Config`, "Join Message have been reseted.", "RED") ]});
       }
+      // gore
       if (args[1] && args[1].toLowerCase() != "none") {
-        db.set(`server_${interaction.guild.id}_joinMessage`, value);
+        await Guild.findOneAndUpdate({ id: interaction.guild.id }, { invitesChannel: `${value}` }, { new: true, upsert: true });
         interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user,
           `Config`, `You have Changed Message which is sent to invites logging channel when member joins server.
 To clear Message just use "none".
@@ -403,12 +382,12 @@ Use \`variables\` Command to view all available Variables.`, "YELLOW") ]});
         { embeds: [this.client.embedBuilder(this.client, interaction.user, "Error", "You need to enter leave message or in order to clear it just type 'none'", "RED")] , ephemeral: true }
       );
       if (args[1].toLowerCase() == "none") {
-        db.delete(`server_${interaction.guild.id}_leaveMessage`);
+        await Guild.findOneAndUpdate({ id: interaction.guild.id }, { leaveMessage: null }, { new: true, upsert: true });
         interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user,
           `Config`, "Leave Message have been reseted.", "RED") ]});
       }
       if (args[1] && args[1].toLowerCase() != "none") {
-        db.set(`server_${interaction.guild.id}_leaveMessage`, value);
+        await Guild.findOneAndUpdate({ id: interaction.guild.id }, { leaveMessage: value }, { new: true, upsert: true });
         interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user,
           `Config`, `You have Changed Message which is sent to invites logging channel when member leave server.
 To clear Message just use "none".
@@ -416,38 +395,37 @@ Use \`variables\` Command to view all available Variables.`, "YELLOW") ]});
       }
     }
     if(option == "dmwinners") {
-      let dm = db.fetch(`server_${interaction.guild.id}_dmWinners`);
+      let dm = settings.dmWinners;
       if(dm == null) {
-        db.set(`server_${interaction.guild.id}_dmWinners`, true);
+        await Guild.findOneAndUpdate({ id: interaction.guild.id }, { dmWinners: true }, { new: true, upsert: true });
         interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user,
           `Config`, "You have Enabled DM Winners Option.", "YELLOW") ]});
       } else {
-        db.delete(`server_${interaction.guild.id}_dmWinners`);
+        await Guild.findOneAndUpdate({ id: interaction.guild.id }, { dmWinners: null }, { new: true, upsert: true });
         interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user,
           `Config`, "You have Disabled DM Winners Option.", "RED") ]});
       }
     }
     if(option == "snipes") {
-      let snStatus = db.fetch(`server_${interaction.guild.id}_snipes`);
+      let snStatus = settings.snipes;
       if(snStatus == null) {
-        db.set(`server_${interaction.guild.id}_snipes`, true);
+        await Guild.findOneAndUpdate({ id: interaction.guild.id }, { snipes: true }, { new: true, upsert: true });
         interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user,
           `Config`, "You have Enabled Snipes Option.", "YELLOW") ]});
       } else {
-        db.delete(`server_${interaction.guild.id}_snipes`);
-        db.delete(`snipes_${interaction.guild.id}`);
+        await Guild.findOneAndUpdate({ id: interaction.guild.id }, { snipes: null }, { new: true, upsert: true });
         interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user,
           `Config`, "You have Disabled Snipes Option.", "RED") ]});
       }
     }
     if(option == "wlcmimg") {
-      let img = db.fetch(`server_${interaction.guild.id}_welcomeImg`);
+      let img = settings.wlcmImage;
       if(img == null) {
-        db.set(`server_${interaction.guild.id}_welcomeImg`, true);
+        await Guild.findOneAndUpdate({ id: interaction.guild.id }, { wlcmImage: true }, { new: true, upsert: true });
         interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user,
           `Config`, "You have Enabled Welcome Image Option.", "YELLOW") ]});
       } else {
-        db.delete(`server_${interaction.guild.id}_welcomeImg`);
+        await Guild.findOneAndUpdate({ id: interaction.guild.id }, { wlcmImage: null }, { new: true, upsert: true });
         interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user,
           `Config`, "You have Disabled Welcome Image Option.", "RED") ]});
       }
@@ -455,12 +433,12 @@ Use \`variables\` Command to view all available Variables.`, "YELLOW") ]});
     if(option == "imgchannel") {
       let channel = interaction.guild.channels.cache.get(value);
       if (!value) {
-        db.delete(`channel_${interaction.guild.id}_welcome`);
+        await Guild.findOneAndUpdate({ id: interaction.guild.id }, { welcomeChannel: null }, { new: true, upsert: true });
         interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user,
           `Config`, `Welcome Channel have been rested.`, "RED") ]});
       }
       if (value) {
-        db.set(`channel_${interaction.guild.id}_welcome`, channel.id);
+        await Guild.findOneAndUpdate({ id: interaction.guild.id }, { welcomeChannel: `${channel.id}` }, { new: true, upsert: true });
         interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user,
           `Config`, `Welcome Channel has been set to ${channel}.
 To reset it just use command without arguments.`, "YELLOW") ]});
@@ -472,7 +450,7 @@ To reset it just use command without arguments.`, "YELLOW") ]});
       if (!parse(value)[0]) return interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user,
           `Error`, "You have entered invalid emoji (Custom Emojis are not supported).", "RED")], ephemeral: true });
       if (parse(value)[0]) {
-        db.set(`server_${message.guild.id}_customReaction`, parse(value)[0].text);
+        await Guild.findOneAndUpdate({ id: interaction.guild.id }, { customEmoji: `${parse(value)[0].text}` }, { new: true, upsert: true });
         interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user,
           `Config`, `You have Changed Giveaway Reaction Emoji to ${parse(args[1])[0].text}.
 

@@ -25,7 +25,7 @@ module.exports = class Vote extends Command {
 			);
 
     let embed = new MessageEmbed()
-      .setDescription(`Vote for me by clicking on Button.`)
+      .setDescription(`> Vote for bot on Top.gg to Help us Promote Bot.`)
       .setColor("BLURPLE");
     message.channel.send({ embeds: [embed], components: [row] });
   }
@@ -40,7 +40,7 @@ module.exports = class Vote extends Command {
 			);
 
     let embed = new MessageEmbed()
-      .setDescription(`Vote for me by clicking on Button.`)
+      .setDescription(`> Vote for bot on Top.gg to Help us Promote Bot.`)
       .setColor("BLURPLE");
     interaction.reply({ embeds: [embed], components: [row] });
   }

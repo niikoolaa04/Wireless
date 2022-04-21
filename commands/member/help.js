@@ -1,6 +1,6 @@
 const Command = require("../../structures/Command");
 const { MessageEmbed, MessageActionRow, MessageSelectMenu } = require('discord.js');
-const db = require("quick.db");
+const Guild = require("../../models/Guild.js");
 
 module.exports = class Help extends Command {
 	constructor(client) {
@@ -15,8 +15,8 @@ module.exports = class Help extends Command {
 		});
 	} 
 	async run(message, args) {
-    let prefix = await db.fetch(`settings_${message.guild.id}_prefix`);
-    if (prefix === null) prefix = this.client.config.prefix;
+    let guildData = await Guild.findOne({ id: message.guild.id }, "prefix -_id");
+
     let user = message.author;
     let commandArg = args[0];
 
@@ -57,7 +57,7 @@ module.exports = class Help extends Command {
       
       let cmdEmbed = new MessageEmbed()
         .setTitle(`🚀・Help Menu`)
-        .setDescription(`Use \`${prefix}help [command]\` to view more informations about command.`)
+        .setDescription(`Use \`${guildData.prefix}help [command]\` to view more informations about command.`)
         .addField(`${this.client.emojisConfig.members}・Member`, 
 `View all available Member Commands`)
         .addField(`${this.client.emojisConfig.prize}・Giveaway`, 
@@ -86,9 +86,9 @@ module.exports = class Help extends Command {
           await i.deferUpdate();
           let memberEmbed = new MessageEmbed()
             .setTitle("👤・Member Commands")
-            .setDescription(`Use \`${prefix}help [command]\` to view more informations about command.`)
+            .setDescription(`Use \`${guildData.prefix}help [command]\` to view more informations about command.`)
             .addField(`${this.client.emojisConfig.members}・Member`, `${contentMember}`)
-            .addField(`${this.client.emojisConfig.gem}・Informations`, `[Invite Me](${this.client.config.links.inviteURL}) | [Vote for me](${this.client.config.links.voteURL}) | [Support Server](${this.client.config.links.supportServer})`)
+            .addField(`${this.client.emojisConfig.gem}・Informations`, `[Invite Me](${this.client.config.links.inviteURL}) | [Website](${this.client.config.links.website}) | [Vote for me](${this.client.config.links.voteURL}) | [Support Server](${this.client.config.links.supportServer})`)
             .setTimestamp()
             .setColor("BLURPLE")
             .setThumbnail(user.displayAvatarURL({ size: 1024, dynamic: true }))
@@ -98,9 +98,9 @@ module.exports = class Help extends Command {
           await i.deferUpdate();
           let gwEmbed = new MessageEmbed()
             .setTitle("🎁・Giveaway Commands")
-            .setDescription(`Use \`${prefix}help [command]\` to view more informations about command.`)
+            .setDescription(`Use \`${guildData.prefix}help [command]\` to view more informations about command.`)
             .addField(`${this.client.emojisConfig.prize}・Giveaway`, `${contentGiveaway}`)
-            .addField(`${this.client.emojisConfig.gem}・Informations`, `[Invite Me](${this.client.config.links.inviteURL}) | [Vote for me](${this.client.config.links.voteURL}) | [Support Server](${this.client.config.links.supportServer})`)
+            .addField(`${this.client.emojisConfig.gem}・Informations`, `[Invite Me](${this.client.config.links.inviteURL}) | [Website](${this.client.config.links.website}) | [Vote for me](${this.client.config.links.voteURL}) | [Support Server](${this.client.config.links.supportServer})`)
             .setTimestamp()
             .setColor("BLURPLE")
             .setThumbnail(user.displayAvatarURL({ size: 1024, dynamic: true }))
@@ -110,9 +110,9 @@ module.exports = class Help extends Command {
           await i.deferUpdate();
           let utilityEmbed = new MessageEmbed()
             .setTitle("🛠・Utility Commands")
-            .setDescription(`Use \`${prefix}help [command]\` to view more informations about command.`)
+            .setDescription(`Use \`${guildData.prefix}help [command]\` to view more informations about command.`)
             .addField(`${this.client.emojisConfig.utility}・Utility`, `${contentUtility}`)
-            .addField(`${this.client.emojisConfig.gem}・Informations`, `[Invite Me](${this.client.config.links.inviteURL}) | [Vote for me](${this.client.config.links.voteURL}) | [Support Server](${this.client.config.links.supportServer})`)
+            .addField(`${this.client.emojisConfig.gem}・Informations`, `[Invite Me](${this.client.config.links.inviteURL}) | [Website](${this.client.config.links.website}) | [Vote for me](${this.client.config.links.voteURL}) | [Support Server](${this.client.config.links.supportServer})`)
             .setTimestamp()
             .setColor("BLURPLE")
             .setThumbnail(user.displayAvatarURL({ size: 1024, dynamic: true }))
@@ -127,7 +127,7 @@ module.exports = class Help extends Command {
       collector.on("end", async (m, reason) => {
         if(reason != "time") return;
         helpRow.components[0].setDisabled(true);
-        mainMenu.edit({ embeds: [cmdEmbed], components: [disabledRow]});
+        mainMenu.edit({ embeds: [cmdEmbed], components: [helpRow]});
       });
     } else {
       let cmd = this.client.commands.get(commandArg);
@@ -144,7 +144,7 @@ module.exports = class Help extends Command {
         .setDescription(
   `> **Command** · \`${cmd.name}\`
 > **Description** · \`${cmd.description}\`
-> **Usage** · \`${prefix}${cmd.usage}\`
+> **Usage** · \`${guildData.prefix}${cmd.usage}\`
 > **Category** · \`${this.client.utils.capitalizeFirstLetter(cmd.category)}\``)
         .setColor("BLURPLE")
         .setFooter({ text: this.client.config.footer, iconURL: this.client.user.displayAvatarURL({ size: 1024, dynamic: true }) })
@@ -154,8 +154,7 @@ module.exports = class Help extends Command {
     }
   }
   async slashRun(interaction, args) {
-    let prefix = await db.fetch(`settings_${interaction.guild.id}_prefix`);
-    if (prefix === null) prefix = this.client.config.prefix;
+    let guildData = await Guild.findOne({ id: interaction.guild.id }, "prefix");
 
 	  const helpRow = new MessageActionRow()
 	    .addComponents(
@@ -193,7 +192,7 @@ module.exports = class Help extends Command {
     
     let cmdEmbed = new MessageEmbed()
       .setTitle(`🚀・Help Menu`)
-      .setDescription(`Use \`${prefix}help [command]\` to view more informations about command.`)
+      .setDescription(`Use \`${guildData.prefix}help [command]\` to view more informations about command.`)
       .addField(`👤・Member`, 
   `View all available Member Commands`)
       .addField(`🎉・Giveaway`, 
@@ -222,20 +221,20 @@ module.exports = class Help extends Command {
       if(i.values[0] == "member_menu") {
         let memberEmbed = new MessageEmbed()
           .setTitle("👤・Member Commands")
-          .setDescription(`Use \`${prefix}help [command]\` to view more informations about command.`)
+          .setDescription(`Use \`${guildData.prefix}help [command]\` to view more informations about command.`)
           .addField(`👤・Member`, `${contentMember}`)
-          .addField(`💎・Informations`, `[Invite Me](${this.client.config.links.inviteURL}) | [Vote for me](${this.client.config.links.voteURL}) | [Support Server](${this.client.config.links.supportServer})`)
+          .addField(`💎・Informations`, `[Invite Me](${this.client.config.links.inviteURL}) | [Website](${this.client.config.links.website}) | [Vote for me](${this.client.config.links.voteURL}) | [Support Server](${this.client.config.links.supportServer})`)
           .setTimestamp()
           .setColor("BLURPLE")
           .setThumbnail(interaction.user.displayAvatarURL({ size: 1024, dynamic: true }))
           .setFooter({ text: `Total Commands ${loadedCommands.length}`, iconURL: interaction.user.displayAvatarURL({ size: 1024, dynamic: true }) });
-        interaction.updateReply({ embeds: [memberEmbed], components: [helpRow] });
+        interaction.editReply({ embeds: [memberEmbed], components: [helpRow] });
       } else if(i.values[0] == "gw_menu") {
         let gwEmbed = new MessageEmbed()
           .setTitle("🎁・Giveaway Commands")
-          .setDescription(`Use \`${prefix}help [command]\` to view more informations about command.`)
+          .setDescription(`Use \`${guildData.prefix}help [command]\` to view more informations about command.`)
           .addField(`🎉・Giveaway`, `${contentGiveaway}`)
-          .addField(`💎・Informations`, `[Invite Me](${this.client.config.links.inviteURL}) | [Vote for me](${this.client.config.links.voteURL}) | [Support Server](${this.client.config.links.supportServer})`)
+          .addField(`💎・Informations`, `[Invite Me](${this.client.config.links.inviteURL}) | [Website](${this.client.config.links.website}) | [Vote for me](${this.client.config.links.voteURL}) | [Support Server](${this.client.config.links.supportServer})`)
           .setTimestamp()
           .setColor("BLURPLE")
           .setThumbnail(interaction.user.displayAvatarURL({ size: 1024, dynamic: true }))
@@ -244,9 +243,9 @@ module.exports = class Help extends Command {
       } else if(i.values[0] == "utility_menu") {
         let utilityEmbed = new MessageEmbed()
           .setTitle("🔎・Utility Commands")
-          .setDescription(`Use \`${prefix}help [command]\` to view more informations about command.`)
+          .setDescription(`Use \`${guildData.prefix}help [command]\` to view more informations about command.`)
           .addField(`🔎・Utility`, `${contentUtility}`)
-          .addField(`💎・Informations`, `[Invite Me](${this.client.config.links.inviteURL}) | [Vote for me](${this.client.config.links.voteURL}) | [Support Server](${this.client.config.links.supportServer})`)
+          .addField(`💎・Informations`, `[Invite Me](${this.client.config.links.inviteURL}) | [Website](${this.client.config.links.website}) | [Vote for me](${this.client.config.links.voteURL}) | [Support Server](${this.client.config.links.supportServer})`)
           .setTimestamp()
           .setColor("BLURPLE")
           .setThumbnail(interaction.user.displayAvatarURL({ size: 1024, dynamic: true }))

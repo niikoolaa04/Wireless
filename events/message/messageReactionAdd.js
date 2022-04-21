@@ -1,7 +1,8 @@
 const Discord = require("discord.js");
-const db = require("quick.db");
-const fs = require("fs");
 const Event = require("../../structures/Events");
+const User = require("../../models/User.js");
+const Guild = require("../../models/Guild.js");
+const Giveaway = require("../../models/Giveaway.js");
 
 module.exports = class MessageReactionAdd extends Event {
 	constructor(...args) {
@@ -12,29 +13,44 @@ module.exports = class MessageReactionAdd extends Event {
     if(user.bot) return;
     if(reaction.partial) await reaction.fetch();
     if(reaction.message.partial) await reaction.message.fetch();
-    if(this.client.disabledGuilds.includes(reaction.message.guild.id)) return;
+
+	  if(this.client.disabledGuilds.includes(reaction.message.guild.id)) return;
+    
     if(user.partial) await user.fetch();
     const message = reaction.message;
     if(message.channel.type === "DM") return;
     let member = message.guild.members.cache.get(user.id);
-    let customEmoji = db.fetch(`server_${message.guild.id}_customReaction`) || "🎉";
+    let guildData = await Guild.findOne({ id: message.guild.id }, "customEmoji -_id");
     
-    if(reaction.emoji.name == customEmoji) {
-      let giveaways = db.fetch(`giveaways_${message.guild.id}`);
+    if(reaction.emoji.name == guildData.customEmoji) {
+      // ovde
+      let giveaways = await Giveaway.find({ guild: message.guild.id });
       if(giveaways == null || giveaways.length < 1) return;
     
-      let gwRunning = giveaways.find(g => g.messageID == message.id && g.ended == false);
+      let gwRunning = await Giveaway.find({ messageId: message.id, ended: false });
       if(!gwRunning) return;
       
-      let invitesReq = db.fetch(`invitesRegular_${message.guild.id}_${user.id}`);
-      let bonusReq = db.fetch(`invitesBonus_${message.guild.id}_${user.id}`); 
-      let msgReq = db.fetch(`messages_${message.guild.id}_${user.id}`);
+      let invitesReq, bonusReq, msgReq, role, blRole;
+      
+      User.findOne({ id: user.id, guild: message.guild.id }, (err, result) => {
+        if (result) {
+          invitesReq = result.invitesRegular;
+          bonusReq = result.invitesBonus;
+          msgReq = result.messages;
+        }
+      });
+      
+      await Guild.findOne({ id: message.guild.id }, (err, result) => {
+        if (result) {
+          role = result.bypassRole;
+          blRole = result.blacklistRole;
+        }
+      });
+      
       let roleReq = gwRunning.requirements.roleReq;
       let gwInvites = gwRunning.requirements.invitesReq;
       let gwMsg = gwRunning.requirements.messagesReq; 
       let totalReq = parseInt(invitesReq + bonusReq);
-      let role = db.fetch(`server_${message.guild.id}_bypassRole`);
-      let blRole = db.fetch(`server_${message.guild.id}_blacklistRole`);
     
       let denyEmbed = new Discord.MessageEmbed()
         .setTitle("🎁・Giveaway Entry")
@@ -48,7 +64,7 @@ module.exports = class MessageReactionAdd extends Event {
 
 Your Giveaway Entry in **${message.guild.name}** has been \`approved\`.`);
 
-      if(message.id != gwRunning.messageID) return;
+      if(message.id != gwRunning.messageId) return;
       if(role != null && member.roles.cache.has(role)) return user.send({ embeds: [approveEmbed] });
       let haveInvites = true;
       let haveMessages = true;

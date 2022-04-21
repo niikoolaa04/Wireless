@@ -1,6 +1,6 @@
-const Discord = require("discord.js");
-const db = require("quick.db");
 const Event = require("../../structures/Events");
+const Discord = require("discord.js");
+const Giveaway = require("../../models/Giveaway");
 const moment = require("moment");
 
 module.exports = class GuildDelete extends Event {
@@ -9,9 +9,11 @@ module.exports = class GuildDelete extends Event {
   }
 
   async run(guild) {
-    db.delete(`giveaways_${guild.id}`);
+    await Giveaway.deleteMany({ guildId: guild.id });
+
     let owner = await guild.fetchOwner();
     let channel = this.client.channels.cache.get(this.client.config.logs);
+    
     let embed = new Discord.MessageEmbed()
       .setTitle("Removed from Guild")
       .setDescription(`
@@ -20,7 +22,7 @@ module.exports = class GuildDelete extends Event {
 **\`👑\` Guild Owner** - ${owner.user.username}
 **\`👤\` Guild Member Count** - ${guild.memberCount}`)
       .setColor("RED");
-    channel.send({ embeds: [embed] })
+    if(channel) channel.send({ embeds: [embed] })
 
     console.log(
       `[BOT] (${moment.utc(new Date()).tz('Europe/Belgrade').format('HH:mm:ss, DD/MM/YYYY.')}) I'm removed from the Guild ${guild.name} (${guild.id}) which had ${guild.memberCount} total members!`

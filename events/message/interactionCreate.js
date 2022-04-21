@@ -1,6 +1,6 @@
-const Discord = require("discord.js");
-const db = require("quick.db");
 const Event = require("../../structures/Events");
+const Discord = require("discord.js");
+const User = require("../../models/User");
 
 module.exports = class InteractionCreate extends Event {
 	constructor(...args) {
@@ -10,6 +10,15 @@ module.exports = class InteractionCreate extends Event {
 	async run(interaction) {
     if(this.client.disabledGuilds.includes(interaction.guild.id)) return;
     if (interaction.isCommand()) {
+      User.findOne({ id: interaction.user.id, guild: interaction.guild.id }, async(err, result) => {
+        if(!result) {
+          await User.create({
+            id: interaction.user.id,
+            guild: interaction.guild.id
+          });
+        }
+      });
+
       const cmd = this.client.slashCommands.get(interaction.commandName);
       if (!cmd) return interaction.followUp({ content: "> Error occured, please contact Bot Developer." });
 

@@ -1,7 +1,7 @@
 const Command = require("../../structures/Command");
 const Discord = require('discord.js');
 const ms = require('ms');
-const db = require("quick.db");
+const Guild = require("../../models/Guild.js");
 
 module.exports = class GiveawayStart extends Command {
 	constructor(client) {
@@ -61,12 +61,12 @@ module.exports = class GiveawayStart extends Command {
     let messagesArg = args[4];
     let invitesArg = args[5];
     let prizeArg = args.slice(6).join(" ");
-    let premiumGuild = db.fetch(`server_${message.guild.id}_premium`);
+    let guildData = await Guild.findOne({ id: message.guild.id }, "premium -_id");
     
     if(!durationArg || isNaN(ms(durationArg))) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, "Error", "You have entered invalid Giveaway Duration.", "RED")] });
     if(!channelArg) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, "Error", "You have mentioned invalid Channel.", "RED")] });
     if(!winnersArg || isNaN(winnersArg) || winnersArg <= 0) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, "Error", "You haven't entered number of winners.", "RED")] });
-    if(winnersArg > 20 && premiumGuild != true) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, "Error", "To Create Giveaway with 20+ Winners you need Premium, get more informations using command `premium`.", "RED")] });
+    if(winnersArg > 20 && guildData.premium == false) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, "Error", "To Create Giveaway with 20+ Winners you need Premium, get more informations using command `premium`.", "RED")] });
     if(!roleArg) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, "Error", "You have entered invalid Role Required for Entering Giveaway.", "RED")] });
     if(!messagesArg || isNaN(messagesArg) || messagesArg < 0) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, "Error", "You have entered invalid Number of Messages Required for Entering Giveaway.", "RED")] });
     if(!invitesArg || isNaN(invitesArg) || invitesArg < 0) return message.channel.send({ embeds: [ this.client.embedBuilder(this.client, message.author, "Error", "You have entered invalid Number of Invites Required for Entering Giveaway.", "RED")] });
@@ -97,9 +97,9 @@ module.exports = class GiveawayStart extends Command {
     let messagesArg = interaction.options.getInteger("messages");
     let invitesArg = interaction.options.getInteger("invites");
     let prizeArg = interaction.options.getString("prize");
-    let premiumGuild = db.fetch(`server_${interaction.guild.id}_premium`);
+    let guildData = await Guild.findOne({ id: interaction.guild.id }, "premium -_id");
 
-    if(winnersArg > 20 && premiumGuild != true) return interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user, "Error", "To Create Giveaway with 20+ Winners you need Premium, get more informations using command `premium`.", "RED")], ephemeral: true });
+    if(winnersArg > 20 && guildData.premium == false) return interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user, "Error", "To Create Giveaway with 20+ Winners you need Premium, get more informations using command `premium`.", "RED")], ephemeral: true });
 
     let giveawayObject = this.client.utils.giveawayObject(
       interaction.guild.id, 

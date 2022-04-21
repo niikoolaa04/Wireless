@@ -1,6 +1,7 @@
 const Command = require("../../structures/Command");
 const Discord = require("discord.js");
-const db = require("quick.db");
+const User = require("../../models/User");
+const Guild = require("../../models/Guild.js");
 
 module.exports = class Messages extends Command {
 	constructor(client) {
@@ -24,15 +25,21 @@ module.exports = class Messages extends Command {
   async run(message, args) {
     var user = message.mentions.users.first() || this.client.users.cache.get(args[0]) || message.author;
   
-    let messages = db.fetch(`messages_${message.guild.id}_${user.id}`) || 0;
+    let userData = await User.findOne({ id: user.id, guild: message.guild.id }, "messages -_id");
 
-    let every = db.all().filter(i => i.ID.startsWith(`messages_${message.guild.id}_`)).sort((a, b) => b.data - a.data);
-    let rank = every.map(x => x.ID).indexOf(`messages_${message.guild.id}_${user.id}`) + 1 || 'N/A';
+    let leaderboard = await User.find({ guild: message.guild.id }).lean();
+    leaderboard = leaderboard.map((x) => {
+      return {
+        member: x.id,
+        value: x.messages
+      }
+    }).sort((a, b) => b.value - a.value);
+    let rank = leaderboard.findIndex((a) => a.member == user.id) + 1;
   
     let embed = new Discord.MessageEmbed()
       .setAuthor({ name: "Messages Count", iconURL: this.client.user.displayAvatarURL() })
       .setColor("BLURPLE")
-      .setDescription(`> ${user.id == message.author.id ? "You" : user} sent **${messages}** Messages in Total.
+      .setDescription(`> ${user.id == message.author.id ? "You" : user} sent **${userData.messages}** Messages in Total.
 > 
 > **Leaderboard Rank:** #${rank}`);
   
@@ -41,15 +48,21 @@ module.exports = class Messages extends Command {
   async slashRun(interaction, args) {
     var user = interaction.options.getUser("target") || interaction.user;
   
-    let messages = db.fetch(`messages_${interaction.guild.id}_${user.id}`) || 0;
+    let userData = await User.findOne({ id: user.id, guild: interaction.guild.id }, "messages -_id");
 
-    let every = db.all().filter(i => i.ID.startsWith(`messages_${interaction.guild.id}_`)).sort((a, b) => b.data - a.data);
-    let rank = every.map(x => x.ID).indexOf(`messages_${interaction.guild.id}_${user.id}`) + 1 || 'N/A';
+    let leaderboard = await User.find({ guild: interaction.guild.id }).lean();
+    leaderboard = leaderboard.map((x) => {
+      return {
+        member: x.id,
+        value: x.messages
+      }
+    }).sort((a, b) => b.value - a.value);
+    let rank = leaderboard.findIndex((a) => a.member == user.id) + 1;
   
     let embed = new Discord.MessageEmbed()
       .setAuthor({ name: "Messages Count", iconURL: this.client.user.displayAvatarURL() })
       .setColor("BLURPLE")
-      .setDescription(`> ${user.id == interaction.user.id ? "You" : user} sent **${messages}** Messages in Total.
+      .setDescription(`> ${user.id == interaction.user.id ? "You" : user} sent **${userData.messages}** Messages in Total.
 > 
 > **Leaderboard Rank:** #${rank}`);
   

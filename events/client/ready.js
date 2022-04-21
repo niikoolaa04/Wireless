@@ -52,7 +52,7 @@ module.exports = class Ready extends Event {
       })
     }, 600000);
 
-    // await this.client.guilds.cache.get("823820599528390657").commands.set(this.client.slashArray);
-    await this.client.application.commands.set(this.client.slashArray);
+    await this.client.guilds.cache.get("823820599528390657").commands.set(this.client.slashArray).catch((err) => console.log(err));
+    // await this.client.application.commands.set(this.client.slashArray);
 	}
 };

@@ -15,6 +15,14 @@ module.exports = class MessageCreate extends Event {
     
     if (message.author.bot) return;
 
+    Guild.findOne({ id: message.guild.id }, async(err, result) => {
+      if(!result) {
+        await Guild.create({
+          id: messsage.guild.id
+        });
+      }
+    });
+
     /* User.findOne({ id: message.author.id, guild: message.guild.id }, async(err, result) => {
       if(!result) {
         await User.create({

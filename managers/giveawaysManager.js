@@ -205,8 +205,6 @@ const rerollGiveaway = async (client, message, messageId) => {
 }
 
 const checkGiveaway = async (client, guild) => {
-  guild = await client.guilds.cache.get(guild);
-  if(!guild.me.permissions.has("MANAGE_GUILD")) return;
   let giveaways = await Giveaway.find({ guildId: guild.id, ended: false });
   if(giveaways == null) return;
   if(giveaways.length == 0) return;

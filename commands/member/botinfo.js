@@ -32,7 +32,7 @@ module.exports = class Botinfo extends Command {
       .addField(`Member Count`, `\`${this.client.users.cache.size}\``, true)
       .addField(`Vote Link`, `[Click Here to Get Vote Link](${this.client.config.links.voteURL})`, true)
       .addField(`Invite Link`, `[Click Here to Get Invite Link](${this.client.config.links.inviteURL})`, true)
-      // .addField(`Website Link`, `[Click Here to Get Website Link](${this.client.config.links.website})`, true)
+      .addField(`Website Link`, `[Click Here to Get Website Link](${this.client.config.links.website})`, true)
       .setColor("BLURPLE");
   
     message.channel.send({ embeds: [embed] });
@@ -50,10 +50,10 @@ module.exports = class Botinfo extends Command {
       .addField(`Memory`, `${memory.toFixed(2)}MB`, true)
       .addField(`Guild Count`, `\`${this.client.guilds.cache.size}\``, true)
       .addField(`Member Count`, `\`${this.client.users.cache.size}\``, true)
-      .addField(`Top.gg Votes`, `\`${votes.length}\``, true)
+      // .addField(`Top.gg Votes`, `\`${votes.length}\``, true)
       .addField(`Vote Link`, `[Click Here to Get Vote Link](${this.client.config.links.voteURL})`, true)
       .addField(`Invite Link`, `[Click Here to Get Invite Link](${this.client.config.links.inviteURL})`, true)
-      // .addField(`Website Link`, `[Click Here to Get Website Link](${this.client.config.links.website})`, true)
+      .addField(`Website Link`, `[Click Here to Get Website Link](${this.client.config.links.website})`, true)
       .setColor("BLURPLE");
   
     interaction.reply({ embeds: [embed] });

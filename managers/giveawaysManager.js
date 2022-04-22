@@ -205,13 +205,13 @@ const rerollGiveaway = async (client, message, messageId) => {
 }
 
 const checkGiveaway = async (client, guild) => {
+  guild = await client.guilds.cache.get(guild);
+  if(!guild.me.permissions.has("MANAGE_GUILD")) return;
   let giveaways = await Giveaway.find({ guildId: guild.id, ended: false });
   if(giveaways == null) return;
   if(giveaways.length == 0) return;
   
   for(let i = 0; i < giveaways.length; i++) {
-    if(giveaways[i].ended == true) continue;
-    
     let removed = false;
     let channel = client.channels.cache.get(giveaways[i].channelID);
     if(channel == undefined) {

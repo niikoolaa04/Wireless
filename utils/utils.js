@@ -160,7 +160,7 @@ const asyncForEach = async (array, callback) => {
 };
 
 const pushHistory = (message, userId, text) => {
-  User.findOneAndUpdate({ id: userId, guild: message.guild.id }, { $push: { invitesHistory: text } }, { new: true, upsert: true });
+  User.findOneAndUpdate({ id: userId, guild: message.guild.id }, { $push: { invitesHistory: text } }, { new: true, upsert: true }, (err, post) => { });
 }
 
 const parseArgs = (args, options) => {

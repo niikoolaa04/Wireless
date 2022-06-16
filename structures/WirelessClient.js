@@ -27,7 +27,7 @@ module.exports = class WirelessClient extends Client {
       useUnifiedTopology: true
     });
 
-    AutoPoster(process.env.TOP_GG_TOKEN, this)
+    // AutoPoster(process.env.TOP_GG_TOKEN, this)
     
     /* const app = express();
     const webhook = new Topgg.Webhook('wireless_wh11551');

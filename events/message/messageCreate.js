@@ -12,16 +12,10 @@ module.exports = class MessageCreate extends Event {
     if(this.client.disabledGuilds.includes(message.guild.id) && message.author.id != this.client.config.developer.id) return;
     if (message.channel.type === "DM") return;
     let guildData = await Guild.findOne({ id: message.guild.id }, "prefix -_id");
+
+    if(!guildData) guildData = await Guild.create({ id: message.guild.id });
     
     if (message.author.bot) return;
-
-    Guild.findOne({ id: message.guild.id }, async(err, result) => {
-      if(!result) {
-        await Guild.create({
-          id: messsage.guild.id
-        });
-      }
-    });
 
     /* User.findOne({ id: message.author.id, guild: message.guild.id }, async(err, result) => {
       if(!result) {

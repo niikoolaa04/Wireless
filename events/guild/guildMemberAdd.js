@@ -26,13 +26,10 @@ module.exports = class GuildMemberAdd extends Event {
       }
     });
 
-    User.findOne({ id: member.id, guild: member.guild.id }, async(err, result) => {
-      if(!result) {
-        await User.create({
-          id: member.id,
-          guild: member.guild.id
-        });
-      }
+    let usrData = await User.findOne({ id: member.id, guild: member.guild.id });
+    if(!usrData) usrData = await User.create({
+      id: member.id,
+      guild: member.guild.id
     });
 
     let settings = await Guild.find({ id: member.guild.id });
@@ -93,6 +90,7 @@ module.exports = class GuildMemberAdd extends Event {
     const guildInvites = generateInvitesCache(member.guild.invites.cache);
     const oldGuildInvites = this.client.invites[member.guild.id];
     if (guildInvites && oldGuildInvites) {
+      console.log('test test here')
       this.client.invites[member.guild.id] = guildInvites;
 
       let inviteUsed = guildInvites.find((i) => oldGuildInvites.get(i.code) && ((Object.prototype.hasOwnProperty.call(oldGuildInvites.get(i.code), "uses") ? oldGuildInvites.get(i.code).uses : "Infinite") < i.uses));
@@ -123,9 +121,8 @@ module.exports = class GuildMemberAdd extends Event {
     if (inviter != "Unknown" && inviter != "Vanity URL") {
       await User.findOneAndUpdate({ id: member.id, guild: member.guild.id }, { inviter: `${inviter.id}` }, { new: true, upsert: true });
 
-      if (inviter.id !== member.id) {
-        await User.findOneAndUpdate({ id: inviter, guild: member.guild.id }, { $inc: { invitesJoins: 1 } }, { new: true, upsert: true });
-        await User.findOneAndUpdate({ id: inviter, guild: member.guild.id }, { $inc: { invitesRegular: 1 } }, { new: true, upsert: true });
+      if (inviter.id != member.id) {
+        await User.findOneAndUpdate({ id: inviter.id, guild: member.guild.id }, { $inc: { invitesRegular: 1, invitesJoins: 1 } }, { new: true, upsert: true });
         this.client.utils.pushHistory(member, inviter.id, `[ 📥 ] **${member.user.tag}** has **joined** server.`);
       }
     } else {
@@ -154,8 +151,8 @@ module.exports = class GuildMemberAdd extends Event {
       User.findOne({ id: inviterData, guild: member.guild.id }, (err, result) => {
         if (result) {
           invitesCount.joins = result.invitesJoin;
-          invitesCount.regular = results.invitesRegular;
-          invitesCount.leave = result.invitesLeaves;
+          invitesCount.regular = result.invitesRegular;
+          invitesCount.leaves = result.invitesLeaves;
           invitesCount.bonus = result.invitesBonus;
         }
       });

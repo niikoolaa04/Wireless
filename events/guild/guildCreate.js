@@ -1,6 +1,7 @@
 const Discord = require("discord.js");
 const Event = require("../../structures/Events");
 const Guild = require("../../models/Guild.js");
+const Bot = require("../../models/Bot.js");
 const moment = require("moment");
 
 module.exports = class GuildCreate extends Event {
@@ -12,7 +13,7 @@ module.exports = class GuildCreate extends Event {
     let owner = await guild.fetchOwner();
 	  let userBL = await Bot.findOne({ name: "wireless" }).userBlacklist;
 	  let guildBL = await Bot.findOne({ name: "wireless" }).guildBlacklist;
-	  if(userBL.includes(owner.user.id) || guildBL.includes(guild.id)) return guild.leave();
+	  if(userBL?.includes(owner.user.id) || guildBL?.includes(guild.id)) return guild.leave();
 	  
     let channel = this.client.channels.cache.get(this.client.config.logs);
     let embed = new Discord.MessageEmbed()
@@ -25,7 +26,7 @@ module.exports = class GuildCreate extends Event {
       .setColor("YELLOW");
     if(channel) channel.send({ embeds: [embed] })
 
-    await Guild.findOne({ id: guild.id }, async(err, result) => {
+    Guild.findOne({ id: guild.id }, async(err, result) => {
       if(!result) {
         await Guild.create({
           id: guild.id

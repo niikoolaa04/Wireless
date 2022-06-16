@@ -4,7 +4,7 @@ const Guild = require("../models/Guild.js");
 
 const updateLb = async (client, guild) => {
   let settings = await Guild.findOne({ id: guild.id });
-  if(!settings) return;
+  if(!settings || !settings?.live) return;
   if(!settings.live.channel || !settings.live.message) return;
   let channel = client.channels.cache.get(settings.live.channel);
   if(channel == undefined || channel == null) {

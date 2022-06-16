@@ -4,18 +4,18 @@
   "version": "1.2.0",
   "footer": "Wireless",
   "developer": {
-    "id": "823228305167351808",
-    "supportGuild": "823495216878452757",
-    "testGuild": "823820599528390657",
-    "patreon": "966778753671901234"
+    "id": "",
+    "supportGuild": "",
+    "testGuild": "",
+    "patreon": ""
   },
-  "logs": "966779165321883708",
+  "logs": "",
   "links": {
-    "inviteURL": "https://discord.com/api/oauth2/authorize?client_id=855321650706513940&permissions=1342564576&scope=bot%20applications.commands",
+    "inviteURL": "",
     "supportServer": "https://discord.gg/APnKTdbM4w", 
-    "website": "https://wireless-bot.tech",
-    "inviteSite": "https://invite.wireless-bot.tech",
-    "voteURL": "https://top.gg/bot/855321650706513940/vote",
-    "patreon": "https://www.patreon.com/nidzoo"
+    "website": "",
+    "inviteSite": "",
+    "voteURL": "",
+    "patreon": ""
   }
 }

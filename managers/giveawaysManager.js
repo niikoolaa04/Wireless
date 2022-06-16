@@ -28,7 +28,6 @@ ${reqContent}
     .setTimestamp(Date.now() + gwObject.duration);
   
   let channel = client.channels.cache.get(gwObject.channelID);
-  console.log(Date.now() + gwObject.duration + " - " + gwObject.endsAt)
   
   let guildData = await Guild.findOne({ id: message.guild.id }, "customEmoji -_id");
 
@@ -157,7 +156,7 @@ ${reqContent}
   
   channel.send({ embeds: [endEmbed] });
 
-  let dmStatus = await Guild.findOne({ id: interaction.guild.id }).dmWinners;
+  let dmStatus = await Guild.findOne({ id: interaction.guild.id }, "dmWinners -_id");
   const dmWin = new Discord.MessageEmbed()
     .setTitle("🎁・Giveaway")
     .setDescription(`\`👑\` Congratulations, you have Won Giveaway in **${message.guild.name}**!
@@ -299,7 +298,7 @@ ${reqContent}
       
       channel.send({ embeds: [endEmbed] });
 
-      let dmStatus = Guild.findOne({ id: guild.id }).dmWinners;
+      let dmStatus = Guild.findOne({ id: guild.id }, "dmWinners -_id");
       const dmWin = new Discord.MessageEmbed()
         .setTitle("🎁・Giveaway")
         .setDescription(`\`👑\` Congratulations, you have Won Giveaway in **${guild.name}**!

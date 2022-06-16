@@ -29,20 +29,17 @@ module.exports = class MessageReactionAdd extends Event {
       let giveaways = await Giveaway.find({ guild: message.guild.id });
       if(giveaways == null || giveaways.length < 1) return;
     
-      let gwRunning = await Giveaway.find({ messageId: message.id, ended: false });
+      let gwRunning = await Giveaway.findOne({ messageId: message.id, ended: false });
       if(!gwRunning) return;
       
-      let invitesReq, bonusReq, msgReq, role, blRole;
+      let role, blRole;
       
-      User.findOne({ id: user.id, guild: message.guild.id }, (err, result) => {
-        if (result) {
-          invitesReq = result.invitesRegular;
-          bonusReq = result.invitesBonus;
-          msgReq = result.messages;
-        }
-      });
-      
-      await Guild.findOne({ id: message.guild.id }, (err, result) => {
+      let usrData = await User.findOne({ id: user.id, guild: message.guild.id }, "invitesRegular invitesBonus messages -_id");
+      let invitesReq = usrData.invitesRegular;
+      let bonusReq = usrData.invitesBonus;
+      let msgReq = usrData.messages;
+
+      Guild.findOne({ id: message.guild.id }, async(err, result) => {
         if (result) {
           role = result.bypassRole;
           blRole = result.blacklistRole;
@@ -53,7 +50,7 @@ module.exports = class MessageReactionAdd extends Event {
       let gwInvites = gwRunning.requirements.invitesReq;
       let gwMsg = gwRunning.requirements.messagesReq; 
       let totalReq = parseInt(invitesReq + bonusReq);
-    
+
       let denyEmbed = new Discord.MessageEmbed()
         .setTitle("🎁・Giveaway Entry")
         .setColor("RED")

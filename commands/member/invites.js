@@ -33,6 +33,8 @@ module.exports = class Invites extends Command {
     let rank = leaderboard.findIndex((a) => a.member == user.id) + 1;
 
     User.findOne({ id: user.id, guild: message.guild.id }, (err, result) => {
+      console.log(result)
+      console.log(result.invitesRegular)
       let inviter = this.client.users.cache.get(result.inviter);
       inviter = inviter ? inviter.username : 'Unknown User';
 

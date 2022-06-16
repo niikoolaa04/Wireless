@@ -16,19 +16,19 @@ module.exports = class GuildMemberRemove extends Event {
     
     let settings = await Guild.find({ id: member.guild.id });
 
-    let inviter = await User.findOne({ id: member.id, guild: member.guild.id }, "inviter");
-    if(inviter != member.id && inviter != "Unknown" && inviter != "Vanity URL") {
-      await User.findOneAndUpdate({ id: inviter, guild: member.guild.id }, { $inc: { invitesRegular: -1, invitesLeaves: 1 } }, { new: true, upsert: true });
-      this.client.utils.pushHistory(member, inviter, `[ 📤 ] **${member.user.tag}** has **left** server.`);
+    let inviterUser = await User.findOne({ id: member.id, guild: member.guild.id }, "inviter");
+    if(inviterUser.inviter != member.id && inviterUser.inviter != "Unknown" && inviterUser.inviter != "Vanity URL") {
+      await User.findOneAndUpdate({ id: inviterUser.inviter, guild: member.guild.id }, { $inc: { invitesRegular: -1, invitesLeaves: 1 } }, { new: true, upsert: true });
+      this.client.utils.pushHistory(member, inviterUser.inviter, `[ 📤 ] **${member.user.tag}** has **left** server.`);
     }
     let invitesChannel = this.client.channels.cache.get(settings.invitesChannel);
     if (invitesChannel != null) {
       delay(1000);
       let invv = null;
 
-      if(inviter == "Vanity URL") invv = "Vanity URL";
-      else if(inviter == undefined  || inviter == null || inviter == "Unknown") invv = "Unknown";
-      else invv = this.client.users.cache.get(inviter).tag;
+      if(inviterUser.inviter == "Vanity URL") invv = "Vanity URL";
+      else if(inviterUser.inviter == undefined  || inviterUser.inviter == null || inviterUser.inviter == "Unknown") invv = "Unknown";
+      else invv = this.client.users.cache.get(inviterUser.inviter).tag;
         
       let inviterName = invv;
       
@@ -39,7 +39,7 @@ module.exports = class GuildMemberRemove extends Event {
         bonus: 0
       };
       
-      User.findOne({ id: inviter, guild: member.guild.id }, (err, result) => {
+      User.findOne({ id: inviterUser.inviter, guild: member.guild.id }, (err, result) => {
         if (result) {
           invitesCount.joins = result.invitesJoin;
           invitesCount.regular = result.invitesRegular;
@@ -54,7 +54,7 @@ module.exports = class GuildMemberRemove extends Event {
           .replace("{members}", member.guild.memberCount)
           .replace("{username}", member.user.username)
           .replace("{userID}", member.user.id)
-          .replace("{invitedBy}", inviterName)
+          .replace("{invitedBy}", inviterUser.inviterName)
           .replace("{totalInvites}", parseInt(invitesCount.regular + invitesCount.bonus))
           .replace("{leavesInvites}", invitesCount.leaves)
           .replace("{bonusInvites}", invitesCount.bonus)

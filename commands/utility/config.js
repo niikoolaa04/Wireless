@@ -368,7 +368,6 @@ To reset it just use command without arguments.`, "YELLOW") ]});
         interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user,
           `Config`, "Join Message have been reseted.", "RED") ]});
       }
-      // gore
       if (args[1] && args[1].toLowerCase() != "none") {
         await Guild.findOneAndUpdate({ id: interaction.guild.id }, { invitesChannel: `${value}` }, { new: true, upsert: true });
         interaction.reply({ embeds: [ this.client.embedBuilder(this.client, interaction.user,

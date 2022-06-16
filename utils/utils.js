@@ -2,7 +2,7 @@ const Discord = require("discord.js");
 const User = require("../models/User.js");
 const Guild = require("../models/Guild.js");
 
-function giveawayObject(guild, messageId, time, role, channel, winners, messages, invites, ending, hoster, prize) {
+const giveawayObject = (guild, messageId, time, role, channel, winners, messages, invites, ending, hoster, prize) => {
   let guildData = Guild.findOne({ id: guild.id });
   let gwObject = {
     messageId: messageId,
@@ -26,7 +26,7 @@ function giveawayObject(guild, messageId, time, role, channel, winners, messages
   return gwObject;
 }
 
-function capitalizeFirstLetter(string) {
+const capitalizeFirstLetter = (string) => {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
@@ -56,7 +56,7 @@ function formatTime(ms) {
   return time;
 }
 
-async function lbContent(client, message, lbType) {
+const lbContent = async(client, message, lbType) => {
   let leaderboard = await User.find({ guild: message.guild.id }).lean();
   let suffix = lbType == "messages" ? "message(s)" : "invite(s)";
 
@@ -206,7 +206,7 @@ const parseArgs = (args, options) => {
   }
 }
 
-function premiumKey() {
+const premiumKey = () => {
   const tokens = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789';
   let key = '';
 

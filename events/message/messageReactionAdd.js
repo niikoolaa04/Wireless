@@ -26,7 +26,6 @@ module.exports = class MessageReactionAdd extends Event {
     })
     
     if(reaction.emoji.name == guildData.customEmoji) {
-      // ovde
       let giveaways = await Giveaway.find({ guild: message.guild.id });
       if(giveaways == null || giveaways.length < 1) return;
     

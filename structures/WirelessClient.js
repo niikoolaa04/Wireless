@@ -59,7 +59,6 @@ module.exports = class WirelessClient extends Client {
     this.dev_ids = [
       "823228305167351808", 
     ];
-    // ovde
     this.disabledGuilds = [
       "110373943822540800",
       "361577445704466432",

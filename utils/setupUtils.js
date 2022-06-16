@@ -2,7 +2,7 @@ const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
 const Guild = require("../models/Guild.js");
 const ms = require('ms');
 
-async function submitGiveaway(client, message, data) {
+const submitGiveaway = async(client, message, data) => {
   const row = new MessageActionRow()
     .addComponents(
       new MessageButton()
@@ -75,7 +75,7 @@ async function submitGiveaway(client, message, data) {
   })
 }
 
-async function prizeSetup(client, message, embed, filter, data) {
+const prizeSetup = (client, message, embed, filter, data) => {
   embed.setDescription(`Enter Prize for this Giveaway.
 Example: \`Nitro Classic\``);
   messageReply(message, embed);
@@ -116,7 +116,7 @@ Example: \`Nitro Classic\``);
   });
 }
 
-async function invitesSetup(client, message, embed, filter, data) {
+const invitesSetup = async(client, message, embed, filter, data) => {
   embed.setDescription(`Enter Number of Invites Required in order to Enter Giveaway - 0 for none.
 Example: \`500\``);
   messageReply(message, embed);
@@ -155,7 +155,7 @@ Example: \`500\``);
   });
 }
 
-async function messagesSetup(client, message, embed, filter, data) {
+const messagesSetup = async(client, message, embed, filter, data) => {
   embed.setDescription(`Enter Number of Messages Required in order to Enter Giveaway - 0 for none.
 Example: \`500\``);
   messageReply(message, embed);
@@ -194,9 +194,7 @@ Example: \`500\``);
   });
 }
 
-// OVDEEEE
-
-async function roleSetup(client, message, embed, filter, data) {
+const roleSetup = async(client, message, embed, filter, data) => {
   embed.setDescription(`Mention Role which will be required to Enter Giveaway - 'none' for none.
 Example: \`@Member\``);
   messageReply(message, embed);
@@ -234,7 +232,7 @@ Example: \`@Member\``);
   });
 }
 
-async function winnersSetup(client, message, embed, filter, data) {
+const winnersSetup = async(client, message, embed, filter, data) => {
   Guild.findOne({ id: message.guild.id }, async(err, guild) => {
     if(!guild) guild = await Guild.create({
       id: message.guild.id
@@ -279,7 +277,7 @@ async function winnersSetup(client, message, embed, filter, data) {
   });
 }
 
-async function channelSetup(client, message, embed, filter, data) {
+const channelSetup = async(client, message, embed, filter, data) => {
   embed.setDescription(`Mention Channel in which to start Giveaway.
     Example: \`#general\``);
   messageReply(message, embed);
@@ -318,7 +316,7 @@ async function channelSetup(client, message, embed, filter, data) {
   });
 }
 
-async function durationSetup(client, message, embed, filter, inter) {
+const durationSetup = async(client, message, embed, filter, inter) => {
   let currentData = {
     duration: null,
     winners: 0,

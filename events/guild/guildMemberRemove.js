@@ -18,8 +18,7 @@ module.exports = class GuildMemberRemove extends Event {
 
     let inviter = await User.findOne({ id: member.id, guild: member.guild.id }, "inviter");
     if(inviter != member.id && inviter != "Unknown" && inviter != "Vanity URL") {
-      await User.findOneAndUpdate({ id: inviter, guild: member.guild.id }, { $inc: { invitesLeaves: 1 } }, { new: true, upsert: true });
-      await User.findOneAndUpdate({ id: inviter, guild: member.guild.id }, { $inc: { invitesRegular: -1 } }, { new: true, upsert: true });
+      await User.findOneAndUpdate({ id: inviter, guild: member.guild.id }, { $inc: { invitesRegular: -1, invitesLeaves: 1 } }, { new: true, upsert: true });
       this.client.utils.pushHistory(member, inviter, `[ 📤 ] **${member.user.tag}** has **left** server.`);
     }
     let invitesChannel = this.client.channels.cache.get(settings.invitesChannel);
@@ -43,7 +42,7 @@ module.exports = class GuildMemberRemove extends Event {
       User.findOne({ id: inviter, guild: member.guild.id }, (err, result) => {
         if (result) {
           invitesCount.joins = result.invitesJoin;
-          invitesCount.regular = results.invitesRegular;
+          invitesCount.regular = result.invitesRegular;
           invitesCount.leaves = result.invitesLeaves;
           invitesCount.bonus = result.invitesBonus;
         }

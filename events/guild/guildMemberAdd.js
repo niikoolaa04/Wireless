@@ -136,9 +136,9 @@ module.exports = class GuildMemberAdd extends Event {
       delay(1000);
       let inviterData = await User.findOne({ id: member.id, guild: member.guild.id }, "inviter");
       let invv = null;
-      if (inviterData == "Vanity URL") invv = "Vanity URL";
-      else if (inviterData == undefined || inviterData == null || inviter == "Unknown") invv = "Unknown";
-      else invv = this.client.users.cache.get(inviterData).tag;
+      if (inviterData.inviter == "Vanity URL") invv = "Vanity URL";
+      else if (inviterData.inviter == undefined || inviterData.inviter == null || inviterData.inviter == "Unknown") invv = "Unknown";
+      else invv = this.client.users.cache.get(inviterData.inviter).tag;
 
       let inviterName = invv;
       let invitesCount = {
@@ -148,14 +148,13 @@ module.exports = class GuildMemberAdd extends Event {
         bonus: 0
       };
       
-      User.findOne({ id: inviterData, guild: member.guild.id }, (err, result) => {
-        if (result) {
-          invitesCount.joins = result.invitesJoin;
-          invitesCount.regular = result.invitesRegular;
-          invitesCount.leaves = result.invitesLeaves;
-          invitesCount.bonus = result.invitesBonus;
-        }
-      });
+      let invData = await User.findOne({ id: inviterData.inviter, guild: member.guild.id });
+      if(invData) {
+        invitesCount.joins = result.invitesJoin;
+        invitesCount.regular = result.invitesRegular;
+        invitesCount.leaves = result.invitesLeaves;
+        invitesCount.bonus = result.invitesBonus;
+      }
 
       invitesChannel.send({ content: `${msgJoin
         .replace("{userTag}", member.user.tag)
